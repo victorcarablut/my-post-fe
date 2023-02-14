@@ -1,23 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import PrivateRoute from './components/security/PrivateRoute';
+
+// Components
+import Header from './components/Header';
+import Footer from './components/Footer';
+
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import VerifyCode from './components/auth/VerifyCode';
+
+import Home from './components/Home';
+import Private from './components/other/Private';
+
+import NotFound from './components/other/NotFound';
+
+// Notifications
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+      <Toaster position="bottom-right" reverseOrder={false} />
+        <Header />
+        <main>
+          <div className="container-fluid">
+            <Routes>
+
+              {/* public */}
+              <Route path="/" exact element={<Home />} />
+              <Route path="/login" exact element={<Login />} />
+              <Route path="/register" exact element={<Register />} />
+              <Route path="/code/verify" exact element={<VerifyCode />} />
+              {/* private */}
+              <Route element={<PrivateRoute />}>
+                <Route path="/private" element={<Private />} />
+              </Route>
+
+              {/* public */}
+              <Route path="*" element={<NotFound />} />
+
+            </Routes>
+          </div>
+        </main>
+        <Footer />
+      </Router>
     </div>
   );
 }

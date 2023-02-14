@@ -1,0 +1,56 @@
+/* ----- Global: Style CSS ----- */
+
+/* Body */
+body {
+  background: #2F3542;
+  background-image: linear-gradient(to right top, #0e0803, #1b0c06, #240f11, #2a111e, #2b162e, #261c38, #1c2341, #092948, #012e48, #003248, #043647, #0d3945);
+  min-height: 100vh;
+}
+
+
+/* Custom Global: scrollbar */
+
+/* Width */
+::-webkit-scrollbar {
+  width: 10px !important;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #57606f !important;
+  border-radius: 5px !important;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #a4b0be !important;
+  border-radius: 5px !important;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #f1f2f6 !important;
+  border-radius: 5px !important;
+}
+
+
+/* Custom Global: scrollbar (small) */
+#scrollbar-small::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+
+
+/* Custom Global: form upload button */
+input[type=file]::file-selector-button {
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  background-color: #596275;
+  color: whitesmoke;
+  transition: 0.5s;
+}
+
+input[type=file]::file-selector-button:hover {
+  background-color: #4e5463;
+}

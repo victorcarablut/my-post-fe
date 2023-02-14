@@ -1,0 +1,215 @@
+/* ----- Custom: Pure CSS & Custom: Bootstrap CSS (Dark) + Custom: Animations ----- */
+
+/* useful command for VSC, find code/word/variable [F3] */
+/* recommended all Bootstrap CSS variables end with -> [!important] */
+
+/* ----- Body Style ----- */
+/* check the specific file.css about it on: index.css */
+
+/* Custom: Fonts (from: Google) */
+
+/* Manrope */
+@font-face {
+  font-family: Manrope_Extra_Light_200;
+  src: url('../fonts/Manrope/static/Manrope-ExtraLight.ttf');
+}
+
+.custom-font-extra-light {
+  font-family: 'Manrope_Extra_Light_200', sans-serif !important;
+}
+
+/* Manrope */
+@font-face {
+  font-family: Manrope_Light_300;
+  src: url('../fonts/Manrope/static/Manrope-Light.ttf');
+}
+
+.custom-font-light {
+  font-family: 'Manrope_Light_300', sans-serif !important;
+}
+
+/* Manrope */
+@font-face {
+  font-family: Manrope_Regular_400;
+  src: url('../fonts/Manrope/static/Manrope-Regular.ttf');
+}
+
+.custom-font-regular {
+  font-family: 'Manrope_Regular_400', sans-serif !important;
+}
+
+
+/* Manrope */
+@font-face {
+  font-family: Manrope_Medium_500;
+  src: url('../fonts/Manrope/static/Manrope-Medium.ttf');
+}
+
+.custom-font-medium {
+  font-family: 'Manrope_Medium_500', sans-serif !important;
+}
+
+/* Manrope */
+@font-face {
+  font-family: Manrope_Semi_Bold_600;
+  src: url('../fonts/Manrope/static/Manrope-SemiBold.ttf');
+}
+
+.custom-font-semi-bold {
+  font-family: 'Manrope_Semi_Bold_600', sans-serif !important;
+}
+
+/* Manrope */
+@font-face {
+  font-family: Manrope_Bold_700;
+  src: url('../fonts/Manrope/static/Manrope-Bold.ttf');
+}
+
+.custom-font-bold {
+  font-family: 'Manrope_Bold_700', sans-serif !important;
+}
+
+/* Manrope */
+@font-face {
+  font-family: Manrope_Extra_Bold_800;
+  src: url('../fonts/Manrope/static/Manrope-ExtraBold.ttf');
+}
+
+.custom-font-extra-bold {
+  font-family: 'Manrope_Extra_Bold_800', sans-serif !important;
+}
+
+
+/* Header > Navbar */
+.nav-link {
+  color: rgb(164, 162, 162) !important;
+}
+
+.nav-link:hover {
+  color: rgb(255, 255, 255) !important;
+}
+
+.active {
+  color: rgb(3, 184, 184) !important;
+}
+
+.active:hover {
+  color: rgb(3, 184, 184) !important;
+}
+
+.navbar-nav {
+  font-family: 'Manrope_Extra_Bold_800', sans-serif !important;
+  font-size: 14px !important;
+  text-shadow: 2px 2px 4px #1b1b1b !important;
+  letter-spacing: 0.5px !important;
+}
+
+
+/* Components */
+.container-main {
+  animation: customAnimationFadeInUp 0.5s ease-in-out !important;
+}
+
+.component-main-container {
+  margin: 20px !important;
+  padding: 10px !important;
+  background: rgba(43, 43, 56, 0.7) !important;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px !important;
+  border-radius: 5px !important;
+  backdrop-filter: blur(2px) !important;
+  animation: customAnimationFadeInUp 0.5s ease-in-out !important;
+  border: 1px solid #353b48 !important;
+}
+
+.custom-card {
+  background: rgba(43, 43, 56, 0.259) !important;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px !important;
+  border-radius: 5px !important;
+  backdrop-filter: blur(2px) !important;
+  border: 1px solid #353b48 !important;
+}
+
+/* Card Full Transparent */
+.custom-card-full-transparent {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: grey !important;
+}
+
+
+/* ----- Modal ----- */
+
+.modal-content {
+  background-color: #353949 !important;
+  color: #95afc0 !important;
+}
+
+
+/* Input Custom Style */
+.custom-form-control-input {
+  background-color: #21242b !important;
+  color: #dcdde1 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: rgba(0, 0, 0, 0.192) 3px 3px 6px 0px inset !important;
+}
+
+.custom-form-control-input:hover {
+  background-color: #242b35 !important;
+}
+
+/* Input Floating Label */
+.custom-floating-input-text {
+  color: #7f8fa6 !important;
+  transition: 0.3s ease-in-out !important;
+}
+
+/* --- Table ---*/
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+  background-color: #21242b !important;
+  color: rgb(5, 154, 162);
+}
+
+
+/* Table - Search/Filter Input */
+.search-table-input {
+  max-width: 250px !important;
+  height: 35px !important;
+  background: #22283b !important;
+  border: 1px solid #747d8c !important;
+  border-radius: 50px !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: whitesmoke !important;
+  font-size: 13px !important;
+  letter-spacing: 1px !important;
+  transition: 0.3s ease-in-out !important;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset !important;
+}
+
+.search-table-input:hover {
+  border: 1px solid #3a434f !important;
+}
+
+
+.search-table-input::placeholder {
+  color: #a4b0be !important;
+  font-size: 12px !important;
+}
+
+/* ----- Custom Animations (@keyframes) ----- */
+
+/* fadeInUp */
+@keyframes customAnimationFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
