@@ -13,11 +13,13 @@ import VerifyCode from './components/auth/VerifyCode';
 
 import Home from './components/Home';
 import Private from './components/other/Private';
+import About from './components/other/About';
 
 import NotFound from './components/other/NotFound';
 
 // Notifications
 import { Toaster } from 'react-hot-toast';
+
 
 function App() {
   return (
@@ -40,6 +42,7 @@ function App() {
               </Route>
 
               {/* public */}
+              <Route path="/about" exact element={<About />} />
               <Route path="*" element={<NotFound />} />
 
             </Routes>

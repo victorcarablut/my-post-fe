@@ -3,7 +3,7 @@
 /* Body */
 body {
   background: #2F3542;
-  background-image: linear-gradient(to right top, #0e0803, #1b0c06, #240f11, #2a111e, #2b162e, #261c38, #1c2341, #092948, #012e48, #003248, #043647, #0d3945);
+  background-image: linear-gradient(to right top, #ffffff, #efeff5, #dedfec, #ccd0e2, #b9c2d9, #b9c2d9, #b9c2d9, #b9c2d9, #ccd0e2, #dedfec, #efeff5, #ffffff); /* background-image: https://mycolor.space */
   min-height: 100vh;
 }
 
