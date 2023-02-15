@@ -82,26 +82,38 @@ function Header() {
 
 
   return (
-    <nav className="navbar navbar-dark navbar-expand-lg navbar shadow sticky-top" style={{ backgroundColor: "#786fa6" }}>
-      <div className="container-fluid">
+    <header className="d-flex justify-content-around navbar fixed-top shadow" style={{ backgroundColor: "#786fa6" }}>
+      <div>
         <Link to="/" className="navbar-brand">
-          <img src={logo} width="40" alt="my-Post" />
+          <img src={logo} width="80" alt="my-Post" />
         </Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarText">
-          <div className="navbar-nav">
-            <NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
-            <NavLink to="/about" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>About</NavLink>
-          </div>
-          <span className="navbar-text">
-            <p>{user.fullName} | {user.email}</p>
-            <button type="button" className="btn btn-danger btn-sm rounded-pill shadow" onClick={logout}>Logout</button>
-          </span>
-        </div>
       </div>
-    </nav>
+
+
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+
+        <button class="btn btn-primary btn-sm me-md-2 rounded-pill shadow" type="button">Button {user.fullName} {user.email}</button>
+
+        <div class="dropdown">
+          <button class="btn btn-secondary btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown button
+          </button>
+          <ul class="dropdown-menu shadow-lg">
+          <li><NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink></li>
+            <li><NavLink to="/about" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>About</NavLink></li>
+            <li><button type="button" className="dropdown-item btn btn-danger btn-sm rounded-pill shadow" onClick={logout}>Logout</button></li>
+          </ul>
+        </div>
+
+
+
+      </div>
+
+
+
+
+
+    </header>
   )
 }
 
