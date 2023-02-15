@@ -14,6 +14,13 @@ import { useNavigate } from "react-router-dom";
 import PrivateRoute from '../security/PrivateRoute.js';
 import VerifyToken from '../security/VerifyToken.js';
 
+// ui resources
+import { Error, Success } from '../_resources/ui/Alerts.jsx';
+import { SmallLoading } from '../_resources/ui/Loadings.jsx';
+
+// Notifications
+import toast from 'react-hot-toast';
+
 
 function Register() {
 
@@ -21,10 +28,10 @@ function Register() {
 
     const [mainLoading, setMainLoading] = useState(true);
 
-    const [fullName, setFullName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('')
-    const [passwordRepeat, setPasswordRepeat] = useState('')
+    const [fullName, setFullName] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null)
+    const [passwordRepeat, setPasswordRepeat] = useState(null)
 
 
     // inputs check validity
@@ -33,7 +40,10 @@ function Register() {
     const [handleInputPasswordIsValid, setHandleInputPasswordIsValid] = useState(false);
     const [handleInputPasswordRepeatIsValid, setHandleInputPasswordRepeatIsValid] = useState(false);
 
-    // const REGEX = /^[a-zA-Z0-9]$/;
+    // http response status
+    //const [responseStatusRegisterUser, setResponseStatusRegisterUser] = useState(null);
+
+    const [buttonRegisterUserIsDisabled, setButtonRegisterUserIsDisabled] = useState(false);
 
     useEffect(() => {
         checkAuth(PrivateRoute, VerifyToken);
@@ -77,6 +87,8 @@ function Register() {
         setHandleInpuEmailIsValid(false);
         setHandleInputPasswordIsValid(false);
         setHandleInputPasswordRepeatIsValid(false);
+        //setResponseStatusRegisterUser(null);
+        setButtonRegisterUserIsDisabled(false);
     }
 
     // handle inputs control
@@ -201,6 +213,10 @@ function Register() {
 
         if (handleInputFullNameIsValid && handleInputEmailIsValid && handleInputPasswordIsValid && handleInputPasswordRepeatIsValid) {
 
+            //setResponseStatusRegisterUser("loading");
+            setButtonRegisterUserIsDisabled(true);
+            const toastNotify = toast.loading("Loading");
+
             const data = {
                 fullName: fullName,
                 email: email.toLocaleLowerCase(),
@@ -209,6 +225,9 @@ function Register() {
 
             await axios.post(`${url_twitter}/account/register`, data).then((res) => {
                 if (res.status === 200) {
+                    //setResponseStatusRegisterUser("success");
+                    toast.dismiss(toastNotify);
+                    toast.success("Registered successfully");
                     console.log("register OK");
                     //console.log(res.data);
                     //navigate("/code/verify");
@@ -222,12 +241,16 @@ function Register() {
                         }
                     )
 
-                    // clear input
+                    // clear inputs
                     clearInputs();
                 }
 
             }).catch(err => {
                 console.log(err);
+                //setResponseStatusRegisterUser("error");
+                setButtonRegisterUserIsDisabled(false);
+                toast.dismiss(toastNotify);
+                toast.error("Server error");
                 return;
             })
 
@@ -255,30 +278,46 @@ function Register() {
                         {mainLoading && <h1>Main Loading true</h1>}
 
 
+
                         <form onSubmit={handleSubmitRegister}>
                             <div className="form-floating mb-3">
                                 <input type="text" className="form-control" id="floatingInputFullName" placeholder="Full Name" onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
                                 <label htmlFor="floatingInputFullName">Full Name *</label>
                                 <div class="invalid-feedback">
-                                    Please choose a username.
+                                    Name must contain only letters
                                 </div>
 
                             </div>
                             <div className="form-floating mb-3">
                                 <input type="email" className="form-control" id="floatingInputEmail" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
                                 <label htmlFor="floatingInputEmail">Email *</label>
+                                <div class="invalid-feedback">
+                                    Email must contain @ and .
+                                </div>
                             </div>
                             <div className="form-floating mb-3">
                                 <input type="password" className="form-control" id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
                                 <label htmlFor="floatingInputPassword">Password *</label>
+                                <div class="invalid-feedback">
+                                    Password must contain at least 6 characters
+                                </div>
                             </div>
                             <div className="form-floating mb-3">
                                 <input type="password" className="form-control" id="floatingInputPasswordRepeat" placeholder="Password Repeat" onChange={(e) => handleInputPasswordRepeat(e)} autoComplete="off" required />
                                 <label htmlFor="floatingInputPasswordRepeat">Password Repeat *</label>
+                                <div class="invalid-feedback">
+                                    Passwords must match
+                                </div>
                             </div>
 
-                            <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!fullName || !email || !password || !passwordRepeat} onClick={registerUser}>Register</button>
+                
+                                <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!fullName || !email || !password || !passwordRepeat || buttonRegisterUserIsDisabled} onClick={registerUser}>Register</button>
+                               
+                            
                         </form>
+
+
+
                     </div>
                     <div className="card-footer text-muted">
                         card footer
