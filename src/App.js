@@ -25,28 +25,33 @@ function App() {
   return (
     <div>
       <Router>
-      <Toaster position="bottom-right" reverseOrder={false} />
+        <Toaster position="bottom-right" reverseOrder={false} />
         <Header />
         <main>
-          <div className="container-fluid">
-            <Routes>
 
-              {/* public */}
-              <Route path="/" exact element={<Home />} />
-              <Route path="/login" exact element={<Login />} />
-              <Route path="/register" exact element={<Register />} />
-              <Route path="/code/verify" exact element={<VerifyCode />} />
-              {/* private */}
-              <Route element={<PrivateRoute />}>
-                <Route path="/private" element={<Private />} />
-              </Route>
+                <Routes>
 
-              {/* public */}
-              <Route path="/about" exact element={<About />} />
-              <Route path="*" element={<NotFound />} />
+                  {/* public */}
+                  <Route path="/" exact element={<Home />} />
+                  <Route path="/login" exact element={<Login />} />
+                  <Route path="/register" exact element={<Register />} />
+                  <Route path="/code/verify" exact element={<VerifyCode />} />
+                  {/* private */}
+                  <Route element={<PrivateRoute />}>
+                    <Route path="/private" element={<Private />} />
+                  </Route>
 
-            </Routes>
-          </div>
+                  {/* public */}
+                  <Route path="/about" exact element={<About />} />
+                  <Route path="*" element={<NotFound />} />
+
+                </Routes>
+             
+             
+                
+              
+          
+
         </main>
         <Footer />
       </Router>

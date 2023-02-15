@@ -82,24 +82,25 @@ function Header() {
 
 
   return (
-    <header className="d-flex justify-content-around navbar fixed-top shadow" style={{ backgroundColor: "#786fa6" }}>
-      <div>
+    <header className="d-flex justify-content-around navbar sticky-top">
+
+      <div className="animate__animated animate__zoomIn">
         <Link to="/" className="navbar-brand">
           <img src={logo} width="80" alt="my-Post" />
         </Link>
       </div>
 
 
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end animate__animated animate__fadeInRight">
+      {/* {user.fullName} {user.email} */}
+        <Link to="/login" type="button" class="btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold" style={{paddingLeft: 10, paddingRight: 15}}><i class="bi bi-box-arrow-in-right me-md-2"/>Login</Link>
 
-        <button class="btn btn-primary btn-sm me-md-2 rounded-pill shadow" type="button">Button {user.fullName} {user.email}</button>
-
-        <div class="dropdown">
-          <button class="btn btn-secondary btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown button
+        <div class="dropdown-center">
+          <button class="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        
           </button>
           <ul class="dropdown-menu shadow-lg">
-          <li><NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink></li>
+            <li><NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink></li>
             <li><NavLink to="/about" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>About</NavLink></li>
             <li><button type="button" className="dropdown-item btn btn-danger btn-sm rounded-pill shadow" onClick={logout}>Logout</button></li>
           </ul>

@@ -24,6 +24,7 @@ function Register() {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
+    const [passwordRepeat, setPasswordRepeat] = useState('')
 
     const REGEX = /^[a-zA-Z0-9]$/;
 
@@ -54,11 +55,11 @@ function Register() {
             }
 
         } else {
-            navigate(window.location.pathname, {replace: true});
+            navigate(window.location.pathname, { replace: true });
         }
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmitRegister = async (e) => {
         e.preventDefault();
         console.log("fullName: " + fullName);
         console.log("email: " + email);
@@ -69,16 +70,16 @@ function Register() {
         navigate(
             "/code/verify",
             {
-              state: {
-                email: email
-              }
+                state: {
+                    email: email
+                }
             }
-          )
-        
+        )
+
     }
 
 
-    const register = async () => {
+    const registerUser = async () => {
 
         const data = {
             fullName: fullName,
@@ -95,12 +96,12 @@ function Register() {
                 navigate(
                     "/code/verify",
                     {
-                      state: {
-                        email: email
-                      }
+                        state: {
+                            email: email
+                        }
                     }
-                  )
-                
+                )
+
                 // clear input
             }
 
@@ -111,43 +112,67 @@ function Register() {
     }
 
     return (
-        <div>
-            Register
 
-            {mainLoading && <h1>Main Loading</h1>}
 
-            <form onSubmit={handleSubmit}>
+        <div className="d-flex justify-content-center">
 
-                <input
-                    type="text"
-                    placeholder='full name'
-                    name='fullName'
-                    onChange={(e) => setFullName(e.target.value)}
-                    autoComplete="off"
-                    required
-                />
+            <div className="container-fluid" style={{ maxWidth: 400 }}>
+                <div className="card text-center shadow-lg animate__animated animate__fadeIn">
+                    <div className="card-header">
+                        <i className="bi bi-person-fill me-md-2" />
+                        Register
+                    </div>
+                    <div className="card-body">
 
-                <input
-                    type="text"
-                    placeholder='email'
-                    name='email'
-                    onChange={(e) => setEmail(e.target.value)}
-                    autoComplete="off"
-                    required
-                />
+                        {mainLoading && <h1>Main Loading</h1>}
 
-                <input
-                    type="password"
-                    placeholder='password'
-                    name='password'
-                    onChange={(e) => setPassword(e.target.value)}
-                    autoComplete="off"
-                    required
-                />
 
-                <button disabled={!fullName || !email || !password} onClick={register}>Register</button>
-            </form>
+                        <form onSubmit={handleSubmitRegister}>
+                            <div className="form-floating mb-3">
+                                <input type="text" className="form-control" id="floatingInputFullName" placeholder="Full Name" onChange={(e) => setFullName(e.target.value)} autoComplete="off" required />
+                                <label for="floatingInputFullName">Full Name</label>
+                            </div>
+                            <div className="form-floating mb-3">
+                                <input type="email" className="form-control" id="floatingInputEmail" placeholder="Email" onChange={(e) => setEmail(e.target.value)} autoComplete="off" required />
+                                <label for="floatingInputEmail">Email</label>
+                            </div>
+                            <div className="form-floating mb-3">
+                                <input type="password" className="form-control" id="floatingInputPassword" placeholder="Password" onChange={(e) => setPassword(e.target.value)} autoComplete="off" required />
+                                <label for="floatingInputPassword">Password</label>
+                            </div>
+                            <div className="form-floating">
+                                <input type="password" className="form-control" id="floatingInputPasswordRepeat" placeholder="Password Repeat" onChange={(e) => setPasswordRepeat(e.target.value)} autoComplete="off" required />
+                                <label for="floatingInputPasswordRepeat">Password Repeat</label>
+                            </div>
+
+                            <button disabled={!fullName || !email || !password || !passwordRepeat} onClick={registerUser}>Register</button>
+                        </form>
+                    </div>
+                    <div className="card-footer text-muted">
+                        card footer
+                    </div>
+                </div>
+
+            </div>
+
+
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     )
 }
 
