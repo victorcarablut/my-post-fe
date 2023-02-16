@@ -39,6 +39,12 @@ function Register() {
     const [handleInputPasswordIsValid, setHandleInputPasswordIsValid] = useState(false);
     const [handleInputPasswordRepeatIsValid, setHandleInputPasswordRepeatIsValid] = useState(false);
 
+    // add CSS className
+    const [handleInputFullNameClassName, setHandleInputFullNameClassName] = useState(null);
+    const [handleInputEmailClassName, setHandleInputEmailClassName] = useState(null);
+    const [handleInputPasswordClassName, setHandleInputPasswordClassName] = useState(null);
+    const [handleInputPasswordRepeatClassName, setHandleInputPasswordRepeatClassName] = useState(null);
+
     const [buttonRegisterUserIsDisabled, setButtonRegisterUserIsDisabled] = useState(false);
 
     useEffect(() => {
@@ -83,6 +89,10 @@ function Register() {
         setHandleInpuEmailIsValid(false);
         setHandleInputPasswordIsValid(false);
         setHandleInputPasswordRepeatIsValid(false);
+        setHandleInputFullNameClassName(null);
+        setHandleInputEmailClassName(null);
+        setHandleInputPasswordClassName(null);
+        setHandleInputPasswordRepeatClassName(null);
         setButtonRegisterUserIsDisabled(false);
     }
 
@@ -145,35 +155,27 @@ function Register() {
 
     const checkAllInputsValidity = () => {
         if (handleInputFullNameIsValid) {
-            document.getElementById("floatingInputFullName").classNameList.add('is-valid');
-            document.getElementById("floatingInputFullName").classNameList.remove('is-invalid');
+            setHandleInputFullNameClassName("is-valid");
         } else {
-            document.getElementById("floatingInputFullName").classNameList.add('is-invalid');
-            document.getElementById("floatingInputFullName").classNameList.remove('is-valid');
+            setHandleInputFullNameClassName("is-invalid");
         }
 
         if (handleInputEmailIsValid) {
-            document.getElementById("floatingInputEmail").classNameList.add('is-valid');
-            document.getElementById("floatingInputEmail").classNameList.remove('is-invalid');
+            setHandleInputEmailClassName("is-valid")
         } else {
-            document.getElementById("floatingInputEmail").classNameList.add('is-invalid');
-            document.getElementById("floatingInputEmail").classNameList.remove('is-valid');
+            setHandleInputEmailClassName("is-invalid")
         }
 
         if (handleInputPasswordIsValid) {
-            document.getElementById("floatingInputPassword").classNameList.add('is-valid');
-            document.getElementById("floatingInputPassword").classNameList.remove('is-invalid');
+            setHandleInputPasswordClassName("is-valid")
         } else {
-            document.getElementById("floatingInputPassword").classNameList.add('is-invalid');
-            document.getElementById("floatingInputPassword").classNameList.remove('is-valid');
+            setHandleInputPasswordClassName("is-invalid")
         }
 
         if (handleInputPasswordRepeatIsValid) {
-            document.getElementById("floatingInputPasswordRepeat").classNameList.add('is-valid');
-            document.getElementById("floatingInputPasswordRepeat").classNameList.remove('is-invalid');
+            setHandleInputPasswordRepeatClassName("is-valid")
         } else {
-            document.getElementById("floatingInputPasswordRepeat").classNameList.add('is-invalid');
-            document.getElementById("floatingInputPasswordRepeat").classNameList.remove('is-valid');
+            setHandleInputPasswordRepeatClassName("is-invalid")
         }
     }
 
@@ -212,7 +214,7 @@ function Register() {
                     )
 
                     clearInputs();
-                } 
+                }
 
             }).catch(err => {
                 console.log(err);
@@ -247,28 +249,28 @@ function Register() {
 
                                     <form onSubmit={handleSubmitRegister}>
                                         <div className="form-floating mb-3">
-                                            <input type="text" className="form-control" id="floatingInputFullName" placeholder="Full Name" onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
+                                            <input type="text" className={"form-control " + handleInputFullNameClassName} id="floatingInputFullName" placeholder="Full Name" onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputFullName">Full Name *</label>
                                             <div className="invalid-feedback">
                                                 <small>Name must contain only letters</small>
                                             </div>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type="email" className="form-control" id="floatingInputEmail" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
+                                            <input type="email" className={"form-control " + handleInputEmailClassName}  id="floatingInputEmail" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputEmail">Email *</label>
                                             <div className="invalid-feedback">
                                                 <small>Email must contain @ and .</small>
                                             </div>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type="password" className="form-control" id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                            <input type="password" className={"form-control " + handleInputPasswordClassName}  id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputPassword">Password *</label>
                                             <div className="invalid-feedback">
                                                 <small>Password must contain at least 6 characters</small>
                                             </div>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type="password" className="form-control" id="floatingInputPasswordRepeat" placeholder="Password Repeat" onChange={(e) => handleInputPasswordRepeat(e)} autoComplete="off" required />
+                                            <input type="password" className={"form-control " + handleInputPasswordRepeatClassName} id="floatingInputPasswordRepeat" placeholder="Password Repeat" onChange={(e) => handleInputPasswordRepeat(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputPasswordRepeat">Password Repeat *</label>
                                             <div className="invalid-feedback">
                                                 <small>Passwords must match</small>

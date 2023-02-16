@@ -30,6 +30,7 @@ const VerifyCode = () => {
   // inputs check validity
   const [handleInputCodeIsValid, setHandleInputCodeIsValid] = useState(false);
 
+  // add CSS className
   const [handleInputCodeClassName, setHandleInputCodeClassName] = useState(null);
 
   const [buttonVerifyCodeIsDisabled, setButtonVerifyCodeIsDisabled] = useState(false);
@@ -138,8 +139,6 @@ const VerifyCode = () => {
       setButtonVerifyCodeIsDisabled(true);
       const toastNotify = toast.loading("Loading");
 
-      //console.log("email state in: VerifyCode: " + state?.email);
-      //console.log("email in: VerifyCode: " + email);
       const data = {
         email: email,
         code: code
