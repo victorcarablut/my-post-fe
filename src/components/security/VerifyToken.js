@@ -7,7 +7,7 @@ import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 
 // config file (URL)
-import { url_twitter } from "../../config.js";
+import { url} from "../../config.js";
 
 const VerifyToken = () => {
 
@@ -33,7 +33,7 @@ const VerifyToken = () => {
 
     }
 
-    await axios.get(`${url_twitter}/token/verify`, config).then((res) => {
+    await axios.get(`${url}/token/verify`, config).then((res) => {
       if (res.status === 200) {
         console.log("token OK");
         setIsValid(true);

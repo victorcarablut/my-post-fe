@@ -7,7 +7,7 @@ import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 
 // config file (URL)
-import { url_twitter } from "../../config.js";
+import { url } from "../../config.js";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -84,7 +84,7 @@ const VerifyCode = () => {
       code: code
     }
 
-    await axios.post(`${url_twitter}/account/email/code/verify`, data).then((res) => {
+    await axios.post(`${url}/account/email/code/verify`, data).then((res) => {
       if (res.status === 200) {
         console.log("code OK");
         navigate("/login")

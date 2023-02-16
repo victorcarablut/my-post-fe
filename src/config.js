@@ -1,4 +1,4 @@
 // URL HOST
-const url = "localhost";
+const host = "localhost";
 
-export const url_twitter = `http://${url}:8080/api`;
+export const url = `http://${host}:8080/api`;
