@@ -69,7 +69,7 @@ function Register() {
 
         } else {
             setMainLoading(false);
-            navigate(window.location.pathname, { replace: true });
+            //navigate(window.location.pathname, { replace: true });
         }
     }
 
@@ -93,7 +93,7 @@ function Register() {
         const fullName = e.target.value;
         const regex = /^(?![\s-])[a-zA-Z\s]*$/;
 
-        setFullName(e.target.value);
+        setFullName(fullName);
 
         if (regex.test(fullName) && fullName.length > 2) {
             setHandleInputFullNameIsValid(true);
@@ -106,7 +106,7 @@ function Register() {
 
         const email = e.target.value;
 
-        setEmail(e.target.value);
+        setEmail(email);
 
         if (email.includes('@') && email.includes('.') && email.length > 3) {
 
@@ -120,7 +120,7 @@ function Register() {
 
         const password = e.target.value;
 
-        setPassword(e.target.value);
+        setPassword(password);
 
         if (password.length > 5) {
             setHandleInputPasswordIsValid(true);
@@ -133,7 +133,7 @@ function Register() {
 
         const passwordRepeat = e.target.value;
 
-        setPasswordRepeat(e.target.value);
+        setPasswordRepeat(passwordRepeat);
 
         if (passwordRepeat.length > 5 && passwordRepeat === password) {
 
@@ -212,7 +212,7 @@ function Register() {
                     )
 
                     clearInputs();
-                }
+                } 
 
             }).catch(err => {
                 console.log(err);
