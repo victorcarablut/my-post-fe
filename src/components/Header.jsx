@@ -93,7 +93,7 @@ function Header() {
 
       <div class="d-grid gap-2 d-md-flex justify-content-md-end animate__animated animate__fadeInRight">
       {/* {user.fullName} {user.email} */}
-        <Link to="/login" type="button" class="btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold" style={{paddingLeft: 10, paddingRight: 15}}><i class="bi bi-box-arrow-in-right me-md-2"/>Login</Link>
+        {/* <Link to="/login" type="button" class="btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold" style={{paddingLeft: 10, paddingRight: 15}}><i class="bi bi-box-arrow-in-right me-md-2"/>Login</Link> */}
 
         <div class="dropdown-center">
           <button class="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false">

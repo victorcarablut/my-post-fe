@@ -9,7 +9,8 @@ import axios from 'axios';
 // config file (URL)
 import { url_twitter } from "../../config.js";
 
-import { useNavigate } from "react-router-dom";
+// Link 
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 
 import PrivateRoute from '../security/PrivateRoute.js';
 import VerifyToken from '../security/VerifyToken.js';
@@ -269,7 +270,7 @@ function Register() {
 
             <div className="container-fluid" style={{ maxWidth: 400 }}>
                 <div className="card text-center shadow-lg animate__animated animate__fadeIn">
-                    <div className="card-header">
+                    <div className="card-header fw-semibold">
                         <i className="bi bi-person-fill me-2" />
                         User Registration
                     </div>
@@ -284,43 +285,48 @@ function Register() {
                                 <input type="text" className="form-control" id="floatingInputFullName" placeholder="Full Name" onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
                                 <label htmlFor="floatingInputFullName">Full Name *</label>
                                 <div class="invalid-feedback">
-                                    Name must contain only letters
+                                    <small>Name must contain only letters</small>
                                 </div>
-
                             </div>
                             <div className="form-floating mb-3">
                                 <input type="email" className="form-control" id="floatingInputEmail" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
                                 <label htmlFor="floatingInputEmail">Email *</label>
                                 <div class="invalid-feedback">
-                                    Email must contain @ and .
+                                    <small>Email must contain @ and .</small>
                                 </div>
                             </div>
                             <div className="form-floating mb-3">
                                 <input type="password" className="form-control" id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
                                 <label htmlFor="floatingInputPassword">Password *</label>
                                 <div class="invalid-feedback">
-                                    Password must contain at least 6 characters
+                                    <small>Password must contain at least 6 characters</small>
                                 </div>
                             </div>
                             <div className="form-floating mb-3">
                                 <input type="password" className="form-control" id="floatingInputPasswordRepeat" placeholder="Password Repeat" onChange={(e) => handleInputPasswordRepeat(e)} autoComplete="off" required />
                                 <label htmlFor="floatingInputPasswordRepeat">Password Repeat *</label>
                                 <div class="invalid-feedback">
-                                    Passwords must match
+                                    <small>Passwords must match</small>
                                 </div>
                             </div>
 
-                
-                                <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!fullName || !email || !password || !passwordRepeat || buttonRegisterUserIsDisabled} onClick={registerUser}>Register</button>
-                               
-                            
+                            <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!fullName || !email || !password || !passwordRepeat || buttonRegisterUserIsDisabled} onClick={registerUser}>Register</button>
                         </form>
+
+                        <p><small className="text-muted mb-3">All fields marked with an asterisk (*) are required.</small></p>
+
+
+                        <div class="alert alert-secondary" role="alert">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <small>By clicking Register you have read and agree to our Privacy Policy, including Cookie Use.</small>
+                        </div>
 
 
 
                     </div>
                     <div className="card-footer text-muted">
-                        card footer
+                        <small className="me-2">Already have an account?</small>
+                        <Link to="/login" type="button" class="btn btn-light btn-sm me-md-2 rounded-pill border border-2 fw-semibold" style={{ paddingLeft: 10, paddingRight: 15 }}><i class="bi bi-box-arrow-in-right me-md-2" />Login</Link>
                     </div>
                 </div>
 
