@@ -107,6 +107,8 @@ function Register() {
 
         if (regex.test(fullName) && fullName.length > 2) {
             setHandleInputFullNameIsValid(true);
+        } else if (fullName.length === 0) {
+            setHandleInputFullNameClassName(null);
         } else {
             setHandleInputFullNameIsValid(false);
         }
@@ -121,6 +123,8 @@ function Register() {
         if (email.includes('@') && email.includes('.') && email.length > 3) {
 
             setHandleInpuEmailIsValid(true);
+        } else if(email.length === 0) {
+            setHandleInputEmailClassName(null)
         } else {
             setHandleInpuEmailIsValid(false);
         }
@@ -134,6 +138,8 @@ function Register() {
 
         if (password.length > 5) {
             setHandleInputPasswordIsValid(true);
+        } else if (password.length === 0) {
+            setHandleInputPasswordClassName(null);
         } else {
             setHandleInputPasswordIsValid(false);
         }
@@ -146,8 +152,9 @@ function Register() {
         setPasswordRepeat(passwordRepeat);
 
         if (passwordRepeat.length > 5 && passwordRepeat === password) {
-
             setHandleInputPasswordRepeatIsValid(true);
+        } else if(passwordRepeat.length === 0) {
+            setHandleInputPasswordRepeatClassName(null);
         } else {
             setHandleInputPasswordRepeatIsValid(false);
         }
@@ -201,19 +208,25 @@ function Register() {
 
             await axios.post(`${url}/account/register`, data).then((res) => {
                 if (res.status === 200) {
-                    toast.dismiss(toastNotify);
-                    toast.success("Registered successfully");
 
-                    navigate(
-                        "/code/verify",
-                        {
-                            state: {
-                                email: email
+                    if (res.data.status_code === 3) {
+                        toast.dismiss(toastNotify);
+                        toast.error("User with that email already exists");
+                    } else {
+                        toast.dismiss(toastNotify);
+                        toast.success("Registered successfully");
+
+                        navigate(
+                            "/code/verify",
+                            {
+                                state: {
+                                    email: email
+                                }
                             }
-                        }
-                    )
+                        )
 
-                    clearInputs();
+                        clearInputs();
+                    }
                 }
 
             }).catch(err => {
@@ -256,14 +269,14 @@ function Register() {
                                             </div>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type="email" className={"form-control " + handleInputEmailClassName}  id="floatingInputEmail" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
+                                            <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputEmail">Email *</label>
                                             <div className="invalid-feedback">
                                                 <small>Email must contain @ and .</small>
                                             </div>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type="password" className={"form-control " + handleInputPasswordClassName}  id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                            <input type="password" className={"form-control " + handleInputPasswordClassName} id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputPassword">Password *</label>
                                             <div className="invalid-feedback">
                                                 <small>Password must contain at least 6 characters</small>
