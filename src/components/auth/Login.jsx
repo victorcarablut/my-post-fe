@@ -12,7 +12,7 @@ import { url} from "../../config.js";
 import { useNavigate } from "react-router-dom";
 
 import PrivateRoute from '../security/PrivateRoute.js';
-import VerifyToken from '../security/VerifyToken.js';
+import  {VerifyToken} from '../security/VerifyToken.js';
 
 function Login() {
 

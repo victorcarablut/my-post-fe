@@ -7,49 +7,48 @@ import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 
 // config file (URL)
-import { url} from "../../config.js";
+import { url } from "../../config.js";
 
-const VerifyToken = () => {
+export const VerifyToken = async () => {
 
-  const [isValid, setIsValid] = useState(false);
+  console.log("VerifyToken.js");
 
-  useEffect(() => {
-    token();
-    console.log("verify token");
-  }, []);
+  let isValid = false;
 
-  const token = async () => {
+  //console.log(secureLocalStorage.getItem("token"));
 
-    console.log(secureLocalStorage.getItem("token"));
+  const jwt_token = secureLocalStorage.getItem("token");
 
-    const jwt_token = secureLocalStorage.getItem("token");
+  //console.log(jwt_token);
 
-    console.log(jwt_token);
-
-    const config = {
-      headers: { 
-        Authorization: "Bearer " + jwt_token
-      }
-
+  const config = {
+    headers: {
+      Authorization: "Bearer " + jwt_token
     }
 
-    await axios.get(`${url}/token/verify`, config).then((res) => {
-      if (res.status === 200) {
-        console.log("token OK");
-        setIsValid(true);
-      } else {
-        return;
-      }
-
-    }).catch(err => {
-      //console.log(err);
-      setIsValid(false);
-      return;
-    })
-
   }
+
+  await axios.get(`${url}/token/verify`, config).then((res) => {
+    if (res.status === 200) {
+      console.log("token OK");
+      isValid = true;
+      return true;
+    } else {
+      isValid = false;
+      // return false;
+    }
+
+  }).catch(err => {
+    //console.log(err);
+    isValid = false
+    //return false;
+  })
 
   return isValid;
 }
 
-export default VerifyToken;
+export const TestVer = () => {
+  console.log("tes method ver");
+
+  return true;
+}

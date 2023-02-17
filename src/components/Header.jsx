@@ -12,7 +12,7 @@ import { url } from "../config.js";
 // Link 
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 
-import VerifyToken from './security/VerifyToken.js';
+import {TestVer, VerifyToken} from './security/VerifyToken.js';
 
 // Logo / User
 import logo from '../assets/images/logo.png';
@@ -40,15 +40,42 @@ function Header() {
 
   useEffect(() => {
 
-    checkAuth(VerifyToken);
+    checkAuth();
 
     //getUser();
 
   }, []);
 
-  const checkAuth = (verifyToken) => {
+  const checkAuth = async () => {
 
-    if (secureLocalStorage.getItem("token")) {
+
+    //const tokenVer = VerifyToken();
+    //console.log(tokenVer);
+
+    //testVer();
+    //const test = testVer();
+    //console.log("test header: " + test);
+
+    const verifyToken = await VerifyToken();
+
+    console.log("header result verifyToken: " + verifyToken);
+
+
+ /*    if (verifyToken) {
+      //navigate("/");
+      setIsAuthenticated(true);
+      setMainLoading(false);
+      //getUser();
+      console.log(">> verifyToken true");
+    } else {
+      // not authenticated
+      console.log(">> verifyToken false");
+      setMainLoading(false);
+      setIsAuthenticated(false);
+    } */
+
+
+   /*  if (secureLocalStorage.getItem("token")) {
       try {
 
         if (verifyToken) {
@@ -56,8 +83,10 @@ function Header() {
           setIsAuthenticated(true);
           setMainLoading(false);
           //getUser();
+          console.log(">> verifyToken true");
         } else {
           // not authenticated
+          console.log(">> verifyToken false");
           setMainLoading(false);
           setIsAuthenticated(false);
         }
@@ -73,7 +102,7 @@ function Header() {
       //navigate(window.location.pathname, { replace: true });
 
       // not authenticated
-    }
+    } */
   }
 
   // TODO: use local storage to get only name, email ...
@@ -135,13 +164,13 @@ function Header() {
       </div>
 
 
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end animate__animated animate__fadeInRight">
+      <div className="d-grid gap-2 d-md-flex justify-content-md-end animate__animated animate__fadeInRight">
         {/* {user.fullName} {user.email} */}
         {isAuthenticated ?
 
           <Link to="/login" type="button" className={"btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}><img src={user_pic_profile} width="25" alt="my-Post" className="rounded-circle border border-2 me-md-2" />{userFullName?.length >= 20 ? userFullName.substring(0, 25) + "..." : userFullName}</Link>
           :
-          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <div className="d-grid gap-2 d-md-flex justify-content-md-end">
             <NavLink to="/login" type="button" className={"navbar-nav-link btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}>Login</NavLink>
             <NavLink to="/register" type="button" className={"navbar-nav-link btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}>Register</NavLink>
           </div>
@@ -149,11 +178,11 @@ function Header() {
         }
         {/* <Link to="/login" type="button" class="btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold" style={{paddingLeft: 10, paddingRight: 15}}><i class="bi bi-box-arrow-in-right me-md-2"/>Login</Link> */}
 
-        <div class="dropdown">
-          <button class="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div className="dropdown">
+          <button className="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 
           </button>
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+          <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
             <li><NavLink to="/" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Posts</NavLink></li>
             <li><NavLink to="/about" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>About</NavLink></li>
             <li><NavLink to="/contact" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Contact</NavLink></li>
