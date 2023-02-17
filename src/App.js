@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PrivateRoute from './components/security/PrivateRoute';
 
 // Components
+import Home from './components/Home';
+
 import Header from './components/Header';
 import Footer from './components/Footer';
 
@@ -11,9 +13,9 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import VerifyCode from './components/auth/VerifyCode';
 
-import Home from './components/Home';
 import Private from './components/other/Private';
 import About from './components/other/About';
+import Contact from './components/other/Contact';
 import PrivacyPolicy from './components/other/PrivacyPolicy';
 
 import NotFound from './components/other/NotFound';
@@ -44,6 +46,7 @@ function App() {
 
             {/* public */}
             <Route path="/about" exact element={<About />} />
+            <Route path="/contact" exact element={<Contact />} />
             <Route path="/privacy-policy" exact element={<PrivacyPolicy />} />
 
             <Route path="*" element={<NotFound />} />

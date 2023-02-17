@@ -69,7 +69,7 @@ function Header() {
 
     } else {
       setMainLoading(false);
-      setIsAuthenticated(true); // false
+      setIsAuthenticated(false); // false
       //navigate(window.location.pathname, { replace: true });
 
       // not authenticated
@@ -156,19 +156,17 @@ function Header() {
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
             <li><NavLink to="/" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Posts</NavLink></li>
             <li><NavLink to="/about" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>About</NavLink></li>
-            <li><hr className="dropdown-divider"/></li>
-            <li><button type="button" className={"btn btn-danger btn-sm rounded-pill  fw-semibold shadow " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} onClick={logout}>Logout</button></li>
+            <li><NavLink to="/contact" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Contact</NavLink></li>
+            {isAuthenticated &&
+              <>
+                <li><hr className="dropdown-divider" /></li>
+                <li><button type="button" className={"btn btn-danger btn-sm rounded-pill  fw-semibold shadow " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} onClick={logout}>Logout</button></li>
+              </>
+            }
+
           </ul>
         </div>
-
-
-
       </div>
-
-
-
-
-
     </header>
   )
 }
