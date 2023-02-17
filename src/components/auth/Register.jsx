@@ -15,7 +15,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import PrivateRoute from '../security/PrivateRoute.js';
 import VerifyToken from '../security/VerifyToken.js';
 
-import { LoadingFullScreen } from '../_resources/ui/Loadings.jsx';
+import { LoadingFullScreen } from '../_resources/ui/Loadings';
 
 // Notifications
 import toast from 'react-hot-toast';

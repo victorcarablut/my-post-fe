@@ -12,12 +12,24 @@ import { url } from "../config.js";
 // Link 
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 
-// Logo
+import VerifyToken from './security/VerifyToken.js';
+
+// Logo / User
 import logo from '../assets/images/logo.png';
+import user_pic_profile from '../assets/images/user.jpg';
+
+import { LoadingFullScreen } from '../components/_resources/ui/Loadings';
 
 function Header() {
 
   const navigate = useNavigate();
+
+  const [mainLoading, setMainLoading] = useState(true);
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // temp
+  const [userFullName] = useState("John Doedoe Tony Clarcklkkk John Cena")
 
   const [user, setUser] = useState(
     {
@@ -28,9 +40,41 @@ function Header() {
 
   useEffect(() => {
 
-    getUser();
+    checkAuth(VerifyToken);
+
+    //getUser();
 
   }, []);
+
+  const checkAuth = (verifyToken) => {
+
+    if (secureLocalStorage.getItem("token")) {
+      try {
+
+        if (verifyToken) {
+          //navigate("/");
+          setIsAuthenticated(true);
+          setMainLoading(false);
+          //getUser();
+        } else {
+          // not authenticated
+          setMainLoading(false);
+          setIsAuthenticated(false);
+        }
+
+      } catch (error) {
+        // error checkAuth
+        console.log("error checkAuth");
+      }
+
+    } else {
+      setMainLoading(false);
+      setIsAuthenticated(true); // false
+      //navigate(window.location.pathname, { replace: true });
+
+      // not authenticated
+    }
+  }
 
   // TODO: use local storage to get only name, email ...
   const getUser = async () => {
@@ -92,17 +136,28 @@ function Header() {
 
 
       <div class="d-grid gap-2 d-md-flex justify-content-md-end animate__animated animate__fadeInRight">
-      {/* {user.fullName} {user.email} */}
+        {/* {user.fullName} {user.email} */}
+        {isAuthenticated ?
+
+          <Link to="/login" type="button" className={"btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}><img src={user_pic_profile} width="25" alt="my-Post" className="rounded-circle border border-2 me-md-2" />{userFullName?.length >= 20 ? userFullName.substring(0, 25) + "..." : userFullName}</Link>
+          :
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <NavLink to="/login" type="button" className={"navbar-nav-link btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}>Login</NavLink>
+            <NavLink to="/register" type="button" className={"navbar-nav-link btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}>Register</NavLink>
+          </div>
+
+        }
         {/* <Link to="/login" type="button" class="btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold" style={{paddingLeft: 10, paddingRight: 15}}><i class="bi bi-box-arrow-in-right me-md-2"/>Login</Link> */}
 
         <div class="dropdown">
           <button class="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        
+
           </button>
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start shadow-lg">
-            <li><NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink></li>
-            <li><NavLink to="/about" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>About</NavLink></li>
-            <li><button type="button" className="dropdown-item btn btn-danger btn-sm rounded-pill shadow" onClick={logout}>Logout</button></li>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+            <li><NavLink to="/" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Posts</NavLink></li>
+            <li><NavLink to="/about" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>About</NavLink></li>
+            <li><hr className="dropdown-divider"/></li>
+            <li><button type="button" className={"btn btn-danger btn-sm rounded-pill  fw-semibold shadow " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} onClick={logout}>Logout</button></li>
           </ul>
         </div>
 

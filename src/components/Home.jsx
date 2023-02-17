@@ -1,6 +1,38 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 
 function Home() {
+
+  useEffect(() => {
+    //checkAuth(PrivateRoute, VerifyToken);
+}, [])
+
+  const checkAuth = (privateRoute, verifyToken) => {
+
+    if (secureLocalStorage.getItem("token")) {
+        try {
+            if (privateRoute) {
+     
+                if (verifyToken) {
+                    navigate("/");
+                } else {
+                    setMainLoading(false);
+                }
+            } else {
+                setMainLoading(false);
+            }
+        } catch (error) {
+            // error checkAuth
+            console.log("error checkAuth");
+        }
+
+    } else {
+        setMainLoading(false);
+        //navigate(window.location.pathname, { replace: true });
+
+        // not authenticated
+    }
+}
+
   return (
     <div>Home Page
 
@@ -23,7 +55,7 @@ function Home() {
             Il brano standard del Lorem Ipsum usato sin dal sedicesimo secolo è riprodotto qui di seguito per coloro che fossero interessati. Anche le sezioni 1.10.32 e 1.10.33 del "de Finibus Bonorum et Malorum" di Cicerone sono riprodotte nella loro forma originale, accompagnate dalla traduzione inglese del 1914 di H. Rackham
           </div>
           <div className="card-footer text-muted">
-card footer 
+            card footer
           </div>
         </div>
       </div>
