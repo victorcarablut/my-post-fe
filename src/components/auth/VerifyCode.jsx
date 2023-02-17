@@ -1,19 +1,13 @@
 import { useEffect, useState } from "react";
 
-// Secure Data (Local Storage)
-import secureLocalStorage from "react-secure-storage";
-
 // Axios (API)
 import axios from "axios";
 
 // config file (URL)
 import { url } from "../../config.js";
 
-// Link 
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-
-import PrivateRoute from '../security/PrivateRoute.js';
-import VerifyToken from '../security/VerifyToken.js';
+// Link
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // Notifications
 import toast from 'react-hot-toast';
@@ -25,7 +19,7 @@ const VerifyCode = () => {
   const navigate = useNavigate();
 
   const [code, setCode] = useState(null);
-  const [email, setEmail] = useState("dibakos701@mirtox.com");
+  const [email, setEmail] = useState(null);
 
   // inputs check validity
   const [handleInputCodeIsValid, setHandleInputCodeIsValid] = useState(false);
@@ -37,56 +31,16 @@ const VerifyCode = () => {
 
   useEffect(() => {
 
-    //checkAuth(PrivateRoute, VerifyToken);
-    //verifyCode();
+    checkAuth();
   }, []);
 
 
-  const checkAuth = (privateRoute, verifyToken) => {
-
-
-    //const { email } = state;
-
-    //console.log("email state: " + state?.email);
+  const checkAuth = () => {
 
     if (!state?.email || state?.email === null || state?.email === undefined) {
-      console.log("undef....");
-      // navigate("/");
-
-      // temporary
-      navigate(window.location.pathname, { replace: true });
-
+      navigate("/");
     } else {
-
       setEmail(state?.email);
-
-      /* if (secureLocalStorage.getItem("token")) {
-        try {
-          if (privateRoute) {
-            console.log("privateRoute: ", "true");
-            if (verifyToken) {
-              console.log("verifyToken: ", "true");
-              navigate("/");
-            } else {
-              console.log("verifyToken: ", "false");
-              //setMainLoading(false);
-            }
-          } else {
-            console.log("privateRoute: ", "false");
-            //setMainLoading(false);
-          }
-        } catch (error) {
-          // error checkAuth
-          console.log("error checkAuth");
-        }
-
-      } else {
-        //navigate("/code/verify");
-        setEmail(state?.email);
-        navigate(window.location.pathname, {replace: true});
-      } */
-
-
     }
   }
 
@@ -98,7 +52,6 @@ const VerifyCode = () => {
     setHandleInputCodeClassName(null);
     setButtonVerifyCodeIsDisabled(false);
   }
-
 
 
   const handleInputCode = async (e) => {
@@ -251,16 +204,11 @@ const VerifyCode = () => {
 
             <p><small className="text-muted mb-3">An email with a verification code was sent to: {email?.substring(0, 5) + "**********"}</small></p>
 
-            <div className="alert alert-secondary" role="alert">
-              <i className="bi bi-info-circle me-2"></i>
-              <small>By clicking Register you have read and agree to our Privacy Policy, including Cookie Use.</small>
-            </div>
-
           </div>
           <div className="card-footer text-muted">
             <div className="animate__animated animate__fadeIn animate__delay-5s">
               <small className="me-2">Haven't received any code yet?</small>
-              <button className="btn btn-light btn-sm me-md-2 rounded-pill border border-2 fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={buttonVerifyCodeIsDisabled} onClick={resendCode}>Resend</button>
+              <button className="btn btn-light btn-sm me-md-2 rounded-pill border border-2" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={buttonVerifyCodeIsDisabled} onClick={resendCode}>Resend</button>
             </div>
 
           </div>

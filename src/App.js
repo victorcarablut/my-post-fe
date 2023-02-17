@@ -14,6 +14,7 @@ import VerifyCode from './components/auth/VerifyCode';
 import Home from './components/Home';
 import Private from './components/other/Private';
 import About from './components/other/About';
+import PrivacyPolicy from './components/other/PrivacyPolicy';
 
 import NotFound from './components/other/NotFound';
 
@@ -28,30 +29,26 @@ function App() {
         <Toaster position="bottom-right" reverseOrder={false} />
         <Header />
         <main>
+          <Routes>
 
-                <Routes>
+            {/* public */}
+            <Route path="/" exact element={<Home />} />
+            <Route path="/login" exact element={<Login />} />
+            <Route path="/register" exact element={<Register />} />
+            <Route path="/code/verify" exact element={<VerifyCode />} />
 
-                  {/* public */}
-                  <Route path="/" exact element={<Home />} />
-                  <Route path="/login" exact element={<Login />} />
-                  <Route path="/register" exact element={<Register />} />
-                  <Route path="/code/verify" exact element={<VerifyCode />} />
-                  {/* private */}
-                  <Route element={<PrivateRoute />}>
-                    <Route path="/private" element={<Private />} />
-                  </Route>
+            {/* private */}
+            <Route element={<PrivateRoute />}>
+              <Route path="/private" element={<Private />} />
+            </Route>
 
-                  {/* public */}
-                  <Route path="/about" exact element={<About />} />
-                  <Route path="*" element={<NotFound />} />
+            {/* public */}
+            <Route path="/about" exact element={<About />} />
+            <Route path="/privacy-policy" exact element={<PrivacyPolicy />} />
 
-                </Routes>
-             
-             
-                
-              
-          
+            <Route path="*" element={<NotFound />} />
 
+          </Routes>
         </main>
         <Footer />
       </Router>

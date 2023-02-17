@@ -298,13 +298,13 @@ function Register() {
 
                                     <div className="alert alert-secondary" role="alert">
                                         <i className="bi bi-info-circle me-2"></i>
-                                        <small>By clicking Register you have read and agree to our Privacy Policy, including Cookie Use.</small>
+                                        <small>By clicking Register you have read and agree to our<Link to="/privacy-policy" type="button" className="btn btn-light-outline btn-sm">Privacy Policy,</Link>including<Link to="/privacy-policy" type="button" className="btn btn-light-outline btn-sm">Cookie Use.</Link></small>
                                     </div>
 
                                 </div>
                                 <div className="card-footer text-muted">
                                     <small className="me-2">Already have an account?</small>
-                                    <Link to="/login" type="button" className="btn btn-light btn-sm me-md-2 rounded-pill border border-2 fw-semibold" style={{ paddingLeft: 10, paddingRight: 15 }}><i className="bi bi-box-arrow-in-right me-md-2" />Login</Link>
+                                    <Link to="/login" type="button" className="btn btn-light btn-sm me-md-2 rounded-pill border border-2">Login</Link>
                                 </div>
                             </div>
                         </div>
