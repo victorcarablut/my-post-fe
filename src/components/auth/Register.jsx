@@ -194,12 +194,13 @@ function Register() {
                 password: password
             }
 
-            await axios.post(`${url}/account/register`, data).then((res) => {
+            await axios.post(`${url}/account/user/register`, data).then((res) => {
                 if (res.status === 200) {
 
                     if (res.data.status_code === 3) {
                         toast.dismiss(toastNotify);
                         toast.error("User with that email already exists");
+                        setButtonRegisterUserIsDisabled(false);
                     } else {
                         toast.dismiss(toastNotify);
                         toast.success("Registered successfully");
@@ -221,7 +222,7 @@ function Register() {
                 console.log(err);
                 setButtonRegisterUserIsDisabled(false);
                 toast.dismiss(toastNotify);
-                toast.error("Server error");
+                toast.error("Error");
                 return;
             })
 
