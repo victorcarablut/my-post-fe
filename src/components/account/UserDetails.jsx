@@ -61,6 +61,7 @@ function UserDetails() {
         }
 
         await axios.get(`${url}/account/user/details`, config).then((res) => {
+
             if (res.status === 200) {
                 setResponseStatusGetUserDetails("success");
                 setUser({
@@ -74,7 +75,7 @@ function UserDetails() {
 
         }).catch(err => {
             setResponseStatusGetUserDetails("error");
-            //Logout();
+            Logout();
             return;
         })
 
