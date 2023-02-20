@@ -92,14 +92,6 @@ function Register() {
         const password = e.target.value;
 
         setPassword(password);
-
-        if (password.length > 5) {
-            setHandleInputPasswordIsValid(true);
-        } else if (password.length === 0) {
-            setHandleInputPasswordClassName(null);
-        } else {
-            setHandleInputPasswordIsValid(false);
-        }
     }
 
 
@@ -111,23 +103,53 @@ function Register() {
             setHandleInputEmailClassName("is-invalid")
         }
 
-        if (handleInputPasswordIsValid) {
-            setHandleInputPasswordClassName("is-valid")
-        } else {
-            setHandleInputPasswordClassName("is-invalid")
-        }
     }
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
     }
 
+    const resendEmailCode = async () => {
+        setButtonLoginUserIsDisabled(true);
+            const toastNotify = toast.loading("Loading... resend code");
+
+            const data = {
+                email: email.toLocaleLowerCase()
+            }
+
+            await axios.post(`${url}/account/email/code/send`, data).then((res) => {
+
+                if (res.status === 200) {
+
+                    toast.dismiss(toastNotify);
+                    toast.success("Code sent successfully");
+
+                    navigate(
+                        "/code/verify",
+                        {
+                            state: {
+                                email: email
+                            }
+                        }
+                    )
+
+                    clearInputs();
+                }
+
+            }).catch(err => {
+                console.log(err);
+                setButtonLoginUserIsDisabled(false);
+                toast.dismiss(toastNotify);
+                toast.error("Error resend code");
+                return;
+            })
+    }
 
     const loginUser = async () => {
 
         checkAllInputsValidity();
 
-        if (handleInputEmailIsValid && handleInputPasswordIsValid) {
+        if (handleInputEmailIsValid) {
 
             setButtonLoginUserIsDisabled(true);
             const toastNotify = toast.loading("Loading");
@@ -137,15 +159,23 @@ function Register() {
                 password: password
             }
 
-            await axios.post(`${url}/account/login`, data).then((res) => {
+            await axios.post(`${url}/account/user/login`, data).then((res) => {
+
                 if (res.status === 200) {
 
-                    if (res.data.status_code === 3) {
+                    if (res.data.status_code === 4) {
                         toast.dismiss(toastNotify);
-                        toast.error("User with that email already exists");
-                    } else {
+                        toast.error("User with that email not found");
+                        setButtonLoginUserIsDisabled(false);
+                    } else if (res.data.status_code === 6) {
                         toast.dismiss(toastNotify);
-                        toast.success("Registered successfully");
+                        toast("Email not verified yet");
+                        setButtonLoginUserIsDisabled(true);
+                        resendEmailCode();
+                    }
+
+                    else {
+                        toast.dismiss(toastNotify);
 
                         navigate("/");
                         clearInputs();
@@ -156,7 +186,7 @@ function Register() {
                 console.log(err);
                 setButtonLoginUserIsDisabled(false);
                 toast.dismiss(toastNotify);
-                toast.error("Server error");
+                toast.error("Error");
                 return;
             })
 
@@ -192,11 +222,8 @@ function Register() {
                                             </div>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type="password" className={"form-control " + handleInputPasswordClassName} id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                            <input type="password" className="form-control" id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputPassword">Password *</label>
-                                            <div className="invalid-feedback">
-                                                <small>Password must contain at least 6 characters</small>
-                                            </div>
                                         </div>
 
                                         <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || !password || buttonLoginUserIsDisabled} onClick={loginUser}>Login</button>
