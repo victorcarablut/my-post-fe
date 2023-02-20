@@ -16,7 +16,7 @@ export const VerifyToken = async () => {
 
   let isValid = false;
 
-  console.log(secureLocalStorage.getItem("token"));
+  //console.log(secureLocalStorage.getItem("token"));
 
   const jwt_token = secureLocalStorage.getItem("token");
 
@@ -31,17 +31,15 @@ export const VerifyToken = async () => {
 
   await axios.get(`${url}/token/verify`, config).then((res) => {
     if (res.status === 200) {
-      console.log("token OK");
+      //console.log("token OK");
       isValid = true;
       //return true;
-    } else {
-      isValid = false;
-      // return false;
     }
 
   }).catch(err => {
     //console.log(err);
-    isValid = false
+    isValid = false;
+    secureLocalStorage.removeItem("token");
     //return false;
   })
 

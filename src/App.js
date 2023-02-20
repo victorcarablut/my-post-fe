@@ -18,6 +18,9 @@ import About from './components/other/About';
 import Contact from './components/other/Contact';
 import PrivacyPolicy from './components/other/PrivacyPolicy';
 
+// account
+import UserDetails from './components/account/UserDetails';
+
 import NotFound from './components/other/NotFound';
 
 // Notifications
@@ -42,6 +45,7 @@ function App() {
             {/* private */}
             <Route element={<PrivateRoute />}>
               <Route path="/private" element={<Private />} />
+              <Route path="/account" element={<UserDetails />} />
             </Route>
 
             {/* public */}

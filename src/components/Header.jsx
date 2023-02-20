@@ -13,6 +13,7 @@ import { url } from "../config.js";
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 
 import { VerifyToken } from './security/VerifyToken.js';
+import { Logout } from './account/Logout.js';
 
 // Logo / User
 import logo from '../assets/images/logo.png';
@@ -22,102 +23,64 @@ import { LoadingFullScreen } from '../components/_resources/ui/Loadings';
 
 function Header() {
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const [mainLoading, setMainLoading] = useState(true);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // temp
-  const [userFullName] = useState("John Doedoe Tony Clarcklkkk John Cena")
-
   const [user, setUser] = useState(
     {
-      fullName: "",
-      email: ""
+      fullName: null
     }
   )
+
+  /* const [user, setUser] = useState(
+    {
+      fullName: null,
+      email: null
+    }
+  ) */
 
   useEffect(() => {
 
     checkAuth();
 
-    //getUser();
-
   }, []);
 
   const checkAuth = async () => {
 
-
-    //const tokenVer = VerifyToken();
-    //console.log(tokenVer);
-
-    //testVer();
-    //const test = testVer();
-    //console.log("test header: " + test);
+   /*  setInterval(() => {
+      checkAuthInfinite();
+    }, 5000); */
 
     const verifyToken = await VerifyToken();
 
-    //console.log("header result verifyToken: " + verifyToken);
-
     if (verifyToken) {
-      //console.log(">> " + true);
       setMainLoading(false);
       setIsAuthenticated(true);
+      getUserDetails();
+
     } else {
-      //console.log(">> " + false);
-      //navigate("/login");
       setMainLoading(false);
       setIsAuthenticated(false);
     }
 
-
-    /*    if (verifyToken) {
-         //navigate("/");
-         setIsAuthenticated(true);
-         setMainLoading(false);
-         //getUser();
-         console.log(">> verifyToken true");
-       } else {
-         // not authenticated
-         console.log(">> verifyToken false");
-         setMainLoading(false);
-         setIsAuthenticated(false);
-       } */
-
-
-    /*  if (secureLocalStorage.getItem("token")) {
-       try {
- 
-         if (verifyToken) {
-           //navigate("/");
-           setIsAuthenticated(true);
-           setMainLoading(false);
-           //getUser();
-           console.log(">> verifyToken true");
-         } else {
-           // not authenticated
-           console.log(">> verifyToken false");
-           setMainLoading(false);
-           setIsAuthenticated(false);
-         }
- 
-       } catch (error) {
-         // error checkAuth
-         console.log("error checkAuth");
-       }
- 
-     } else {
-       setMainLoading(false);
-       setIsAuthenticated(false); // false
-       //navigate(window.location.pathname, { replace: true });
- 
-       // not authenticated
-     } */
   }
 
-  // TODO: use local storage to get only name, email ...
-  const getUser = async () => {
+  const checkAuthInfinite = async () => {
+
+    const verifyToken = await VerifyToken();
+
+    if (verifyToken) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+
+  }
+
+  const getUserDetails = async () => {
 
     const jwt_token = secureLocalStorage.getItem("token");
 
@@ -130,38 +93,31 @@ function Header() {
 
     await axios.get(`${url}/account/user/details`, config).then((res) => {
       if (res.status === 200) {
-        console.log(res.data);
-        console.log(res.data.fullName);
         setUser({
-          fullName: res.data.fullName,
-          email: res.data.email
+          fullName: res.data.fullName
         })
-        //setIsValid(true);
       } else {
-        //setIsValid(false);
-        return;
+        logout();
       }
 
     }).catch(err => {
-      //console.log(err);
-      //setIsValid(false);
       return;
     })
 
   }
 
 
-  const logout = () => {
-    secureLocalStorage.removeItem("token");
-    setUser({
-      fullName: null,
-      email: null
-    })
-    window.location.reload();
-    //console.log(secureLocalStorage.getItem("token"));
+  const logout = async () => {
+   // const logout = await Logout();
+
+    //document.getElementById('button-modal-submit-update-employee-close').click();
+
+    //secureLocalStorage.removeItem("token");
+    //setUser({ fullName: null })
+    //window.location.reload();
+
+    return await Logout();
   }
-
-
 
 
 
@@ -184,10 +140,10 @@ function Header() {
 
 
             <div className="d-grid gap-2 d-md-flex justify-content-md-end animate__animated animate__fadeInRight">
-              {/* {user.fullName} {user.email} */}
+
               {isAuthenticated ?
 
-                <Link to="/login" type="button" className={"btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}><img src={user_pic_profile} width="25" alt="my-Post" className="rounded-circle border border-2 me-md-2" />{userFullName?.length >= 20 ? userFullName.substring(0, 25) + "..." : userFullName}</Link>
+                <Link to="/account" type="button" className={"btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}><img src={user_pic_profile} width="25" alt="my-Post" className="rounded-circle border border-2 me-md-2" />{user.fullName?.length >= 20 ? user.fullName.substring(0, 25) + "..." : user.fullName}</Link>
                 :
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                   <NavLink to="/login" type="button" className={"navbar-nav-link btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}>Login</NavLink>
@@ -208,7 +164,7 @@ function Header() {
                   {isAuthenticated &&
                     <>
                       <li><hr className="dropdown-divider" /></li>
-                      <li><button type="button" className={"btn btn-danger btn-sm rounded-pill  fw-semibold shadow " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} onClick={logout}>Logout</button></li>
+                      <li><button type="button" className="btn btn-danger btn-sm rounded-pill fw-semibold shadow" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal">Logout</button></li>
                     </>
                   }
 
@@ -218,6 +174,25 @@ function Header() {
           </header>
 
       }
+
+      {/* --- Modal (Delete Employee) --- */}
+      <div className="modal fade" id="deleteEmployeeModal" tabIndex="-1" aria-labelledby="deleteEmployeeModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="deleteEmployeeModalLabel">Delete Employee</h1>
+                            <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            <p>Are you sure you want to delete?</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-danger btn-sm rounded-pill shadow" onClick={logout}>Logout</button>
+                            <button type="button" className="btn btn-secondary btn-sm rounded-pill shadow" id='button-modal-submit-delete-employee-close' data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
     </>
   )

@@ -32,11 +32,9 @@ function Register() {
 
     // inputs check validity
     const [handleInputEmailIsValid, setHandleInpuEmailIsValid] = useState(false);
-    const [handleInputPasswordIsValid, setHandleInputPasswordIsValid] = useState(false);
 
     // add CSS className
     const [handleInputEmailClassName, setHandleInputEmailClassName] = useState(null);
-    const [handleInputPasswordClassName, setHandleInputPasswordClassName] = useState(null);
 
     const [buttonLoginUserIsDisabled, setButtonLoginUserIsDisabled] = useState(false);
 
@@ -66,9 +64,7 @@ function Register() {
         setEmail(null);
         setPassword(null);
         setHandleInpuEmailIsValid(false);
-        setHandleInputPasswordIsValid(false);
         setHandleInputEmailClassName(null);
-        setHandleInputPasswordClassName(null);
         setButtonLoginUserIsDisabled(false);
     }
 
