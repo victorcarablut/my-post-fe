@@ -22,6 +22,10 @@ import { Logout } from './Logout.js';
 import { LoadingFullScreen, LoadingSmall } from '../../components/_resources/ui/Loadings';
 import { Error } from '../_resources/ui/Alerts.jsx';
 
+// Date Time Format (moment.js)
+import moment from 'moment/min/moment-with-locales';
+import { moment_locale, moment_format_date_time_long } from '../_resources/date-time/DateTime.js';
+
 function UserDetails() {
 
     const [user, setUser] = useState(
@@ -93,11 +97,11 @@ function UserDetails() {
                                     responseStatusGeUserDetails === "success" ?
 
                                         <ul className="list-group list-group-flush">
-                                            <li className="list-group-item"><strong>Full Name:</strong> {user?.fullName}</li>
-                                            <li className="list-group-item"><strong>Email:</strong> {user?.email}</li>
-                                            <li className="list-group-item"><strong>Username:</strong> {user?.username}</li>
-                                            <li className="list-group-item"><strong>Role:</strong> {user?.role}</li>
-                                            <li className="list-group-item"><strong>Registered Date:</strong> {user?.registeredDate}</li>
+                                            <li className="list-group-item"><small><strong>Full Name:</strong> {user?.fullName}</small></li>
+                                            <li className="list-group-item"><small><strong>Email:</strong> {user?.email}</small></li>
+                                            <li className="list-group-item"><small><strong>Username:</strong> {user?.username}</small></li>
+                                            <li className="list-group-item"><small><strong>Role:</strong> {user?.role}</small></li>
+                                            <li className="list-group-item"><small><strong>Registered Date:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
                                         </ul>
 
                                         :
