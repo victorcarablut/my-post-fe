@@ -157,8 +157,8 @@ function Header() {
       fullName: null,
       email: null
     })
-    navigate("/login");
-    console.log(secureLocalStorage.getItem("token"));
+    window.location.reload();
+    //console.log(secureLocalStorage.getItem("token"));
   }
 
 

@@ -197,7 +197,11 @@ function Register() {
             await axios.post(`${url}/account/user/register`, data).then((res) => {
                 if (res.status === 200) {
 
-                    if (res.data.status_code === 3) {
+                    if(res.data.status_code === 2) {
+                        toast.dismiss(toastNotify);
+                        toast.error("Invalid email format");
+                        setButtonRegisterUserIsDisabled(false);
+                    } else if (res.data.status_code === 3) {
                         toast.dismiss(toastNotify);
                         toast.error("User with that email already exists");
                         setButtonRegisterUserIsDisabled(false);

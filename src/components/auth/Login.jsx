@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 // Axios (API)
 import axios from 'axios';
 
+// Secure Data (Local Storage)
+import secureLocalStorage from "react-secure-storage";
+
 // config file (URL)
 import { url } from "../../config.js";
 
@@ -163,7 +166,11 @@ function Register() {
 
                 if (res.status === 200) {
 
-                    if (res.data.status_code === 4) {
+                    if(res.data.status_code === 2) {
+                        toast.dismiss(toastNotify);
+                        toast.error("Invalid email format");
+                        setButtonLoginUserIsDisabled(false);
+                    } else if (res.data.status_code === 4) {
                         toast.dismiss(toastNotify);
                         toast.error("User with that email not found");
                         setButtonLoginUserIsDisabled(false);
@@ -172,12 +179,12 @@ function Register() {
                         toast("Email not verified yet");
                         setButtonLoginUserIsDisabled(true);
                         resendEmailCode();
-                    }
+                    } else {
+                        secureLocalStorage.setItem("token", res.data.token);
 
-                    else {
                         toast.dismiss(toastNotify);
 
-                        navigate("/");
+                        window.location.reload();
                         clearInputs();
                     }
                 }
