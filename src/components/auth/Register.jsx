@@ -12,8 +12,7 @@ import { url } from "../../config.js";
 // Link 
 import { Link, useNavigate } from 'react-router-dom';
 
-import PrivateRoute from '../security/PrivateRoute.js';
-import {VerifyToken } from '../security/VerifyToken.js';
+import { VerifyToken } from '../security/VerifyToken.js';
 
 import { LoadingFullScreen } from '../_resources/ui/Loadings';
 
@@ -48,34 +47,23 @@ function Register() {
     const [buttonRegisterUserIsDisabled, setButtonRegisterUserIsDisabled] = useState(false);
 
     useEffect(() => {
-        checkAuth(PrivateRoute, VerifyToken);
+        checkAuth();
     }, [])
 
-    const checkAuth = (privateRoute, verifyToken) => {
+    /* 
+    if access to this page, check if user are already authenticated
+    - if yes: auto redirect to (home)
+    - if not: stay here
+    */
+    const checkAuth = async () => {
 
-        if (secureLocalStorage.getItem("token")) {
-            try {
-                if (privateRoute) {
-                    console.log("privateRoute: ", "true");
-                    if (verifyToken) {
-                        console.log("verifyToken: ", "true");
-                        navigate("/");
-                    } else {
-                        console.log("verifyToken: ", "false");
-                        setMainLoading(false);
-                    }
-                } else {
-                    console.log("privateRoute: ", "false");
-                    setMainLoading(false);
-                }
-            } catch (error) {
-                // error checkAuth
-                console.log("error checkAuth");
-            }
+        const verifyToken = await VerifyToken();
 
+        if (verifyToken) {
+            navigate("/");
+            setMainLoading(false);
         } else {
             setMainLoading(false);
-            //navigate(window.location.pathname, { replace: true });
         }
     }
 
@@ -123,7 +111,7 @@ function Register() {
         if (email.includes('@') && email.includes('.') && email.length > 3) {
 
             setHandleInpuEmailIsValid(true);
-        } else if(email.length === 0) {
+        } else if (email.length === 0) {
             setHandleInputEmailClassName(null)
         } else {
             setHandleInpuEmailIsValid(false);
@@ -153,7 +141,7 @@ function Register() {
 
         if (passwordRepeat.length > 5 && passwordRepeat === password) {
             setHandleInputPasswordRepeatIsValid(true);
-        } else if(passwordRepeat.length === 0) {
+        } else if (passwordRepeat.length === 0) {
             setHandleInputPasswordRepeatClassName(null);
         } else {
             setHandleInputPasswordRepeatIsValid(false);
@@ -246,7 +234,6 @@ function Register() {
     return (
 
         <>
-
             {
                 mainLoading ? <LoadingFullScreen />
                     :
@@ -309,8 +296,9 @@ function Register() {
                             </div>
                         </div>
                     </div>
-            }
 
+
+            }
         </>
 
     )

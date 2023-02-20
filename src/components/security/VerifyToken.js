@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 // Secure Data (Local Storage)
 import secureLocalStorage from "react-secure-storage";
@@ -9,13 +9,15 @@ import axios from "axios";
 // config file (URL)
 import { url } from "../../config.js";
 
+//import { AuthContext } from "./AuthContext.js";
+
 export const VerifyToken = async () => {
 
   console.log("VerifyToken.js");
 
   let isValid = false;
 
-  //console.log(secureLocalStorage.getItem("token"));
+  console.log(secureLocalStorage.getItem("token"));
 
   const jwt_token = secureLocalStorage.getItem("token");
 
@@ -32,7 +34,7 @@ export const VerifyToken = async () => {
     if (res.status === 200) {
       console.log("token OK");
       isValid = true;
-      return true;
+      //return true;
     } else {
       isValid = false;
       // return false;
@@ -47,8 +49,11 @@ export const VerifyToken = async () => {
   return isValid;
 }
 
-export const TestVer = () => {
-  console.log("tes method ver");
-
-  return true;
+/* export const IsAuthenticatedContext = () => {
+  return useContext(AuthContext)
 }
+
+export const IsAuthenticatedLocalStorage = () => {
+  return secureLocalStorage.getItem("authenticated");;
+}
+ */

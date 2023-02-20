@@ -12,7 +12,7 @@ import { url } from "../config.js";
 // Link 
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 
-import {TestVer, VerifyToken} from './security/VerifyToken.js';
+import { VerifyToken } from './security/VerifyToken.js';
 
 // Logo / User
 import logo from '../assets/images/logo.png';
@@ -58,51 +58,62 @@ function Header() {
 
     const verifyToken = await VerifyToken();
 
-    console.log("header result verifyToken: " + verifyToken);
+    //console.log("header result verifyToken: " + verifyToken);
 
-
- /*    if (verifyToken) {
-      //navigate("/");
-      setIsAuthenticated(true);
+    if (verifyToken) {
+      //console.log(">> " + true);
       setMainLoading(false);
-      //getUser();
-      console.log(">> verifyToken true");
+      setIsAuthenticated(true);
     } else {
-      // not authenticated
-      console.log(">> verifyToken false");
+      //console.log(">> " + false);
+      //navigate("/login");
       setMainLoading(false);
       setIsAuthenticated(false);
-    } */
+    }
 
 
-   /*  if (secureLocalStorage.getItem("token")) {
-      try {
+    /*    if (verifyToken) {
+         //navigate("/");
+         setIsAuthenticated(true);
+         setMainLoading(false);
+         //getUser();
+         console.log(">> verifyToken true");
+       } else {
+         // not authenticated
+         console.log(">> verifyToken false");
+         setMainLoading(false);
+         setIsAuthenticated(false);
+       } */
 
-        if (verifyToken) {
-          //navigate("/");
-          setIsAuthenticated(true);
-          setMainLoading(false);
-          //getUser();
-          console.log(">> verifyToken true");
-        } else {
-          // not authenticated
-          console.log(">> verifyToken false");
-          setMainLoading(false);
-          setIsAuthenticated(false);
-        }
 
-      } catch (error) {
-        // error checkAuth
-        console.log("error checkAuth");
-      }
-
-    } else {
-      setMainLoading(false);
-      setIsAuthenticated(false); // false
-      //navigate(window.location.pathname, { replace: true });
-
-      // not authenticated
-    } */
+    /*  if (secureLocalStorage.getItem("token")) {
+       try {
+ 
+         if (verifyToken) {
+           //navigate("/");
+           setIsAuthenticated(true);
+           setMainLoading(false);
+           //getUser();
+           console.log(">> verifyToken true");
+         } else {
+           // not authenticated
+           console.log(">> verifyToken false");
+           setMainLoading(false);
+           setIsAuthenticated(false);
+         }
+ 
+       } catch (error) {
+         // error checkAuth
+         console.log("error checkAuth");
+       }
+ 
+     } else {
+       setMainLoading(false);
+       setIsAuthenticated(false); // false
+       //navigate(window.location.pathname, { replace: true });
+ 
+       // not authenticated
+     } */
   }
 
   // TODO: use local storage to get only name, email ...
@@ -155,48 +166,60 @@ function Header() {
 
 
   return (
-    <header className="d-flex justify-content-around navbar sticky-top">
+    <>
 
-      <div className="animate__animated animate__zoomIn">
-        <Link to="/" className="navbar-brand">
-          <img src={logo} width="80" alt="my-Post" />
-        </Link>
-      </div>
+      {
+        mainLoading ? <LoadingFullScreen />
 
-
-      <div className="d-grid gap-2 d-md-flex justify-content-md-end animate__animated animate__fadeInRight">
-        {/* {user.fullName} {user.email} */}
-        {isAuthenticated ?
-
-          <Link to="/login" type="button" className={"btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}><img src={user_pic_profile} width="25" alt="my-Post" className="rounded-circle border border-2 me-md-2" />{userFullName?.length >= 20 ? userFullName.substring(0, 25) + "..." : userFullName}</Link>
           :
-          <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-            <NavLink to="/login" type="button" className={"navbar-nav-link btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}>Login</NavLink>
-            <NavLink to="/register" type="button" className={"navbar-nav-link btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}>Register</NavLink>
-          </div>
 
-        }
-        {/* <Link to="/login" type="button" class="btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold" style={{paddingLeft: 10, paddingRight: 15}}><i class="bi bi-box-arrow-in-right me-md-2"/>Login</Link> */}
 
-        <div className="dropdown">
-          <button className="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <header className="d-flex justify-content-around navbar sticky-top">
 
-          </button>
-          <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-            <li><NavLink to="/" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Posts</NavLink></li>
-            <li><NavLink to="/about" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>About</NavLink></li>
-            <li><NavLink to="/contact" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Contact</NavLink></li>
-            {isAuthenticated &&
-              <>
-                <li><hr className="dropdown-divider" /></li>
-                <li><button type="button" className={"btn btn-danger btn-sm rounded-pill  fw-semibold shadow " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} onClick={logout}>Logout</button></li>
-              </>
-            }
+            <div className="animate__animated animate__zoomIn">
+              <Link to="/" className="navbar-brand">
+                <img src={logo} width="80" alt="my-Post" />
+              </Link>
+            </div>
 
-          </ul>
-        </div>
-      </div>
-    </header>
+
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end animate__animated animate__fadeInRight">
+              {/* {user.fullName} {user.email} */}
+              {isAuthenticated ?
+
+                <Link to="/login" type="button" className={"btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}><img src={user_pic_profile} width="25" alt="my-Post" className="rounded-circle border border-2 me-md-2" />{userFullName?.length >= 20 ? userFullName.substring(0, 25) + "..." : userFullName}</Link>
+                :
+                <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <NavLink to="/login" type="button" className={"navbar-nav-link btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}>Login</NavLink>
+                  <NavLink to="/register" type="button" className={"navbar-nav-link btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}>Register</NavLink>
+                </div>
+
+              }
+              {/* <Link to="/login" type="button" class="btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold" style={{paddingLeft: 10, paddingRight: 15}}><i class="bi bi-box-arrow-in-right me-md-2"/>Login</Link> */}
+
+              <div className="dropdown">
+                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                  <li><NavLink to="/" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Posts</NavLink></li>
+                  <li><NavLink to="/about" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>About</NavLink></li>
+                  <li><NavLink to="/contact" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Contact</NavLink></li>
+                  {isAuthenticated &&
+                    <>
+                      <li><hr className="dropdown-divider" /></li>
+                      <li><button type="button" className={"btn btn-danger btn-sm rounded-pill  fw-semibold shadow " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} onClick={logout}>Logout</button></li>
+                    </>
+                  }
+
+                </ul>
+              </div>
+            </div>
+          </header>
+
+      }
+
+    </>
   )
 }
 
