@@ -84,8 +84,8 @@ function UserDetails() {
         <div className="d-flex justify-content-center">
 
             <div className="container-fluid" style={{ maxWidth: 400 }}>
-                <div className="card text-center shadow-lg animate__animated animate__fadeIn">
-                    <div className="card-header fw-semibold">
+                <div className="card text-left shadow-lg animate__animated animate__fadeIn">
+                    <div className="card-header text-center fw-semibold">
                         <i className="bi bi-person-fill me-2" />
                         User Details
                     </div>
@@ -110,7 +110,7 @@ function UserDetails() {
 
 
                     </div>
-                    <div className="card-footer text-muted">
+                    <div className="card-footer text-center text-muted">
                         <small className="me-2">Don't have an account?</small>
                     </div>
                 </div>
