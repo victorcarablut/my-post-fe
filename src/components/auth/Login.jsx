@@ -27,8 +27,9 @@ function Register() {
     const [mainLoading, setMainLoading] = useState(true);
 
     const [email, setEmail] = useState(null);
-    const [password, setPassword] = useState(null)
-
+    const [password, setPassword] = useState(null);
+    const [passwordType, setPasswordType] = useState("password");
+    const [passwordVisibleChecked, setPasswordVisibleChecked] = useState(false);
 
     // inputs check validity
     const [handleInputEmailIsValid, setHandleInpuEmailIsValid] = useState(false);
@@ -93,6 +94,17 @@ function Register() {
         setPassword(password);
     }
 
+    const handleInputPasswordVisible = async () => {
+
+        setPasswordVisibleChecked(!passwordVisibleChecked);
+
+        if(!passwordVisibleChecked) {
+            setPasswordType("text");
+        } else {
+            setPasswordType("password");
+        }
+        
+    }
 
     const checkAllInputsValidity = () => {
 
@@ -110,38 +122,38 @@ function Register() {
 
     const resendEmailCode = async () => {
         setButtonLoginUserIsDisabled(true);
-            const toastNotify = toast.loading("Loading... resend code");
+        const toastNotify = toast.loading("Loading... resend code");
 
-            const data = {
-                email: email.toLocaleLowerCase()
+        const data = {
+            email: email.toLocaleLowerCase()
+        }
+
+        await axios.post(`${url}/account/email/code/send`, data).then((res) => {
+
+            if (res.status === 200) {
+
+                toast.dismiss(toastNotify);
+                toast.success("Code sent successfully");
+
+                navigate(
+                    "/code/verify",
+                    {
+                        state: {
+                            email: email
+                        }
+                    }
+                )
+
+                clearInputs();
             }
 
-            await axios.post(`${url}/account/email/code/send`, data).then((res) => {
-
-                if (res.status === 200) {
-
-                    toast.dismiss(toastNotify);
-                    toast.success("Code sent successfully");
-
-                    navigate(
-                        "/code/verify",
-                        {
-                            state: {
-                                email: email
-                            }
-                        }
-                    )
-
-                    clearInputs();
-                }
-
-            }).catch(err => {
-                console.log(err);
-                setButtonLoginUserIsDisabled(false);
-                toast.dismiss(toastNotify);
-                toast.error("Error resend code");
-                return;
-            })
+        }).catch(err => {
+            console.log(err);
+            setButtonLoginUserIsDisabled(false);
+            toast.dismiss(toastNotify);
+            toast.error("Error resend code");
+            return;
+        })
     }
 
     const loginUser = async () => {
@@ -151,6 +163,7 @@ function Register() {
         if (handleInputEmailIsValid) {
 
             setButtonLoginUserIsDisabled(true);
+            setPasswordType("password");
             const toastNotify = toast.loading("Loading");
 
             const data = {
@@ -162,7 +175,7 @@ function Register() {
 
                 if (res.status === 200) {
 
-                    if(res.data.status_code === 2) {
+                    if (res.data.status_code === 2) {
                         toast.dismiss(toastNotify);
                         toast.error("Invalid email format");
                         setButtonLoginUserIsDisabled(false);
@@ -225,8 +238,12 @@ function Register() {
                                             </div>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type="password" className="form-control" id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                            <input type={passwordType} className="form-control" id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputPassword">Password *</label>
+                                        </div>
+                                        <div className="mb-3">
+                                            <input type="checkbox" className="form-check-input me-md-2" id="checkPasswordVisible" defaultChecked={passwordVisibleChecked} onChange={() => handleInputPasswordVisible()} />
+                                            <label className="form-check-label" htmlFor="checkPasswordVisible">Show Password</label>
                                         </div>
 
                                         <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || !password || buttonLoginUserIsDisabled} onClick={loginUser}>Login</button>

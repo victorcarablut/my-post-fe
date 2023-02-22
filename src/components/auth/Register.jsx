@@ -28,8 +28,11 @@ function Register() {
 
     const [fullName, setFullName] = useState(null);
     const [email, setEmail] = useState(null);
-    const [password, setPassword] = useState(null)
-    const [passwordRepeat, setPasswordRepeat] = useState(null)
+    const [password, setPassword] = useState(null);
+    const [passwordRepeat, setPasswordRepeat] = useState(null);
+
+    const [passwordType, setPasswordType] = useState("password");
+    const [passwordVisibleChecked, setPasswordVisibleChecked] = useState(false);
 
 
     // inputs check validity
@@ -148,6 +151,18 @@ function Register() {
         }
     }
 
+    const handleInputPasswordVisible = async () => {
+
+        setPasswordVisibleChecked(!passwordVisibleChecked);
+
+        if(!passwordVisibleChecked) {
+            setPasswordType("text");
+        } else {
+            setPasswordType("password");
+        }
+        
+    }
+
     const checkAllInputsValidity = () => {
         if (handleInputFullNameIsValid) {
             setHandleInputFullNameClassName("is-valid");
@@ -186,6 +201,7 @@ function Register() {
         if (handleInputFullNameIsValid && handleInputEmailIsValid && handleInputPasswordIsValid && handleInputPasswordRepeatIsValid) {
 
             setButtonRegisterUserIsDisabled(true);
+            setPasswordType("password");
             const toastNotify = toast.loading("Loading");
 
             const data = {
@@ -268,18 +284,22 @@ function Register() {
                                             </div>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type="password" className={"form-control " + handleInputPasswordClassName} id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                            <input type={passwordType} className={"form-control " + handleInputPasswordClassName} id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputPassword">Password *</label>
                                             <div className="invalid-feedback">
                                                 <small>Password must contain at least 6 characters</small>
                                             </div>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type="password" className={"form-control " + handleInputPasswordRepeatClassName} id="floatingInputPasswordRepeat" placeholder="Password Repeat" onChange={(e) => handleInputPasswordRepeat(e)} autoComplete="off" required />
+                                            <input type={passwordType} className={"form-control " + handleInputPasswordRepeatClassName} id="floatingInputPasswordRepeat" placeholder="Password Repeat" onChange={(e) => handleInputPasswordRepeat(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputPasswordRepeat">Password Repeat *</label>
                                             <div className="invalid-feedback">
                                                 <small>Passwords must match</small>
                                             </div>
+                                        </div>
+                                        <div className="mb-3">
+                                            <input type="checkbox" className="form-check-input me-md-2" id="checkPasswordVisible" defaultChecked={passwordVisibleChecked} onChange={() => handleInputPasswordVisible()} />
+                                            <label className="form-check-label" htmlFor="checkPasswordVisible">Show Password</label>
                                         </div>
 
                                         <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!fullName || !email || !password || !passwordRepeat || buttonRegisterUserIsDisabled} onClick={registerUser}>Register</button>
