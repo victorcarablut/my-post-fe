@@ -25,6 +25,7 @@ import { Error } from '../_resources/ui/Alerts.jsx';
 // Date Time Format (moment.js)
 import moment from 'moment/min/moment-with-locales';
 import { moment_locale, moment_format_date_time_long } from '../_resources/date-time/DateTime.js';
+import UserPasswordRecover from './UserPasswordRecover.jsx';
 
 function UserDetails() {
 
@@ -113,10 +114,12 @@ function UserDetails() {
                     </div>
                     <div className="card-footer text-center text-muted">
                         <small className="me-2">Don't have an account?</small>
+                        <UserPasswordRecover />
                     </div>
                 </div>
             </div>
         </div>
+
     )
 }
 
