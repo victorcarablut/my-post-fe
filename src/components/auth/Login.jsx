@@ -19,6 +19,9 @@ import { LoadingFullScreen } from '../_resources/ui/Loadings';
 // Notifications
 import toast from 'react-hot-toast';
 
+import UserPasswordRecover from '../account/UserPasswordRecover.jsx';
+import SendEmailCodeNoReplay from '../account/SendEmailCodeNoReplay.jsx';
+
 
 function Register() {
 
@@ -98,12 +101,12 @@ function Register() {
 
         setPasswordVisibleChecked(!passwordVisibleChecked);
 
-        if(!passwordVisibleChecked) {
+        if (!passwordVisibleChecked) {
             setPasswordType("text");
         } else {
             setPasswordType("password");
         }
-        
+
     }
 
     const checkAllInputsValidity = () => {
@@ -243,18 +246,19 @@ function Register() {
                                         </div>
                                         <div className="mb-3">
                                             <input type="checkbox" className="form-check-input me-md-2" id="checkPasswordVisible" defaultChecked={passwordVisibleChecked} onChange={() => handleInputPasswordVisible()} />
-                                            <label className="form-check-label" htmlFor="checkPasswordVisible">Show Password</label>
+                                            <label className="form-check-label" htmlFor="checkPasswordVisible"><small>Show Password</small></label>
                                         </div>
 
                                         <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || !password || buttonLoginUserIsDisabled} onClick={loginUser}>Login</button>
                                     </form>
 
-                                    <p><small className="text-muted mb-3">All fields marked with an asterisk (*) are required.</small></p>
+                                    <p><small className="text-muted">All fields marked with an asterisk (*) are required.</small></p>
 
+                                    <button type="button" className="btn btn-outline btn-sm rounded-pill mb-3" data-bs-toggle="modal" data-bs-target="#passwordRecoverModal">Forgot Password?</button>
 
                                     <div className="alert alert-secondary" role="alert">
                                         <i className="bi bi-info-circle me-2"></i>
-                                        <small>By clicking Login you have read and agree to our<Link to="/privacy-policy" type="button" className="btn btn-light-outline btn-sm">Privacy Policy,</Link>including<Link to="/privacy-policy" type="button" className="btn btn-light-outline btn-sm">Cookie Use.</Link></small>
+                                        <small>By clicking Login you have read and agree to our<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy,</Link>including<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Cookie Use.</Link></small>
                                     </div>
 
                                 </div>
@@ -264,7 +268,32 @@ function Register() {
                                 </div>
                             </div>
                         </div>
+
+                        {/* --- Modal (Reset Password) --- */}
+                        <div className="modal fade" id="passwordRecoverModal" tabIndex="-1" aria-labelledby="passwordRecoverModalLabel" aria-hidden="true" >
+                            <div className="modal-dialog" style={{ maxWidth: 400 }}>
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h1 className="modal-title fs-5" id="passwordRecoverModalLabel">Recover Password</h1>
+                                        <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div className="modal-body">
+                                        <p>Send code</p>
+                                        {/* <SendEmailCodeNoReplay email = {email}  /> */}
+                                        <div>
+                                            <UserPasswordRecover emailParent={email ? email : ""} />
+                                        </div>
+
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-danger btn-sm rounded-pill shadow">Logout</button>
+                                        <button type="button" className="btn btn-secondary btn-sm rounded-pill shadow" id='button-modal-submit-delete-employee-close' data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
 
 
             }

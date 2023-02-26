@@ -305,12 +305,11 @@ function Register() {
                                         <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!fullName || !email || !password || !passwordRepeat || buttonRegisterUserIsDisabled} onClick={registerUser}>Register</button>
                                     </form>
 
-                                    <p><small className="text-muted mb-3">All fields marked with an asterisk (*) are required.</small></p>
-
+                                    <p><small className="text-muted">All fields marked with an asterisk (*) are required.</small></p>
 
                                     <div className="alert alert-secondary" role="alert">
                                         <i className="bi bi-info-circle me-2"></i>
-                                        <small>By clicking Register you have read and agree to our<Link to="/privacy-policy" type="button" className="btn btn-light-outline btn-sm">Privacy Policy,</Link>including<Link to="/privacy-policy" type="button" className="btn btn-light-outline btn-sm">Cookie Use.</Link></small>
+                                        <small>By clicking Register you have read and agree to our<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy,</Link>including<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Cookie Use.</Link></small>
                                     </div>
 
                                 </div>
