@@ -27,6 +27,9 @@ function UserPasswordRecover({ emailParent }) {
 
   const [buttonSendEmailCodeIsDisabled, setButtonSendEmailCodeIsDisabled] = useState(false);
 
+  // http response status
+  //const [responseStatusSendEmailCodeNoReply, setResponseStatusSendEmailCodeNoReply] = useState("");
+
   /*   useEffect(() => {
       //setEmail(emailParent);
     }, []) */
@@ -40,6 +43,10 @@ function UserPasswordRecover({ emailParent }) {
   }
 
   const sendEmailCodeNoReply = async () => {
+
+    checkAllInputsValidity(); 
+
+    if (handleInputEmailIsValid) {
 
     setButtonSendEmailCodeIsDisabled(true);
     const toastNotify = toast.loading("Loading");
@@ -55,37 +62,43 @@ function UserPasswordRecover({ emailParent }) {
         if (res.data.status_code === 1) {
           toast.dismiss(toastNotify);
           toast.error("Error"); // Error save data to DB
-          //setButtonLoginUserIsDisabled(false);
+          setButtonSendEmailCodeIsDisabled(false);
         } else if (res.data.status_code === 2) {
           toast.dismiss(toastNotify);
           toast.error("Invalid email format");
-          //setButtonLoginUserIsDisabled(false);
+          setButtonSendEmailCodeIsDisabled(false);
         } else if (res.data.status_code === 4) {
           toast.dismiss(toastNotify);
           toast.error("Account with that email doesn't exist");
-          //setButtonLoginUserIsDisabled(false);
+          setButtonSendEmailCodeIsDisabled(false);
         } else if (res.data.status_code === 6) {
           toast.dismiss(toastNotify);
           toast("Email not verified yet");
-          //setButtonLoginUserIsDisabled(true);
+          setButtonSendEmailCodeIsDisabled(false);
           //resendEmailCode();
         } else {
           //secureLocalStorage.setItem("token", res.data.token);
 
           toast.dismiss(toastNotify);
 
+          // OK
+
           //window.location.reload();
-          clearInputs();
+          //clearInputs();
         }
       }
 
     }).catch(err => {
       console.log(err);
-      //setButtonLoginUserIsDisabled(false);
+      setButtonSendEmailCodeIsDisabled(false);
       toast.dismiss(toastNotify);
       toast.error("Error");
       return;
     })
+
+  } else {
+      return;
+  }
 
   }
 
@@ -175,7 +188,16 @@ function UserPasswordRecover({ emailParent }) {
 
   const pass = () => {
     setEmail(emailParent);
+
+    if (emailParent.includes('@') && emailParent.includes('.') && emailParent.length > 3) {
+      setHandleInpuEmailIsValid(true);
+    } else if (emailParent.length === 0) {
+      setHandleInputEmailClassName(null)
+    } else {
+      setHandleInpuEmailIsValid(false);
+    }
   }
+
   const test = () => {
     console.log("test email: " + email);
   }
@@ -204,7 +226,7 @@ function UserPasswordRecover({ emailParent }) {
           </div>
         </div>
 
-        <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || buttonSendEmailCodeIsDisabled} onClick={test}>Send Code</button>
+        <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || buttonSendEmailCodeIsDisabled} onClick={sendEmailCodeNoReply}>Send Code</button>
       </form>
     </div>
   )

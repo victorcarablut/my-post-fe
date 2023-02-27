@@ -166,7 +166,15 @@ function Register() {
         if (handleInputEmailIsValid) {
 
             setButtonLoginUserIsDisabled(true);
-            setPasswordType("password");
+
+            if(passwordType === "text") {
+                setPasswordType("password");
+            }
+
+            if(passwordVisibleChecked) {
+                setPasswordVisibleChecked(!passwordVisibleChecked);
+            }
+
             const toastNotify = toast.loading("Loading");
 
             const data = {
@@ -245,7 +253,7 @@ function Register() {
                                             <label htmlFor="floatingInputPassword">Password *</label>
                                         </div>
                                         <div className="mb-3">
-                                            <input type="checkbox" className="form-check-input me-md-2" id="checkPasswordVisible" defaultChecked={passwordVisibleChecked} onChange={() => handleInputPasswordVisible()} />
+                                            <input type="checkbox" className="form-check-input me-md-2" id="checkPasswordVisible" checked={passwordVisibleChecked} onChange={() => handleInputPasswordVisible()} />
                                             <label className="form-check-label" htmlFor="checkPasswordVisible"><small>Show Password</small></label>
                                         </div>
 
