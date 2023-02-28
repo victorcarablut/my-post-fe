@@ -14,9 +14,9 @@ import toast from 'react-hot-toast';
 
 const VerifyCode = () => {
 
-  const { state } = useLocation();
-
   const navigate = useNavigate();
+
+  const { state } = useLocation();
 
   const [code, setCode] = useState(null);
   const [email, setEmail] = useState(null);
@@ -31,11 +31,11 @@ const VerifyCode = () => {
 
   useEffect(() => {
 
-    checkAuth();
+    checkState();
   }, []);
 
 
-  const checkAuth = () => {
+  const checkState = () => {
 
     if (!state?.email || state?.email === null || state?.email === undefined) {
       navigate("/");
@@ -103,14 +103,22 @@ const VerifyCode = () => {
 
         if (res.status === 200) {
 
-          if (res.data.status_code === 2) {
+          if (res.data.status_code === 1) {
+            toast.dismiss(toastNotify);
+            toast.error("Error"); // Error save data to DB
+            setButtonVerifyCodeIsDisabled(false);
+            setHandleInputCodeIsValid(false);
 
+          } else if (res.data.status_code === 2) {
             toast.dismiss(toastNotify);
             toast.error("Wrong code");
-
             setButtonVerifyCodeIsDisabled(false);
             setHandleInputCodeIsValid(false);
             setHandleInputCodeClassName("is-invalid animate__animated animate__shakeX");
+          } else if (res.data.status_code === 4) {
+            toast.dismiss(toastNotify);
+            toast.error("Account with that email doesn't exist");
+            setButtonVerifyCodeIsDisabled(false);
           } else {
             toast.dismiss(toastNotify);
             toast.success("Code verified");

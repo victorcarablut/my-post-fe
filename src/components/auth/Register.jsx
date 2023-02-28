@@ -49,6 +49,9 @@ function Register() {
 
     const [buttonRegisterUserIsDisabled, setButtonRegisterUserIsDisabled] = useState(false);
 
+    const [userRegiteredStatus, setUserRegiteredStatus] = useState("");
+    const [emailCodeStatus, setEmailCodeStatus] = useState("");
+
     useEffect(() => {
         checkAuth();
     }, [])
@@ -76,15 +79,21 @@ function Register() {
         setEmail(null);
         setPassword(null);
         setPasswordRepeat(null);
+
         setHandleInputFullNameIsValid(false);
         setHandleInpuEmailIsValid(false);
         setHandleInputPasswordIsValid(false);
         setHandleInputPasswordRepeatIsValid(false);
+
         setHandleInputFullNameClassName(null);
         setHandleInputEmailClassName(null);
         setHandleInputPasswordClassName(null);
         setHandleInputPasswordRepeatClassName(null);
+
         setButtonRegisterUserIsDisabled(false);
+
+        setUserRegiteredStatus("");
+        setEmailCodeStatus("");
     }
 
     // handle inputs control
@@ -155,12 +164,12 @@ function Register() {
 
         setPasswordVisibleChecked(!passwordVisibleChecked);
 
-        if(!passwordVisibleChecked) {
+        if (!passwordVisibleChecked) {
             setPasswordType("text");
         } else {
             setPasswordType("password");
         }
-        
+
     }
 
     const checkAllInputsValidity = () => {
@@ -189,7 +198,7 @@ function Register() {
         }
     }
 
-    const handleSubmitRegister = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
     }
 
@@ -202,7 +211,8 @@ function Register() {
 
             setButtonRegisterUserIsDisabled(true);
             setPasswordType("password");
-            const toastNotify = toast.loading("Loading");
+            setUserRegiteredStatus("loading");
+            const toastNotify = toast.loading("Register User");
 
             const data = {
                 fullName: fullName,
@@ -213,7 +223,12 @@ function Register() {
             await axios.post(`${url}/account/user/register`, data).then((res) => {
                 if (res.status === 200) {
 
-                    if(res.data.status_code === 2) {
+                    if (res.data.status_code === 1) {
+                        toast.dismiss(toastNotify);
+                        toast.error("Error"); // Error save data to DB
+                        setButtonRegisterUserIsDisabled(false);
+                        setUserRegiteredStatus("error");
+                    } else if (res.data.status_code === 2) {
                         toast.dismiss(toastNotify);
                         toast.error("Invalid email format");
                         setButtonRegisterUserIsDisabled(false);
@@ -221,28 +236,33 @@ function Register() {
                         toast.dismiss(toastNotify);
                         toast.error("User with that email already exists");
                         setButtonRegisterUserIsDisabled(false);
+                        setUserRegiteredStatus("email_already_exist");
                     } else {
                         toast.dismiss(toastNotify);
                         toast.success("Registered successfully");
 
-                        navigate(
+                        setUserRegiteredStatus("success");
+
+                        sendEmailCodeNoReply(email);
+
+                        /* navigate(
                             "/code/verify",
                             {
                                 state: {
                                     email: email
                                 }
                             }
-                        )
+                        ) */
 
-                        clearInputs();
+                        // clearInputs();
                     }
                 }
 
             }).catch(err => {
-                console.log(err);
-                setButtonRegisterUserIsDisabled(false);
                 toast.dismiss(toastNotify);
                 toast.error("Error");
+                setButtonRegisterUserIsDisabled(false);
+                setUserRegiteredStatus("error");
                 return;
             })
 
@@ -250,6 +270,72 @@ function Register() {
             return;
         }
 
+    }
+
+
+    const sendEmailCodeNoReply = async (email) => {
+
+        setEmailCodeStatus("loading")
+        const toastNotify = toast.loading("Send Email Code");
+
+        const data = {
+            email: email.toString().toLocaleLowerCase()
+        }
+
+        await axios.post(`${url}/account/email/code/send0`, data).then((res) => {
+
+            if (res.status === 200) {
+
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error"); // Error save data to DB
+                    setEmailCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else if (res.data.status_code === 2) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Invalid email format");
+                    setEmailCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else if (res.data.status_code === 4) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Account with that email doesn't exist");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else if (res.data.status_code === 7) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error while sending email, try again!");
+                    setEmailCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                    //resendEmailCode();
+                } else {
+                    //secureLocalStorage.setItem("token", res.data.token);
+
+                    toast.dismiss(toastNotify);
+                    toast.success("Email sended successfully");
+                    setEmailCodeStatus("success");
+
+                    navigate(
+                        "/code/verify",
+                        {
+                            state: {
+                                email: email.toLocaleLowerCase()
+                            }
+                        }
+                    )
+
+                    // OK
+
+                    //window.location.reload();
+                    clearInputs();
+                }
+            }
+
+        }).catch(err => {
+            //setButtonSendEmailCodeIsDisabled(false);
+            toast.dismiss(toastNotify);
+            toast.error("Error Send Email");
+            setEmailCodeStatus("error");
+            return;
+        })
     }
 
     return (
@@ -268,49 +354,82 @@ function Register() {
                                 </div>
                                 <div className="card-body">
 
-                                    <form onSubmit={handleSubmitRegister}>
-                                        <div className="form-floating mb-3">
-                                            <input type="text" className={"form-control " + handleInputFullNameClassName} id="floatingInputFullName" placeholder="Full Name" onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
-                                            <label htmlFor="floatingInputFullName">Full Name *</label>
-                                            <div className="invalid-feedback">
-                                                <small>Name must contain only letters</small>
-                                            </div>
-                                        </div>
-                                        <div className="form-floating mb-3">
-                                            <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
-                                            <label htmlFor="floatingInputEmail">Email *</label>
-                                            <div className="invalid-feedback">
-                                                <small>Email must contain @ and .</small>
-                                            </div>
-                                        </div>
-                                        <div className="form-floating mb-3">
-                                            <input type={passwordType} className={"form-control " + handleInputPasswordClassName} id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
-                                            <label htmlFor="floatingInputPassword">Password *</label>
-                                            <div className="invalid-feedback">
-                                                <small>Password must contain at least 6 characters</small>
-                                            </div>
-                                        </div>
-                                        <div className="form-floating mb-3">
-                                            <input type={passwordType} className={"form-control " + handleInputPasswordRepeatClassName} id="floatingInputPasswordRepeat" placeholder="Password Repeat" onChange={(e) => handleInputPasswordRepeat(e)} autoComplete="off" required />
-                                            <label htmlFor="floatingInputPasswordRepeat">Password Repeat *</label>
-                                            <div className="invalid-feedback">
-                                                <small>Passwords must match</small>
-                                            </div>
-                                        </div>
-                                        <div className="mb-3">
-                                            <input type="checkbox" className="form-check-input me-md-2" id="checkPasswordVisible" defaultChecked={passwordVisibleChecked} onChange={() => handleInputPasswordVisible()} />
-                                            <label className="form-check-label" htmlFor="checkPasswordVisible">Show Password</label>
+                                    {userRegiteredStatus === "email_already_exist" ?
+
+                                        <div className="alert alert-warning" role="alert">
+
+                                            <p><small>{email}</small></p>
+                                            <p><small>User with that email already exists!</small></p>
+
                                         </div>
 
-                                        <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!fullName || !email || !password || !passwordRepeat || buttonRegisterUserIsDisabled} onClick={registerUser}>Register</button>
-                                    </form>
+                                        :
 
-                                    <p><small className="text-muted">All fields marked with an asterisk (*) are required.</small></p>
+                                        emailCodeStatus === "error" ?
 
-                                    <div className="alert alert-secondary" role="alert">
-                                        <i className="bi bi-info-circle me-2"></i>
-                                        <small>By clicking Register you have read and agree to our<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy,</Link>including<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Cookie Use.</Link></small>
-                                    </div>
+                                            <div className="alert alert-danger" role="alert">
+
+                                                <p><small>{email}</small></p>
+                                                <p><small>Error send email code, try again!</small></p>
+                                                <div>
+                                                    <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={sendEmailCodeNoReply}>Resend Code</button>
+                                                </div>
+
+                                            </div>
+                                            :
+
+                                            <div>
+
+                                                <form onSubmit={handleSubmit}>
+                                                    <div className="form-floating mb-3">
+                                                        <input type="text" className={"form-control " + handleInputFullNameClassName} id="floatingInputFullName" placeholder="Full Name" onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
+                                                        <label htmlFor="floatingInputFullName">Full Name *</label>
+                                                        <div className="invalid-feedback">
+                                                            <small>Name must contain only letters</small>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-floating mb-3">
+                                                        <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
+                                                        <label htmlFor="floatingInputEmail">Email *</label>
+                                                        <div className="invalid-feedback">
+                                                            <small>Email must contain @ and .</small>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-floating mb-3">
+                                                        <input type={passwordType} className={"form-control " + handleInputPasswordClassName} id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                                        <label htmlFor="floatingInputPassword">Password *</label>
+                                                        <div className="invalid-feedback">
+                                                            <small>Password must contain at least 6 characters</small>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-floating mb-3">
+                                                        <input type={passwordType} className={"form-control " + handleInputPasswordRepeatClassName} id="floatingInputPasswordRepeat" placeholder="Password Repeat" onChange={(e) => handleInputPasswordRepeat(e)} autoComplete="off" required />
+                                                        <label htmlFor="floatingInputPasswordRepeat">Password Repeat *</label>
+                                                        <div className="invalid-feedback">
+                                                            <small>Passwords must match</small>
+                                                        </div>
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <input type="checkbox" className="form-check-input me-md-2" id="checkPasswordVisible" defaultChecked={passwordVisibleChecked} onChange={() => handleInputPasswordVisible()} />
+                                                        <label className="form-check-label" htmlFor="checkPasswordVisible">Show Password</label>
+                                                    </div>
+
+                                                    <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!fullName || !email || !password || !passwordRepeat || buttonRegisterUserIsDisabled} onClick={registerUser}>Register</button>
+                                                </form>
+
+
+                                                <p><small className="text-muted">All fields marked with an asterisk (*) are required.</small></p>
+
+                                                <div className="alert alert-secondary" role="alert">
+                                                    <i className="bi bi-info-circle me-2"></i>
+                                                    <small>By clicking Register you have read and agree to our<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy,</Link>including<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Cookie Use.</Link></small>
+                                                </div>
+
+                                            </div>
+
+                                    }
+
+
 
                                 </div>
                                 <div className="card-footer text-muted">

@@ -42,6 +42,8 @@ function Register() {
 
     const [buttonLoginUserIsDisabled, setButtonLoginUserIsDisabled] = useState(false);
 
+    const [loginUserStatus, setLoginUserStatus] = useState("");
+
     useEffect(() => {
         checkAuth();
     }, [])
@@ -63,6 +65,7 @@ function Register() {
         }
     }
 
+
     // clear/reset inputs, other...
     const clearInputs = () => {
         setEmail(null);
@@ -70,6 +73,7 @@ function Register() {
         setHandleInpuEmailIsValid(false);
         setHandleInputEmailClassName(null);
         setButtonLoginUserIsDisabled(false);
+        setLoginUserStatus("");
     }
 
     // handle inputs control
@@ -119,7 +123,7 @@ function Register() {
 
     }
 
-    const handleSubmitLogin = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
     }
 
@@ -167,14 +171,15 @@ function Register() {
 
             setButtonLoginUserIsDisabled(true);
 
-            if(passwordType === "text") {
+            if (passwordType === "text") {
                 setPasswordType("password");
             }
 
-            if(passwordVisibleChecked) {
+            if (passwordVisibleChecked) {
                 setPasswordVisibleChecked(!passwordVisibleChecked);
             }
 
+            setLoginUserStatus("loading");
             const toastNotify = toast.loading("Loading");
 
             const data = {
@@ -193,16 +198,20 @@ function Register() {
                     } else if (res.data.status_code === 4) {
                         toast.dismiss(toastNotify);
                         toast.error("User with that email not found");
+                        setLoginUserStatus("user_email_not_found");
                         setButtonLoginUserIsDisabled(false);
                     } else if (res.data.status_code === 6) {
                         toast.dismiss(toastNotify);
-                        toast("Email not verified yet");
-                        setButtonLoginUserIsDisabled(true);
-                        resendEmailCode();
+                        toast.error("Email not verified yet");
+                        setButtonLoginUserIsDisabled(false);
+                        setLoginUserStatus("email_not_verified");
+                        //resendEmailCode();
                     } else {
                         secureLocalStorage.setItem("token", res.data.token);
 
                         toast.dismiss(toastNotify);
+
+                        setLoginUserStatus("success");
 
                         window.location.reload();
                         clearInputs();
@@ -214,6 +223,7 @@ function Register() {
                 setButtonLoginUserIsDisabled(false);
                 toast.dismiss(toastNotify);
                 toast.error("Error");
+                setLoginUserStatus("error");
                 return;
             })
 
@@ -221,6 +231,79 @@ function Register() {
             return;
         }
 
+    }
+
+    const sendEmailCodeNoReply = async () => {
+
+        checkAllInputsValidity();
+
+        if (handleInputEmailIsValid) {
+
+            //setEmailCodeStatus("loading")
+            const toastNotify = toast.loading("Send Email Code");
+
+            const data = {
+                email: email.toLocaleLowerCase()
+            }
+
+            await axios.post(`${url}/account/email/code/send0`, data).then((res) => {
+
+                if (res.status === 200) {
+
+                    if (res.data.status_code === 1) {
+                        toast.dismiss(toastNotify);
+                        toast.error("Error"); // Error save data to DB
+                        //setEmailCodeStatus("error");
+                        //setButtonSendEmailCodeIsDisabled(false);
+                    } else if (res.data.status_code === 2) {
+                        toast.dismiss(toastNotify);
+                        toast.error("Invalid email format");
+                        //setEmailCodeStatus("error");
+                        //setButtonSendEmailCodeIsDisabled(false);
+                    } else if (res.data.status_code === 4) {
+                        toast.dismiss(toastNotify);
+                        toast.error("Account with that email doesn't exist");
+                        //setButtonSendEmailCodeIsDisabled(false);
+                    } else if (res.data.status_code === 7) {
+                        toast.dismiss(toastNotify);
+                        toast.error("Error while sending email, try again!");
+                        //setEmailCodeStatus("error");
+                        //setButtonSendEmailCodeIsDisabled(false);
+                        //resendEmailCode();
+                    } else {
+                        //secureLocalStorage.setItem("token", res.data.token);
+
+                        toast.dismiss(toastNotify);
+                        toast.success("Email sended successfully");
+                        //setEmailCodeStatus("success");
+
+                        navigate(
+                            "/code/verify",
+                            {
+                                state: {
+                                    email: email.toLocaleLowerCase()
+                                }
+                            }
+                        )
+
+                        // OK
+
+                        //window.location.reload();
+                        clearInputs();
+                    }
+                }
+
+            }).catch(err => {
+                //setButtonSendEmailCodeIsDisabled(false);
+                toast.dismiss(toastNotify);
+                toast.error("Error Send Email");
+                //setEmailCodeStatus("error");
+                return;
+            })
+
+        } else {
+            return;
+        }
     }
 
     return (
@@ -239,7 +322,7 @@ function Register() {
                                 </div>
                                 <div className="card-body">
 
-                                    <form onSubmit={handleSubmitLogin}>
+                                    <form onSubmit={handleSubmit}>
 
                                         <div className="form-floating mb-3">
                                             <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
@@ -262,7 +345,24 @@ function Register() {
 
                                     <p><small className="text-muted">All fields marked with an asterisk (*) are required.</small></p>
 
-                                    <button type="button" className="btn btn-outline btn-sm rounded-pill mb-3" data-bs-toggle="modal" data-bs-target="#passwordRecoverModal">Forgot Password?</button>
+
+
+
+
+                                    {loginUserStatus === "email_not_verified" &&
+                                        <div className="alert alert-warning" role="alert">
+                                            <p><small>{email ? email : ""}</small></p>
+                                            <p><small className="text-secondary mb-3">Send verification code on email?</small></p>
+                                            <div>
+                                                <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email} onClick={sendEmailCodeNoReply}>Send Code</button>
+                                            </div>
+                                        </div>
+
+                                    }
+
+                                    {loginUserStatus !== "user_email_not_found" && loginUserStatus !== "email_not_verified" && loginUserStatus !== "" &&
+                                        <button type="button" className="btn btn-outline btn-sm rounded-pill mb-3" data-bs-toggle="modal" data-bs-target="#passwordRecoverModal">Forgot Password?</button>
+                                    }
 
                                     <div className="alert alert-secondary" role="alert">
                                         <i className="bi bi-info-circle me-2"></i>
