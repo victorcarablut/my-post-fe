@@ -17,6 +17,8 @@ import toast from 'react-hot-toast';
 
 function UserPasswordRecover({ emailParent }) {
 
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState(null);
   const [code, setCode] = useState(null);
   const [password, setPassword] = useState(null);
@@ -233,7 +235,7 @@ function UserPasswordRecover({ emailParent }) {
             //secureLocalStorage.setItem("token", res.data.token);
 
             toast.dismiss(toastNotify);
-            toast.success("Email sended successfully");
+            toast.success("Email sent successfully");
             setEmailCodeIsSended(true);
 
             // OK
@@ -266,8 +268,17 @@ function UserPasswordRecover({ emailParent }) {
 
     if (handleInputEmailIsValid && handleInputCodeIsValid && handleInputPasswordIsValid && handleInputPasswordRepeatIsValid) {
 
+
+      if (passwordType === "text") {
+        setPasswordType("password");
+      }
+
+      if (passwordVisibleChecked) {
+        setPasswordVisibleChecked(!passwordVisibleChecked);
+      }
+
       setButtonRecoverPasswordIsDisabled(true);
-      setPasswordType("password");
+
       const toastNotify = toast.loading("Loading");
 
 
@@ -301,20 +312,25 @@ function UserPasswordRecover({ emailParent }) {
             setButtonRecoverPasswordIsDisabled(false);
           } else if (res.data.status_code === 6) {
             toast.dismiss(toastNotify);
-            toast("Email not verified yet");
+            toast.error("Email not verified yet");
             setButtonRecoverPasswordIsDisabled(false);
             //resendEmailCode();
           } else {
             //secureLocalStorage.setItem("token", res.data.token);
 
             toast.dismiss(toastNotify);
+            toast.success("Password reset successfully");
 
-            //window.location.reload();
+            navigate("/login");
 
-            console.log("password reset ok");
+            clearInputs();
+
+            window.location.reload();
+
+            //console.log("password reset ok");
 
             // OK
-            clearInputs();
+            
           }
         }
 
@@ -335,32 +351,31 @@ function UserPasswordRecover({ emailParent }) {
   return (
     <div>
 
-      <div>
-        {emailParent &&
 
-          <div className="alert alert-secondary alert-dismissible fade show" role="alert">
-            <small className="me-md-2">Use this email: {emailParent}?</small>
-            <button type="button" className="btn btn-secondary btn-sm" onClick={passEmailParentToChild}>Yes</button>
-          </div>
-        }
-
-      </div>
       {!emailCodeIsSended ?
 
+        <>
 
-        <form onSubmit={handleSubmit}>
-          <small>1. Step - Send verification code on email</small>
-          <div className="form-floating mb-3">
-            <input type="email" value={email ? email : ""} className={"form-control " + handleInputEmailClassName} id="floatingInputEmail2" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
-            <label htmlFor="floatingInputEmail2">Email *</label>
-            <div className="invalid-feedback">
-              <small>Email must contain @ and .</small>
+          {emailParent &&
+
+            <div className="alert alert-secondary alert-dismissible fade show" role="alert">
+              <small className="me-md-2">Use this email: {emailParent}?</small>
+              <button type="button" className="btn btn-secondary btn-sm" onClick={passEmailParentToChild}>Yes</button>
             </div>
-          </div>
+          }
+          <form onSubmit={handleSubmit}>
+            <small>1. Step - Send verification code on email</small>
+            <div className="form-floating mb-3">
+              <input type="email" value={email ? email : ""} className={"form-control " + handleInputEmailClassName} id="floatingInputEmail2" placeholder="Email" onChange={(e) => handleInputEmail(e)} disabled={buttonSendEmailCodeIsDisabled} autoComplete="off" required />
+              <label htmlFor="floatingInputEmail2">Email *</label>
+              <div className="invalid-feedback">
+                <small>Email must contain @ and .</small>
+              </div>
+            </div>
 
-          <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || buttonSendEmailCodeIsDisabled} onClick={sendEmailCodeNoReply}>Send Code</button>
-        </form>
-
+            <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || buttonSendEmailCodeIsDisabled} onClick={sendEmailCodeNoReply}>Send Code</button>
+          </form>
+        </>
         :
 
         <form onSubmit={handleSubmit}>
@@ -374,7 +389,7 @@ function UserPasswordRecover({ emailParent }) {
           </div>
           <div className="form-floating mb-3">
             <input type="text" className={"form-control text-center " + handleInputCodeClassName} id="floatingInputCode2" placeholder="Code" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
-            <label htmlFor="floatingInputCode2">Code</label>
+            <label htmlFor="floatingInputCode2">Code (received on email)</label>
           </div>
           <div className="form-floating mb-3">
             <input type={passwordType} className={"form-control " + handleInputPasswordClassName} id="floatingInputPassword2" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
@@ -391,12 +406,14 @@ function UserPasswordRecover({ emailParent }) {
             </div>
           </div>
           <div className="mb-3">
-            <input type="checkbox" className="form-check-input me-md-2" id="checkPasswordVisible2" defaultChecked={passwordVisibleChecked} onChange={() => handleInputPasswordVisible()} />
+            <input type="checkbox" className="form-check-input me-md-2" id="checkPasswordVisible2" checked={passwordVisibleChecked} onChange={() => handleInputPasswordVisible()} />
             <label className="form-check-label" htmlFor="checkPasswordVisible2">Show Password</label>
           </div>
 
           <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || !code || !password || !passwordRepeat || buttonRecoverPasswordIsDisabled} onClick={recoverPassword}>Submit</button>
         </form>
+
+
       }
     </div>
   )

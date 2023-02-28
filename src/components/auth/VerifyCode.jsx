@@ -81,7 +81,7 @@ const VerifyCode = () => {
   }
 
 
-  const handleSubmitCode = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
   }
 
@@ -111,18 +111,25 @@ const VerifyCode = () => {
 
           } else if (res.data.status_code === 2) {
             toast.dismiss(toastNotify);
-            toast.error("Wrong code");
+            toast.error("Invalid email format");
             setButtonVerifyCodeIsDisabled(false);
             setHandleInputCodeIsValid(false);
-            setHandleInputCodeClassName("is-invalid animate__animated animate__shakeX");
+
           } else if (res.data.status_code === 4) {
             toast.dismiss(toastNotify);
             toast.error("Account with that email doesn't exist");
             setButtonVerifyCodeIsDisabled(false);
+
+          } else if (res.data.status_code === 5) {
+            toast.dismiss(toastNotify);
+            toast.error("Wrong code");
+            setHandleInputCodeClassName("is-invalid animate__animated animate__shakeX");
+            setButtonVerifyCodeIsDisabled(false);
+
           } else {
             toast.dismiss(toastNotify);
             toast.success("Code verified");
-            navigate("/login")
+            navigate("/login");
             clearInputs();
           }
 
@@ -202,7 +209,7 @@ const VerifyCode = () => {
           </div>
           <div className="card-body">
 
-            <form onSubmit={handleSubmitCode}>
+            <form onSubmit={handleSubmit}>
               <div className="form-floating mb-3">
                 <input type="text" className={"form-control text-center " + handleInputCodeClassName} id="floatingInputCode" placeholder="Code" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
                 <label htmlFor="floatingInputCode">Code</label>

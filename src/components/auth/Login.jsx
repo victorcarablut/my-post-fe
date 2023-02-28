@@ -43,10 +43,11 @@ function Register() {
     const [buttonLoginUserIsDisabled, setButtonLoginUserIsDisabled] = useState(false);
 
     const [loginUserStatus, setLoginUserStatus] = useState("");
+    const [emailCodeStatus, setEmailCodeStatus] = useState("");
 
-    useEffect(() => {
-        checkAuth();
-    }, [])
+        useEffect(() => {
+            checkAuth();
+        }, [])
 
     /* 
     if access to this page, check if user are already authenticated
@@ -74,6 +75,7 @@ function Register() {
         setHandleInputEmailClassName(null);
         setButtonLoginUserIsDisabled(false);
         setLoginUserStatus("");
+        setEmailCodeStatus("");
     }
 
     // handle inputs control
@@ -206,6 +208,10 @@ function Register() {
                         setButtonLoginUserIsDisabled(false);
                         setLoginUserStatus("email_not_verified");
                         //resendEmailCode();
+                    } else if (res.data.status_code === 9) {
+                        toast.dismiss(toastNotify);
+                        toast.error("Wrong email or password");
+                        setButtonLoginUserIsDisabled(false);
                     } else {
                         secureLocalStorage.setItem("token", res.data.token);
 
@@ -239,34 +245,36 @@ function Register() {
 
         if (handleInputEmailIsValid) {
 
-            //setEmailCodeStatus("loading")
+            setEmailCodeStatus("loading")
             const toastNotify = toast.loading("Send Email Code");
 
             const data = {
                 email: email.toLocaleLowerCase()
             }
 
-            await axios.post(`${url}/account/email/code/send0`, data).then((res) => {
+            await axios.post(`${url}/account/email/code/send`, data).then((res) => {
 
                 if (res.status === 200) {
 
                     if (res.data.status_code === 1) {
                         toast.dismiss(toastNotify);
                         toast.error("Error"); // Error save data to DB
-                        //setEmailCodeStatus("error");
+                        setEmailCodeStatus("error");
                         //setButtonSendEmailCodeIsDisabled(false);
                     } else if (res.data.status_code === 2) {
                         toast.dismiss(toastNotify);
                         toast.error("Invalid email format");
-                        //setEmailCodeStatus("error");
+                        setEmailCodeStatus("error");
                         //setButtonSendEmailCodeIsDisabled(false);
                     } else if (res.data.status_code === 4) {
                         toast.dismiss(toastNotify);
                         toast.error("Account with that email doesn't exist");
                         //setButtonSendEmailCodeIsDisabled(false);
+                        setEmailCodeStatus("error");
                     } else if (res.data.status_code === 7) {
                         toast.dismiss(toastNotify);
                         toast.error("Error while sending email, try again!");
+                        setEmailCodeStatus("error");
                         //setEmailCodeStatus("error");
                         //setButtonSendEmailCodeIsDisabled(false);
                         //resendEmailCode();
@@ -274,8 +282,9 @@ function Register() {
                         //secureLocalStorage.setItem("token", res.data.token);
 
                         toast.dismiss(toastNotify);
-                        toast.success("Email sended successfully");
+                        toast.success("Email sent successfully");
                         //setEmailCodeStatus("success");
+                        setEmailCodeStatus("success");
 
                         navigate(
                             "/code/verify",
@@ -297,6 +306,7 @@ function Register() {
                 //setButtonSendEmailCodeIsDisabled(false);
                 toast.dismiss(toastNotify);
                 toast.error("Error Send Email");
+                setEmailCodeStatus("error");
                 //setEmailCodeStatus("error");
                 return;
             })
@@ -354,7 +364,7 @@ function Register() {
                                             <p><small>{email ? email : ""}</small></p>
                                             <p><small className="text-secondary mb-3">Send verification code on email?</small></p>
                                             <div>
-                                                <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email} onClick={sendEmailCodeNoReply}>Send Code</button>
+                                                <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || emailCodeStatus === "loading"} onClick={sendEmailCodeNoReply}>Send Code</button>
                                             </div>
                                         </div>
 
@@ -378,7 +388,7 @@ function Register() {
                         </div>
 
                         {/* --- Modal (Reset Password) --- */}
-                        <div className="modal fade" id="passwordRecoverModal" tabIndex="-1" aria-labelledby="passwordRecoverModalLabel" aria-hidden="true" >
+                        <div className="modal fade" id="passwordRecoverModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="passwordRecoverModalLabel" aria-hidden="true" >
                             <div className="modal-dialog" style={{ maxWidth: 400 }}>
                                 <div className="modal-content">
                                     <div className="modal-header">
@@ -386,7 +396,6 @@ function Register() {
                                         <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div className="modal-body">
-                                        <p>Send code</p>
                                         {/* <SendEmailCodeNoReplay email = {email}  /> */}
                                         <div>
                                             <UserPasswordRecover emailParent={email ? email : ""} />
@@ -394,7 +403,6 @@ function Register() {
 
                                     </div>
                                     <div className="modal-footer">
-                                        <button type="button" className="btn btn-danger btn-sm rounded-pill shadow">Logout</button>
                                         <button type="button" className="btn btn-secondary btn-sm rounded-pill shadow" id='button-modal-submit-delete-employee-close' data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
