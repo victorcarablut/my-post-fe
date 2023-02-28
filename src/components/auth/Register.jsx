@@ -282,7 +282,7 @@ function Register() {
             email: email.toString().toLocaleLowerCase()
         }
 
-        await axios.post(`${url}/account/email/code/send0`, data).then((res) => {
+        await axios.post(`${url}/account/email/code/send`, data).then((res) => {
 
             if (res.status === 200) {
 
@@ -310,14 +310,14 @@ function Register() {
                     //secureLocalStorage.setItem("token", res.data.token);
 
                     toast.dismiss(toastNotify);
-                    toast.success("Email sended successfully");
+                    toast.success("Email sent successfully");
                     setEmailCodeStatus("success");
 
                     navigate(
                         "/code/verify",
                         {
                             state: {
-                                email: email.toLocaleLowerCase()
+                                email: email.toString().toLocaleLowerCase()
                             }
                         }
                     )

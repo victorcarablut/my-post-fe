@@ -154,9 +154,7 @@ function Header() {
               {/* <Link to="/login" type="button" class="btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold" style={{paddingLeft: 10, paddingRight: 15}}><i class="bi bi-box-arrow-in-right me-md-2"/>Login</Link> */}
 
               <div className="dropdown">
-                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-
-                </button>
+                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                   <li><NavLink to="/" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Posts</NavLink></li>
                   <li><NavLink to="/about" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>About</NavLink></li>

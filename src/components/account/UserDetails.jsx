@@ -98,13 +98,68 @@ function UserDetails() {
                                 responseStatusGeUserDetails === "error" ? <Error /> :
                                     responseStatusGeUserDetails === "success" ?
 
-                                        <ul className="list-group list-group-flush">
-                                            <li className="list-group-item"><small><strong>Full Name:</strong> {user?.fullName}</small></li>
-                                            <li className="list-group-item"><small><strong>Email:</strong> {user?.email}</small></li>
-                                            <li className="list-group-item"><small><strong>Username:</strong> {user?.username}</small></li>
-                                            <li className="list-group-item"><small><strong>Role:</strong> {user?.role}</small></li>
-                                            <li className="list-group-item"><small><strong>Registered Date:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
-                                        </ul>
+                                        <>
+                                            <ul className="list-group list-group-flush">
+                                                <li className="list-group-item">
+                                                    <div className="d-grid gap-2 d-md-flex">
+                                                    <small className="me-md-2"><strong>Full Name:</strong> {user?.fullName}</small>
+                                                        <div className="dropdown">
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                <li>item1</li>
+                                                                <li>item2</li>
+                                                            </ul>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </li>
+                                                <li className="list-group-item"><small><strong>Email:</strong> {user?.email}</small></li>
+                                                <li className="list-group-item"><small><strong>Username:</strong> {user?.username}</small></li>
+                                                <li className="list-group-item"><small><strong>Role:</strong> {user?.role}</small></li>
+                                                <li className="list-group-item"><small><strong>Registered Date:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
+                                            </ul>
+
+                                            <div class="accordion" id="accordionExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headingOne">
+                                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                            Accordion Item #1
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headingTwo">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                            Accordion Item #2
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headingThree">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                            Accordion Item #3
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </>
+
 
                                         :
                                         <></>
@@ -114,7 +169,7 @@ function UserDetails() {
                     </div>
                     <div className="card-footer text-center text-muted">
                         <small className="me-2">Don't have an account?</small>
-                        <UserPasswordRecover />
+                        {/* <UserPasswordRecover /> */}
                     </div>
                 </div>
             </div>
