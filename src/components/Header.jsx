@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 // Secure Data (Local Storage)
 import secureLocalStorage from "react-secure-storage";
@@ -21,6 +21,7 @@ import user_pic_profile from '../assets/images/user.jpg';
 
 import { LoadingFullScreen } from '../components/_resources/ui/Loadings';
 
+
 function Header() {
 
   //const navigate = useNavigate();
@@ -41,6 +42,9 @@ function Header() {
       email: null
     }
   ) */
+
+  // contexts
+  //const userFullNameContext = useContext(UserFullNameContext);
 
   useEffect(() => {
 
@@ -91,11 +95,12 @@ function Header() {
 
     }
 
-    await axios.get(`${url}/account/user/details`, config).then((res) => {
+    await axios.get(`${url}/user/details`, config).then((res) => {
       if (res.status === 200) {
         setUser({
           fullName: res.data.fullName
-        })
+        }) 
+
       } else {
         logout();
       }

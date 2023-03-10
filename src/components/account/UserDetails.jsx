@@ -25,7 +25,10 @@ import { Error } from '../_resources/ui/Alerts.jsx';
 // Date Time Format (moment.js)
 import moment from 'moment/min/moment-with-locales';
 import { moment_locale, moment_format_date_time_long } from '../_resources/date-time/DateTime.js';
-import UserPasswordRecover from './UserPasswordRecover.jsx';
+//import UserPasswordRecover from './UserPasswordRecover.jsx';
+
+// Notifications
+import toast from 'react-hot-toast';
 
 function UserDetails() {
 
@@ -39,6 +42,17 @@ function UserDetails() {
         }
     )
 
+    const [inputFullName, setInputFullName] = useState(null);
+    //const [inputFullNameCountChar, setInputFullNameChar] = useState(null);
+
+    // inputs check validity
+    const [handleInputFullNameIsValid, setHandleInpuFullNameIsValid] = useState(false);
+
+    // add CSS className
+    const [handleInputFullNameClassName, setHandleInputFullNameClassName] = useState(null);
+
+    const [buttonUpdateUserDetailsIsDisabled, setButtonUpdateUserDetailsIsDisabled] = useState(false);
+
     // http response status
     const [responseStatusGeUserDetails, setResponseStatusGetUserDetails] = useState("");
 
@@ -48,6 +62,43 @@ function UserDetails() {
         getUserDetails();
 
     }, []);
+
+    // clear/reset inputs, other...
+    const clearInputs = () => {
+        // setEmail(null);
+        // setPassword(null);
+        // setHandleInpuEmailIsValid(false);
+        // setHandleInputEmailClassName(null);
+        // setButtonLoginUserIsDisabled(false);
+        // setLoginUserStatus("");
+        // setEmailCodeStatus("");
+
+        setUser(null);
+        setInputFullName(null);
+    }
+
+    const handleInputFullName = async (e) => {
+
+        const fullName = e.target.value;
+
+        //setInputFullName(fullName);
+
+        //setUser({fullName: fullName})
+
+        //setUser({...user, fullName: fullName});
+
+        setInputFullName(fullName);
+
+
+
+        // if (fullName.length > 100) {
+        //     setHandleInpuFullNameIsValid(true);
+        // } else if (fullName.length === 0) {
+        //     setHandleInputFullNameClassName(null);
+        // } else {
+        //     setHandleInpuFullNameIsValid(false);
+        // }
+    }
 
     const getUserDetails = async () => {
 
@@ -61,7 +112,7 @@ function UserDetails() {
             }
         }
 
-        await axios.get(`${url}/account/user/details`, config).then((res) => {
+        await axios.get(`${url}/user/details`, config).then((res) => {
 
             if (res.status === 200) {
                 setResponseStatusGetUserDetails("success");
@@ -72,6 +123,9 @@ function UserDetails() {
                     role: res.data.role,
                     registeredDate: res.data.registeredDate
                 })
+
+                setInputFullName(res.data.fullName);
+
             }
 
         }).catch(err => {
@@ -81,6 +135,91 @@ function UserDetails() {
         })
 
     }
+
+    const updateUserDetails = async () => {
+
+        //checkAllInputsValidity();
+
+        // if (handleInputEmailIsValid) {
+
+        //setButtonLoginUserIsDisabled(true);
+
+        //if (passwordType === "text") {
+        //setPasswordType("password");
+        // }
+
+        // if (passwordVisibleChecked) {
+        //setPasswordVisibleChecked(!passwordVisibleChecked);
+        //}
+
+        //setLoginUserStatus("loading");
+        const toastNotify = toast.loading("Loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            email: user.email.toLocaleLowerCase(),
+            //password: password
+
+            fullName: inputFullName
+        }
+
+        await axios.put(`${url}/user/details/update`, data, config).then((res) => {
+
+            if (res.status === 200) {
+
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error");
+                } else if (res.data.status_code === 2) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Invalid email format");
+                    //setButtonLoginUserIsDisabled(false);
+                } else if (res.data.status_code === 4) {
+                    toast.dismiss(toastNotify);
+                    toast.error("User with that email not found");
+                    //setLoginUserStatus("user_email_not_found");
+                    //setButtonLoginUserIsDisabled(false);
+                } else {
+                    //secureLocalStorage.setItem("token", res.data.token);
+
+                    toast.dismiss(toastNotify);
+
+                    getUserDetails();
+
+                    //setLoginUserStatus("success");
+
+                    //window.location.reload();
+                    clearInputs();
+                }
+            }
+
+        }).catch(err => {
+            console.log(err);
+            //setButtonLoginUserIsDisabled(false);
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            //setLoginUserStatus("error");
+            return;
+        })
+
+        //} else {
+        //    return;
+        //}
+
+    }
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    }
+
 
     return (
         <div className="d-flex justify-content-center">
@@ -102,56 +241,64 @@ function UserDetails() {
                                             <ul className="list-group list-group-flush">
                                                 <li className="list-group-item">
                                                     <div className="d-grid gap-2 d-md-flex">
-                                                    <small className="me-md-2"><strong>Full Name:</strong> {user?.fullName}</small>
+                                                        <small className="me-md-2"><strong>Full Name:</strong> {user?.fullName}</small>
                                                         <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                <li>item1</li>
-                                                                <li>item2</li>
+                                                                <form onSubmit={handleSubmit}>
+                                                                    <li className="container-fluid mb-3">
+                                                                        <input type="text" className={"form-control form-control-sm " + handleInputFullNameClassName} id="inputFullName" placeholder={inputFullName} value={inputFullName} onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
+                                                                        {inputFullName?.length > 0 &&
+                                                                            <small className="text-secondary">{inputFullName?.length}/100</small>
+                                                                        }
+
+                                                                    </li>
+                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }}  onClick={updateUserDetails} disabled={!inputFullName}>Update</button></li>
+                                                                </form>
                                                             </ul>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </li>
                                                 <li className="list-group-item"><small><strong>Email:</strong> {user?.email}</small></li>
                                                 <li className="list-group-item"><small><strong>Username:</strong> {user?.username}</small></li>
                                                 <li className="list-group-item"><small><strong>Role:</strong> {user?.role}</small></li>
-                                                <li className="list-group-item"><small><strong>Registered Date:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
+                                                <li className="list-group-item"><small><strong>Registered:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
                                             </ul>
 
-                                            <div class="accordion" id="accordionExample">
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="headingOne">
-                                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <div className="accordion" id="accordionExample">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="headingOne">
+                                                        <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                             Accordion Item #1
                                                         </button>
                                                     </h2>
-                                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                                        <div class="accordion-body">
+                                                    <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                        <div className="accordion-body">
                                                             <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="headingTwo">
-                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="headingTwo">
+                                                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                                             Accordion Item #2
                                                         </button>
                                                     </h2>
-                                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                                        <div class="accordion-body">
+                                                    <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                        <div className="accordion-body">
                                                             <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="headingThree">
-                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="headingThree">
+                                                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                                             Accordion Item #3
                                                         </button>
                                                     </h2>
-                                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                                        <div class="accordion-body">
+                                                    <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                                        <div className="accordion-body">
                                                             <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
                                                         </div>
                                                     </div>

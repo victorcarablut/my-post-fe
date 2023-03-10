@@ -45,9 +45,9 @@ function Register() {
     const [loginUserStatus, setLoginUserStatus] = useState("");
     const [emailCodeStatus, setEmailCodeStatus] = useState("");
 
-        useEffect(() => {
-            checkAuth();
-        }, [])
+    useEffect(() => {
+        checkAuth();
+    }, [])
 
     /* 
     if access to this page, check if user are already authenticated
@@ -87,10 +87,9 @@ function Register() {
         setEmail(email);
 
         if (email.includes('@') && email.includes('.') && email.length > 3) {
-
             setHandleInpuEmailIsValid(true);
         } else if (email.length === 0) {
-            setHandleInputEmailClassName(null)
+            setHandleInputEmailClassName(null);
         } else {
             setHandleInpuEmailIsValid(false);
         }
@@ -189,7 +188,7 @@ function Register() {
                 password: password
             }
 
-            await axios.post(`${url}/account/user/login`, data).then((res) => {
+            await axios.post(`${url}/account/login`, data).then((res) => {
 
                 if (res.status === 200) {
 

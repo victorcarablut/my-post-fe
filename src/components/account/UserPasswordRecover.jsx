@@ -288,7 +288,7 @@ function UserPasswordRecover({ emailParent }) {
         password: password
       }
 
-      await axios.post(`${url}/account/user/password/recover`, data).then((res) => {
+      await axios.post(`${url}/account/password/recover`, data).then((res) => {
 
         if (res.status === 200) {
 

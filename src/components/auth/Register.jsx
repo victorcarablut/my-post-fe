@@ -220,7 +220,7 @@ function Register() {
                 password: password
             }
 
-            await axios.post(`${url}/account/user/register`, data).then((res) => {
+            await axios.post(`${url}/account/register`, data).then((res) => {
                 if (res.status === 200) {
 
                     if (res.data.status_code === 1) {
