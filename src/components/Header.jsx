@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Secure Data (Local Storage)
 import secureLocalStorage from "react-secure-storage";
@@ -43,8 +43,6 @@ function Header() {
     }
   ) */
 
-  // contexts
-  //const userFullNameContext = useContext(UserFullNameContext);
 
   useEffect(() => {
 
@@ -99,7 +97,7 @@ function Header() {
       if (res.status === 200) {
         setUser({
           fullName: res.data.fullName
-        }) 
+        })
 
       } else {
         logout();
@@ -123,7 +121,6 @@ function Header() {
 
     return await Logout();
   }
-
 
 
   return (

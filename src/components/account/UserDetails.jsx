@@ -59,8 +59,8 @@ function UserDetails() {
     useEffect(() => {
 
         //checkAuth();
+        clearInputs();
         getUserDetails();
-
     }, []);
 
     // clear/reset inputs, other...
@@ -191,12 +191,12 @@ function UserDetails() {
 
                     toast.dismiss(toastNotify);
 
-                    getUserDetails();
+                    //getUserDetails();
 
                     //setLoginUserStatus("success");
 
-                    //window.location.reload();
-                    clearInputs();
+                    window.location.reload(); // to update the value in header
+                    //clearInputs();
                 }
             }
 
