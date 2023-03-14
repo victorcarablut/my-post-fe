@@ -87,6 +87,7 @@ function UserDetails() {
         setPassword(null);
         setCode(null);
         setEmailNewCodeStatus("");
+        setResponseStatusGetUserDetails("");
     }
 
     const handleInputFullName = async (e) => {
