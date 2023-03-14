@@ -48,16 +48,8 @@ function UserDetails() {
     // new data
     const [fullNameNew, setFullNameNew] = useState(null);
     const [emailNew, setEmailNew] = useState(null);
+    const [usernameNew, setUsernameNew] = useState(null);
 
-    // inputs check validity
-    const [handleInputFullNameNewIsValid, setHandleInpuFullNameNewIsValid] = useState(false);
-    const [handleInputEmailNewIsValid, setHandleInpuEmailNewIsValid] = useState(false);
-
-    // add CSS className
-    const [handleInputFullNameNewClassName, setHandleInputFullNameNewClassName] = useState(null);
-    const [handleInputEmailNewClassName, setHandleInputEmailNewClassName] = useState(null);
-
-    const [buttonUpdateUserDetailsIsDisabled, setButtonUpdateUserDetailsIsDisabled] = useState(false);
 
     // http response status
     const [responseStatusGeUserDetails, setResponseStatusGetUserDetails] = useState("");
@@ -84,6 +76,7 @@ function UserDetails() {
         setUser(null);
         setFullNameNew(null);
         setEmailNew(null);
+        setUsernameNew(null);
         setPassword(null);
         setCode(null);
         setEmailNewCodeStatus("");
@@ -118,6 +111,21 @@ function UserDetails() {
         const email = e.target.value;
 
         setEmailNew(email);
+
+        /*  if (email.includes('@') && email.includes('.') && email.length > 3) {
+             setHandleInpuEmailNewIsValid(true);
+         } else if (email.length === 0) {
+             setHandleInputEmailNewClassName(null);
+         } else {
+             setHandleInpuEmailNewIsValid(false);
+         } */
+    }
+
+    const handleInputUsername = async (e) => {
+
+        const username = e.target.value;
+
+        setUsernameNew(username);
 
         /*  if (email.includes('@') && email.includes('.') && email.length > 3) {
              setHandleInpuEmailNewIsValid(true);
@@ -163,6 +171,7 @@ function UserDetails() {
                 })
 
                 setFullNameNew(res.data.fullName);
+                setUsernameNew(res.data.username);
 
             }
 
@@ -281,7 +290,7 @@ function UserDetails() {
         }
 
         const data = {
-            old_email: user.email.toLocaleLowerCase(),
+            old_email: user.email,
             password: password,
             new_email: emailNew.toLocaleLowerCase(),
             code: code
@@ -326,6 +335,103 @@ function UserDetails() {
 
                     toast.dismiss(toastNotify);
                     toast.success("Email updated successfully");
+                    //setEmailNewCodeStatus("success");
+
+                    /*  navigate(
+                         "/code/verify",
+                         {
+                             state: {
+                                 email: email.toString().toLocaleLowerCase()
+                             }
+                         }
+                     ) */
+
+                    // OK
+
+                    //window.location.reload();
+                    clearInputs();
+                    getUserDetails();
+                }
+            }
+
+        }).catch(err => {
+            console.log(err);
+            //setButtonLoginUserIsDisabled(false);
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            //setLoginUserStatus("error");
+            return;
+        })
+
+        //} else {
+        //    return;
+        //}
+
+    }
+
+    const updateUserUsername = async () => {
+
+        //checkAllInputsValidity();
+
+        // if (handleInputEmailIsValid) {
+
+        //setButtonLoginUserIsDisabled(true);
+
+        //if (passwordType === "text") {
+        //setPasswordType("password");
+        // }
+
+        // if (passwordVisibleChecked) {
+        //setPasswordVisibleChecked(!passwordVisibleChecked);
+        //}
+
+        //setLoginUserStatus("loading");
+        const toastNotify = toast.loading("Loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            email: user.email,
+            password: password,
+            old_username: user.username,
+            new_username: usernameNew.toLocaleLowerCase(),
+        }
+
+        await axios.put(`${url}/user/username/update`, data, config).then((res) => {
+
+            if (res.status === 200) {
+
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error"); // Error save data to DB
+                    //setEmailNewCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else if (res.data.status_code === 2) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Invalid email format");
+                    //setEmailNewCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else if (res.data.status_code === 4) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Account with that email doesn't exist");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                    //setEmailNewCodeStatus("error");
+                } else if (res.data.status_code === 9) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Wrong email or password");
+                    //setButtonLoginUserIsDisabled(false);
+                    //setEmailNewCodeStatus("error");
+                } else {
+                    //secureLocalStorage.setItem("token", res.data.token);
+
+                    toast.dismiss(toastNotify);
+                    toast.success("Username updated successfully");
                     //setEmailNewCodeStatus("success");
 
                     /*  navigate(
@@ -455,13 +561,13 @@ function UserDetails() {
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                 <form onSubmit={handleSubmit}>
                                                                     <li className="container-fluid mb-3">
-                                                                        <input type="text" className={"form-control form-control-sm " + handleInputFullNameNewClassName} id="inputFullNameNew" placeholder="New: Full Name" value={fullNameNew} onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
+                                                                        <input type="text" className="form-control form-control-sm" id="inputFullNameNew" placeholder="New: Full Name" value={fullNameNew} onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
                                                                         {fullNameNew?.length > 0 &&
                                                                             <small className="text-secondary">{fullNameNew?.length}/100</small>
                                                                         }
 
                                                                     </li>
-                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserDetails} disabled={!fullNameNew}>Update</button></li>
+                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserDetails} disabled={!fullNameNew || fullNameNew > 100}>Update</button></li>
                                                                 </form>
                                                             </ul>
                                                         </div>
@@ -474,8 +580,14 @@ function UserDetails() {
                                                         <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                             <form onSubmit={handleSubmit}>
                                                                 <li className="container-fluid mb-3">
-                                                                    {emailNew && code &&
+                                                                    {emailNew && code ?
+
                                                                         <input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                                                        :
+                                                                        <>
+                                                                        <p><small>Password will be required</small></p>
+                                                                        <p><small>Verification code will be sent on new email</small></p>
+                                                                        </>
                                                                     }
 
                                                                     <input type="email" className="form-control form-control-sm mb-3" id="inputEmailNew" placeholder="New: Email" name="emailNew" onChange={(e) => handleInputEmail(e)} autoComplete="off" required noValidate />
@@ -484,8 +596,12 @@ function UserDetails() {
                                                                         <input type="text" className="form-control form-control-sm mb-3" id="inputCode" placeholder="Code from new Email" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
                                                                     }
 
-                                                                    {emailNew && !code &&
+                                                                    {emailNew && !code && user.email !== emailNew &&
                                                                         <button type="button" className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={sendEmailNewCodeNoReply} disabled={!emailNew || emailNewCodeStatus === "loading"}>Send Code</button>
+                                                                    }
+
+                                                                    {user.email === emailNew &&
+                                                                    <small>Warning: same email</small>
                                                                     }
 
                                                                 </li>
@@ -496,7 +612,25 @@ function UserDetails() {
                                                         </ul>
                                                     </div>
                                                 </li>
-                                                <li className="list-group-item"><small><strong>Username:</strong> {user?.username}</small></li>
+                                                <li className="list-group-item">
+                                                    <small><strong>Username:</strong> {user?.username}</small>
+                                                    <div className="dropdown">
+                                                        <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                            <form onSubmit={handleSubmit} className="container-fluid">
+                                                                <li className="mb-3">
+                                                                    <input type="text" className="form-control form-control-sm" id="inputUsernameNew" placeholder="New: Username" value={usernameNew} onChange={(e) => handleInputUsername(e)} autoComplete="off" required />
+                                                                    {usernameNew?.length > 0 &&
+                                                                        <small className="text-secondary">{usernameNew?.length}/20</small>
+                                                                    }
+
+                                                                </li>
+                                                                <li><input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
+                                                                <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserUsername} disabled={!usernameNew || !password || usernameNew.length > 20}>Update</button></li>
+                                                            </form>
+                                                        </ul>
+                                                    </div>
+                                                </li>
                                                 <li className="list-group-item"><small><strong>Role:</strong> {user?.role}</small></li>
                                                 <li className="list-group-item"><small><strong>Registered:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
                                             </ul>
