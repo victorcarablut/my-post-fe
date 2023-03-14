@@ -49,7 +49,8 @@ function UserDetails() {
     const [fullNameNew, setFullNameNew] = useState(null);
     const [emailNew, setEmailNew] = useState(null);
     const [usernameNew, setUsernameNew] = useState(null);
-
+    const [passwordNew, setPasswordNew] = useState();
+    const [passwordRepeatNew, setPasswordRepeatNew] = useState();
 
     // http response status
     const [responseStatusGeUserDetails, setResponseStatusGetUserDetails] = useState("");
@@ -78,6 +79,8 @@ function UserDetails() {
         setEmailNew(null);
         setUsernameNew(null);
         setPassword(null);
+        setPasswordNew(null);
+        setPasswordRepeatNew(null);
         setCode(null);
         setEmailNewCodeStatus("");
         setResponseStatusGetUserDetails("");
@@ -140,6 +143,17 @@ function UserDetails() {
         const password = e.target.value;
         setPassword(password);
     }
+
+    const handleInputPasswordNew = async (e) => {
+        const password = e.target.value;
+        setPasswordNew(password);
+    }
+
+    const handleInputPasswordRepeatNew = async (e) => {
+        const password = e.target.value;
+        setPasswordRepeatNew(password);
+    }
+
 
     const handleInputCode = async (e) => {
         const code = e.target.value;
@@ -466,6 +480,106 @@ function UserDetails() {
 
     }
 
+    const updateUserPassword= async () => {
+
+        //checkAllInputsValidity();
+
+        // if (handleInputEmailIsValid) {
+
+        //setButtonLoginUserIsDisabled(true);
+
+        //if (passwordType === "text") {
+        //setPasswordType("password");
+        // }
+
+        // if (passwordVisibleChecked) {
+        //setPasswordVisibleChecked(!passwordVisibleChecked);
+        //}
+
+        //setLoginUserStatus("loading");
+        const toastNotify = toast.loading("Loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            email: user.email,
+            old_password: password,
+            new_password: passwordNew
+        }
+
+        await axios.put(`${url}/user/password/update`, data, config).then((res) => {
+
+            if (res.status === 200) {
+
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error"); // Error save data to DB
+                    //setEmailNewCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else if (res.data.status_code === 2) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Invalid email format");
+                    //setEmailNewCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else if (res.data.status_code === 4) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Account with that email doesn't exist");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                    //setEmailNewCodeStatus("error");
+                } else if (res.data.status_code === 8) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Wrong old password");
+                    //setButtonLoginUserIsDisabled(false);
+                    //setEmailNewCodeStatus("error");
+                } else if (res.data.status_code === 9) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Wrong email or password");
+                    //setButtonLoginUserIsDisabled(false);
+                    //setEmailNewCodeStatus("error");
+                } else {
+                    //secureLocalStorage.setItem("token", res.data.token);
+
+                    toast.dismiss(toastNotify);
+                    toast.success("Password updated successfully");
+                    //setEmailNewCodeStatus("success");
+
+                    /*  navigate(
+                         "/code/verify",
+                         {
+                             state: {
+                                 email: email.toString().toLocaleLowerCase()
+                             }
+                         }
+                     ) */
+
+                    // OK
+                    clearInputs();
+                    //window.location.reload();
+                    //getUserDetails();
+                }
+            }
+
+        }).catch(err => {
+            console.log(err);
+            //setButtonLoginUserIsDisabled(false);
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            //setLoginUserStatus("error");
+            return;
+        })
+
+        //} else {
+        //    return;
+        //}
+
+    }
+
 
     const sendEmailNewCodeNoReply = async () => {
 
@@ -574,65 +688,88 @@ function UserDetails() {
                                                     </div>
                                                 </li>
                                                 <li className="list-group-item">
-                                                    <small><strong>Email:</strong> {user?.email}</small>
-                                                    <div className="dropdown">
-                                                        <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
-                                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                            <form onSubmit={handleSubmit}>
-                                                                <li className="container-fluid mb-3">
-                                                                    {emailNew && code ?
+                                                    <div className="d-grid gap-2 d-md-flex">
+                                                        <small><strong>Email:</strong> {user?.email}</small>
+                                                        <div className="dropdown">
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                <form onSubmit={handleSubmit}>
+                                                                    <li className="container-fluid mb-3">
+                                                                        {emailNew && code ?
 
-                                                                        <input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
-                                                                        :
-                                                                        <>
-                                                                        <p><small>Password will be required</small></p>
-                                                                        <p><small>Verification code will be sent on new email</small></p>
-                                                                        </>
+                                                                            <input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                                                            :
+                                                                            <>
+                                                                                <p><small>Password will be required</small></p>
+                                                                                <p><small>Verification code will be sent on new email</small></p>
+                                                                            </>
+                                                                        }
+
+                                                                        <input type="email" className="form-control form-control-sm mb-3" id="inputEmailNew" placeholder="New: Email" name="emailNew" onChange={(e) => handleInputEmail(e)} autoComplete="off" required noValidate />
+
+                                                                        {emailNewCodeStatus === "success" &&
+                                                                            <input type="text" className="form-control form-control-sm mb-3" id="inputCode" placeholder="Code from new Email" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
+                                                                        }
+
+                                                                        {emailNew && !code && user.email !== emailNew &&
+                                                                            <button type="button" className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={sendEmailNewCodeNoReply} disabled={!emailNew || emailNewCodeStatus === "loading"}>Send Code</button>
+                                                                        }
+
+                                                                        {user.email === emailNew &&
+                                                                            <small>Warning: same email</small>
+                                                                        }
+
+                                                                    </li>
+                                                                    {password && emailNew && code &&
+                                                                        <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserEmail}>Update</button></li>
                                                                     }
-
-                                                                    <input type="email" className="form-control form-control-sm mb-3" id="inputEmailNew" placeholder="New: Email" name="emailNew" onChange={(e) => handleInputEmail(e)} autoComplete="off" required noValidate />
-
-                                                                    {emailNewCodeStatus === "success" &&
-                                                                        <input type="text" className="form-control form-control-sm mb-3" id="inputCode" placeholder="Code from new Email" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
-                                                                    }
-
-                                                                    {emailNew && !code && user.email !== emailNew &&
-                                                                        <button type="button" className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={sendEmailNewCodeNoReply} disabled={!emailNew || emailNewCodeStatus === "loading"}>Send Code</button>
-                                                                    }
-
-                                                                    {user.email === emailNew &&
-                                                                    <small>Warning: same email</small>
-                                                                    }
-
-                                                                </li>
-                                                                {password && emailNew && code &&
-                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserEmail}>Update</button></li>
-                                                                }
-                                                            </form>
-                                                        </ul>
+                                                                </form>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </li>
                                                 <li className="list-group-item">
-                                                    <small><strong>Username:</strong> {user?.username}</small>
-                                                    <div className="dropdown">
-                                                        <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
-                                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                            <form onSubmit={handleSubmit} className="container-fluid">
-                                                                <li className="mb-3">
-                                                                    <input type="text" className="form-control form-control-sm" id="inputUsernameNew" placeholder="New: Username" value={usernameNew} onChange={(e) => handleInputUsername(e)} autoComplete="off" required />
-                                                                    {usernameNew?.length > 0 &&
-                                                                        <small className="text-secondary">{usernameNew?.length}/20</small>
-                                                                    }
+                                                    <div className="d-grid gap-2 d-md-flex">
+                                                        <small><strong>Username:</strong> {user?.username}</small>
+                                                        <div className="dropdown">
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                <form onSubmit={handleSubmit} className="container-fluid">
+                                                                    <li className="mb-3">
+                                                                        <input type="text" className="form-control form-control-sm" id="inputUsernameNew" placeholder="New: Username" value={usernameNew} onChange={(e) => handleInputUsername(e)} autoComplete="off" required />
+                                                                        {usernameNew?.length > 0 &&
+                                                                            <small className="text-secondary">{usernameNew?.length}/20</small>
+                                                                        }
 
-                                                                </li>
-                                                                <li><input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
-                                                                <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserUsername} disabled={!usernameNew || !password || usernameNew.length > 20}>Update</button></li>
-                                                            </form>
-                                                        </ul>
+                                                                    </li>
+                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
+                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserUsername} disabled={!usernameNew || !password || usernameNew.length > 20}>Update</button></li>
+                                                                </form>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </li>
                                                 <li className="list-group-item"><small><strong>Role:</strong> {user?.role}</small></li>
                                                 <li className="list-group-item"><small><strong>Registered:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
+                                                <li className="list-group-item">
+                                                    <div className="d-grid gap-2 d-md-flex">
+                                                        <small><strong>Password:</strong> ******</small>
+                                                        <div className="dropdown">
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                <form onSubmit={handleSubmit} className="container-fluid">
+                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordOld" placeholder="Old: Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
+                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordNew" placeholder="New: Password" onChange={(e) => handleInputPasswordNew(e)} autoComplete="off" required /></li>
+                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordRepeatNew" placeholder="New: Password Repeat" onChange={(e) => handleInputPasswordRepeatNew(e)} autoComplete="off" required /></li>
+                                                                    {passwordNew !== passwordRepeatNew &&
+                                                                    <small>Warning: new passwords not match!</small>
+                                                                    }
+                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserPassword} disabled={!password || !passwordNew || passwordRepeatNew !== passwordNew || passwordNew.length > 100}>Update</button></li>
+                                                                </form>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
                                             </ul>
 
                                             <div className="accordion" id="accordionExample">
