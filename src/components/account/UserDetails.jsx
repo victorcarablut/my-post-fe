@@ -42,19 +42,27 @@ function UserDetails() {
         }
     )
 
-    const [inputFullName, setInputFullName] = useState(null);
-    //const [inputFullNameCountChar, setInputFullNameChar] = useState(null);
+    const [password, setPassword] = useState();
+    const [code, setCode] = useState();
+
+    // new data
+    const [fullNameNew, setFullNameNew] = useState(null);
+    const [emailNew, setEmailNew] = useState(null);
 
     // inputs check validity
-    const [handleInputFullNameIsValid, setHandleInpuFullNameIsValid] = useState(false);
+    const [handleInputFullNameNewIsValid, setHandleInpuFullNameNewIsValid] = useState(false);
+    const [handleInputEmailNewIsValid, setHandleInpuEmailNewIsValid] = useState(false);
 
     // add CSS className
-    const [handleInputFullNameClassName, setHandleInputFullNameClassName] = useState(null);
+    const [handleInputFullNameNewClassName, setHandleInputFullNameNewClassName] = useState(null);
+    const [handleInputEmailNewClassName, setHandleInputEmailNewClassName] = useState(null);
 
     const [buttonUpdateUserDetailsIsDisabled, setButtonUpdateUserDetailsIsDisabled] = useState(false);
 
     // http response status
     const [responseStatusGeUserDetails, setResponseStatusGetUserDetails] = useState("");
+
+    const [emailNewCodeStatus, setEmailNewCodeStatus] = useState("");
 
     useEffect(() => {
 
@@ -71,10 +79,14 @@ function UserDetails() {
         // setHandleInputEmailClassName(null);
         // setButtonLoginUserIsDisabled(false);
         // setLoginUserStatus("");
-        // setEmailCodeStatus("");
+        // setEmailNewCodeStatus("");
 
         setUser(null);
-        setInputFullName(null);
+        setFullNameNew(null);
+        setEmailNew(null);
+        setPassword(null);
+        setCode(null);
+        setEmailNewCodeStatus("");
     }
 
     const handleInputFullName = async (e) => {
@@ -87,7 +99,7 @@ function UserDetails() {
 
         //setUser({...user, fullName: fullName});
 
-        setInputFullName(fullName);
+        setFullNameNew(fullName);
 
 
 
@@ -98,6 +110,31 @@ function UserDetails() {
         // } else {
         //     setHandleInpuFullNameIsValid(false);
         // }
+    }
+
+    const handleInputEmail = async (e) => {
+
+        const email = e.target.value;
+
+        setEmailNew(email);
+
+        /*  if (email.includes('@') && email.includes('.') && email.length > 3) {
+             setHandleInpuEmailNewIsValid(true);
+         } else if (email.length === 0) {
+             setHandleInputEmailNewClassName(null);
+         } else {
+             setHandleInpuEmailNewIsValid(false);
+         } */
+    }
+
+    const handleInputPassword = async (e) => {
+        const password = e.target.value;
+        setPassword(password);
+    }
+
+    const handleInputCode = async (e) => {
+        const code = e.target.value;
+        setCode(code);
     }
 
     const getUserDetails = async () => {
@@ -124,7 +161,7 @@ function UserDetails() {
                     registeredDate: res.data.registeredDate
                 })
 
-                setInputFullName(res.data.fullName);
+                setFullNameNew(res.data.fullName);
 
             }
 
@@ -167,7 +204,7 @@ function UserDetails() {
             email: user.email.toLocaleLowerCase(),
             //password: password
 
-            fullName: inputFullName
+            fullName: fullNameNew
         }
 
         await axios.put(`${url}/user/details/update`, data, config).then((res) => {
@@ -215,6 +252,176 @@ function UserDetails() {
 
     }
 
+    const updateUserEmail = async () => {
+
+        //checkAllInputsValidity();
+
+        // if (handleInputEmailIsValid) {
+
+        //setButtonLoginUserIsDisabled(true);
+
+        //if (passwordType === "text") {
+        //setPasswordType("password");
+        // }
+
+        // if (passwordVisibleChecked) {
+        //setPasswordVisibleChecked(!passwordVisibleChecked);
+        //}
+
+        //setLoginUserStatus("loading");
+        const toastNotify = toast.loading("Loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            old_email: user.email.toLocaleLowerCase(),
+            password: password,
+            new_email: emailNew.toLocaleLowerCase(),
+            code: code
+        }
+
+        await axios.put(`${url}/user/email/update`, data, config).then((res) => {
+
+            if (res.status === 200) {
+
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error"); // Error save data to DB
+                    //setEmailNewCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else if (res.data.status_code === 2) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Invalid email format");
+                    //setEmailNewCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else if (res.data.status_code === 4) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Account with that email doesn't exist");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                    //setEmailNewCodeStatus("error");
+                } else if (res.data.status_code === 5) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Wrong verification code");
+                    //setEmailNewCodeStatus("error");
+                } else if (res.data.status_code === 7) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error while sending email, try again!");
+                    //setEmailNewCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                    //resendEmailCode();
+                } else if (res.data.status_code === 9) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Wrong email or password");
+                    //setButtonLoginUserIsDisabled(false);
+                    //setEmailNewCodeStatus("error");
+                } else {
+                    //secureLocalStorage.setItem("token", res.data.token);
+
+                    toast.dismiss(toastNotify);
+                    toast.success("Email updated successfully");
+                    //setEmailNewCodeStatus("success");
+
+                    /*  navigate(
+                         "/code/verify",
+                         {
+                             state: {
+                                 email: email.toString().toLocaleLowerCase()
+                             }
+                         }
+                     ) */
+
+                    // OK
+
+                    //window.location.reload();
+                    clearInputs();
+                    getUserDetails();
+                }
+            }
+
+        }).catch(err => {
+            console.log(err);
+            //setButtonLoginUserIsDisabled(false);
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            //setLoginUserStatus("error");
+            return;
+        })
+
+        //} else {
+        //    return;
+        //}
+
+    }
+
+
+    const sendEmailNewCodeNoReply = async () => {
+
+        setEmailNewCodeStatus("loading")
+        const toastNotify = toast.loading("Send Email Code");
+
+        const data = {
+            old_email: user.email,
+            new_email: emailNew.toString().toLocaleLowerCase()
+        }
+
+        await axios.post(`${url}/account/new-email/code/send`, data).then((res) => {
+
+            if (res.status === 200) {
+
+                if (res.data.status_code === 2) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Invalid email format");
+                    setEmailNewCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else if (res.data.status_code === 4) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Account with that email doesn't exist");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                    setEmailNewCodeStatus("error");
+                } else if (res.data.status_code === 7) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error while sending email, try again!");
+                    setEmailNewCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                    //resendEmailCode();
+                } else {
+                    //secureLocalStorage.setItem("token", res.data.token);
+
+                    toast.dismiss(toastNotify);
+                    toast.success("Email sent successfully");
+                    setEmailNewCodeStatus("success");
+
+                    /*  navigate(
+                         "/code/verify",
+                         {
+                             state: {
+                                 email: email.toString().toLocaleLowerCase()
+                             }
+                         }
+                     ) */
+
+                    // OK
+
+                    //window.location.reload();
+                    //clearInputs();
+                }
+            }
+
+        }).catch(err => {
+            //setButtonSendEmailCodeIsDisabled(false);
+            toast.dismiss(toastNotify);
+            toast.error("Error Send Email");
+            setEmailNewCodeStatus("error");
+            return;
+        })
+    }
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -247,20 +454,47 @@ function UserDetails() {
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                 <form onSubmit={handleSubmit}>
                                                                     <li className="container-fluid mb-3">
-                                                                        <input type="text" className={"form-control form-control-sm " + handleInputFullNameClassName} id="inputFullName" placeholder={inputFullName} value={inputFullName} onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
-                                                                        {inputFullName?.length > 0 &&
-                                                                            <small className="text-secondary">{inputFullName?.length}/100</small>
+                                                                        <input type="text" className={"form-control form-control-sm " + handleInputFullNameNewClassName} id="inputFullNameNew" placeholder="New: Full Name" value={fullNameNew} onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
+                                                                        {fullNameNew?.length > 0 &&
+                                                                            <small className="text-secondary">{fullNameNew?.length}/100</small>
                                                                         }
 
                                                                     </li>
-                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }}  onClick={updateUserDetails} disabled={!inputFullName}>Update</button></li>
+                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserDetails} disabled={!fullNameNew}>Update</button></li>
                                                                 </form>
                                                             </ul>
                                                         </div>
-
                                                     </div>
                                                 </li>
-                                                <li className="list-group-item"><small><strong>Email:</strong> {user?.email}</small></li>
+                                                <li className="list-group-item">
+                                                    <small><strong>Email:</strong> {user?.email}</small>
+                                                    <div className="dropdown">
+                                                        <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                            <form onSubmit={handleSubmit}>
+                                                                <li className="container-fluid mb-3">
+                                                                    {emailNew && code &&
+                                                                        <input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                                                    }
+
+                                                                    <input type="email" className="form-control form-control-sm mb-3" id="inputEmailNew" placeholder="New: Email" name="emailNew" onChange={(e) => handleInputEmail(e)} autoComplete="off" required noValidate />
+
+                                                                    {emailNewCodeStatus === "success" &&
+                                                                        <input type="text" className="form-control form-control-sm mb-3" id="inputCode" placeholder="Code from new Email" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
+                                                                    }
+
+                                                                    {emailNew && !code &&
+                                                                        <button type="button" className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={sendEmailNewCodeNoReply} disabled={!emailNew || emailNewCodeStatus === "loading"}>Send Code</button>
+                                                                    }
+
+                                                                </li>
+                                                                {password && emailNew && code &&
+                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserEmail}>Update</button></li>
+                                                                }
+                                                            </form>
+                                                        </ul>
+                                                    </div>
+                                                </li>
                                                 <li className="list-group-item"><small><strong>Username:</strong> {user?.username}</small></li>
                                                 <li className="list-group-item"><small><strong>Role:</strong> {user?.role}</small></li>
                                                 <li className="list-group-item"><small><strong>Registered:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
