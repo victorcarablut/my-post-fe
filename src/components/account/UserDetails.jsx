@@ -27,6 +27,9 @@ import moment from 'moment/min/moment-with-locales';
 import { moment_locale, moment_format_date_time_long } from '../_resources/date-time/DateTime.js';
 //import UserPasswordRecover from './UserPasswordRecover.jsx';
 
+import default_user_profile_img from '../../assets/images/user.jpg';
+
+
 // Notifications
 import toast from 'react-hot-toast';
 
@@ -38,7 +41,8 @@ function UserDetails() {
             email: null,
             username: null,
             role: null,
-            registeredDate: null
+            registeredDate: null,
+            userProfileImg: null
         }
     )
 
@@ -51,6 +55,7 @@ function UserDetails() {
     const [usernameNew, setUsernameNew] = useState(null);
     const [passwordNew, setPasswordNew] = useState();
     const [passwordRepeatNew, setPasswordRepeatNew] = useState();
+    const [userProfileImgNew, setUserProfileImgNew] = useState();
 
     // http response status
     const [responseStatusGeUserDetails, setResponseStatusGetUserDetails] = useState("");
@@ -81,6 +86,7 @@ function UserDetails() {
         setPassword(null);
         setPasswordNew(null);
         setPasswordRepeatNew(null);
+        setUserProfileImgNew(null);
         setCode(null);
         setEmailNewCodeStatus("");
         setResponseStatusGetUserDetails("");
@@ -181,7 +187,8 @@ function UserDetails() {
                     email: res.data.email,
                     username: res.data.username,
                     role: res.data.role,
-                    registeredDate: res.data.registeredDate
+                    registeredDate: res.data.registeredDate,
+                    userProfileImg: res.data.userProfileImg
                 })
 
                 setFullNameNew(res.data.fullName);
@@ -225,7 +232,7 @@ function UserDetails() {
         }
 
         const data = {
-            email: user.email.toLocaleLowerCase(),
+            email: user.email,
             //password: password
 
             fullName: fullNameNew
@@ -480,7 +487,7 @@ function UserDetails() {
 
     }
 
-    const updateUserPassword= async () => {
+    const updateUserPassword = async () => {
 
         //checkAllInputsValidity();
 
@@ -562,6 +569,84 @@ function UserDetails() {
                     clearInputs();
                     //window.location.reload();
                     //getUserDetails();
+                }
+            }
+
+        }).catch(err => {
+            console.log(err);
+            //setButtonLoginUserIsDisabled(false);
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            //setLoginUserStatus("error");
+            return;
+        })
+
+        //} else {
+        //    return;
+        //}
+
+    }
+
+    const updateUserProfileImage = async () => {
+
+        //checkAllInputsValidity();
+
+        // if (handleInputEmailIsValid) {
+
+        //setButtonLoginUserIsDisabled(true);
+
+        //if (passwordType === "text") {
+        //setPasswordType("password");
+        // }
+
+        // if (passwordVisibleChecked) {
+        //setPasswordVisibleChecked(!passwordVisibleChecked);
+        //}
+
+        //setLoginUserStatus("loading");
+        const toastNotify = toast.loading("Loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const formData = new FormData();
+        formData.append("email", user.email);
+        formData.append("userProfileImg", userProfileImgNew);
+
+        //const data = formData
+
+        await axios.put(`${url}/user/profile-image/update`, formData, config).then((res) => {
+
+            if (res.status === 200) {
+
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error");
+                } else if (res.data.status_code === 2) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Invalid email format");
+                    //setButtonLoginUserIsDisabled(false);
+                } else if (res.data.status_code === 4) {
+                    toast.dismiss(toastNotify);
+                    toast.error("User with that email not found");
+                    //setLoginUserStatus("user_email_not_found");
+                    //setButtonLoginUserIsDisabled(false);
+                } else {
+                    //secureLocalStorage.setItem("token", res.data.token);
+
+                    toast.dismiss(toastNotify);
+
+                    //getUserDetails();
+
+                    //setLoginUserStatus("success");
+
+                    window.location.reload(); // to update the value in header
+                    //clearInputs();
                 }
             }
 
@@ -669,6 +754,23 @@ function UserDetails() {
                                             <ul className="list-group list-group-flush">
                                                 <li className="list-group-item">
                                                     <div className="d-grid gap-2 d-md-flex">
+                                                        <img src={user?.userProfileImg ? `data:image/png;base64,${user.userProfileImg}` : default_user_profile_img} width="90" height="90" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
+                                                    </div>
+                                                    <div className="dropdown">
+                                                        <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                            <form onSubmit={handleSubmit}>
+                                                                <li className="container-fluid mb-3">
+                                                                    <input type="file" className="form-control form-control-sm" name="userProfileImagenew" accept="image/jpeg" onChange={(e) => { setUserProfileImgNew(e.target.files[0]); }} required />
+                                                                    <small className="text-secondary">max: 10mb | .jpg</small>
+                                                                </li>
+                                                                <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserProfileImage} disabled={!userProfileImgNew}>Update</button></li>
+                                                            </form>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li className="list-group-item">
+                                                    <div className="d-grid gap-2 d-md-flex">
                                                         <small className="me-md-2"><strong>Full Name:</strong> {user?.fullName}</small>
                                                         <div className="dropdown">
                                                             <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
@@ -762,7 +864,7 @@ function UserDetails() {
                                                                     <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordNew" placeholder="New: Password" onChange={(e) => handleInputPasswordNew(e)} autoComplete="off" required /></li>
                                                                     <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordRepeatNew" placeholder="New: Password Repeat" onChange={(e) => handleInputPasswordRepeatNew(e)} autoComplete="off" required /></li>
                                                                     {passwordNew !== passwordRepeatNew &&
-                                                                    <small>Warning: new passwords not match!</small>
+                                                                        <small>Warning: new passwords not match!</small>
                                                                     }
                                                                     <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserPassword} disabled={!password || !passwordNew || passwordRepeatNew !== passwordNew || passwordNew.length > 100}>Update</button></li>
                                                                 </form>
