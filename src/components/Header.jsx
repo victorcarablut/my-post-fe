@@ -17,7 +17,7 @@ import { Logout } from './account/Logout.js';
 
 // Logo / User
 import logo from '../assets/images/logo.png';
-import user_pic_profile from '../assets/images/user.jpg';
+import default_user_profile_img from '../assets/images/user.jpg';
 
 import { LoadingFullScreen } from '../components/_resources/ui/Loadings';
 
@@ -32,7 +32,8 @@ function Header() {
 
   const [user, setUser] = useState(
     {
-      fullName: null
+      fullName: null,
+      userProfileImg: null
     }
   )
 
@@ -96,7 +97,8 @@ function Header() {
     await axios.get(`${url}/user/details`, config).then((res) => {
       if (res.status === 200) {
         setUser({
-          fullName: res.data.fullName
+          fullName: res.data.fullName,
+          userProfileImg: res.data.userProfileImg
         })
 
       } else {
@@ -145,7 +147,7 @@ function Header() {
 
               {isAuthenticated ?
 
-                <Link to="/account" type="button" className={"btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}><img src={user_pic_profile} width="25" alt="my-Post" className="rounded-circle border border-2 me-md-2" />{user.fullName?.length >= 20 ? user.fullName.substring(0, 25) + "..." : user.fullName}</Link>
+                <Link to="/account" type="button" className={"btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}><img src={user?.userProfileImg ? `data:image/png;base64,${user.userProfileImg}` : default_user_profile_img} width="25" alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />{user.fullName?.length >= 20 ? user.fullName.substring(0, 25) + "..." : user.fullName}</Link>
                 :
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                   <NavLink to="/login" type="button" className={"navbar-nav-link btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}>Login</NavLink>
