@@ -137,7 +137,11 @@ function Post() {
                                                                         <div className="card-body">
 
                                                                             <p>{post.title}</p>
-                                                                            <small>{post.description}</small>
+                                                                            {post.image &&
+                                                                                <img src={`data:image/png;base64,${post.image}`} className="img-fluid rounded" alt="image" />
+                                                                            }
+
+                                                                            <small style={{fontSize: 12}}>{post.description}</small>
 
                                                                             <div className="position-absolute bottom-0 end-0" style={{ padding: "5px" }}>
                                                                                 2023
