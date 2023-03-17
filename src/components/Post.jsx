@@ -141,10 +141,16 @@ function Post() {
                                                                                 <img src={`data:image/png;base64,${post.image}`} className="img-fluid rounded" alt="image" />
                                                                             }
 
-                                                                            <small style={{fontSize: 12}}>{post.description}</small>
+                                                                            <small style={{ fontSize: 12 }}>{post.description}</small>
 
-                                                                            <div className="position-absolute bottom-0 end-0" style={{ padding: "5px" }}>
-                                                                                2023
+                                                                            <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12}}>
+
+                                                                                {post?.updatedDate ?
+
+                                                                                    <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                                    :
+                                                                                    <small>{moment(post.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                                }
                                                                             </div>
                                                                         </div>
                                                                         <div className="card-footer bg-transparent text-muted">
