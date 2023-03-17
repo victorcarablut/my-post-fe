@@ -77,10 +77,10 @@ function Post() {
 
             <div className="row">
 
-                <div className="col-xl-5" style={{ paddingBottom: "20px" }}>
+                <div className="col-xl-6" style={{ paddingBottom: 20 }}>
 
                     <div className="d-flex justify-content-center sticky-top">
-                        <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
+                        <div className="card container-fluid shadow" style={{ maxWidth: 500, marginTop: 20 }}>
                             <div className="card-body">
                                 This is some text within a card body.
                             </div>
@@ -91,7 +91,7 @@ function Post() {
 
 
 
-                <div className="col-xl-7" style={{ paddingBottom: "20px" }}>
+                <div className="col-xl-6" style={{ paddingBottom: 20 }}>
 
                     <div>
 
