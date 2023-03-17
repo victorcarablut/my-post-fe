@@ -213,6 +213,12 @@
 }
 
 
+.transparent-background-fluid {
+  background-color: #434553f3 !important;
+  box-shadow: 0px 15px 35px 10px rgba(66, 69, 80, 0.445) !important;
+}
+
+
 /* Remove Dropdown blue color on click */
 .dropdown-item.active, .dropdown-item:active {
   color: black;

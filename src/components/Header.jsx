@@ -134,7 +134,7 @@ function Header() {
           :
 
 
-          <header className="d-flex justify-content-around navbar sticky-top">
+          <header className="d-flex justify-content-around navbar transparent-background-fluid sticky-top">
 
             <div className="animate__animated animate__zoomIn">
               <Link to="/" className="navbar-brand">
