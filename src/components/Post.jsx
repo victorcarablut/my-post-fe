@@ -79,9 +79,8 @@ function Post() {
 
                 <div className="col-xl-5" style={{ paddingBottom: "20px" }}>
 
-                    <div className="d-flex justify-content-center">
-
-                        <div className="card">
+                    <div className="d-flex justify-content-center sticky-top">
+                        <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
                             <div className="card-body">
                                 This is some text within a card body.
                             </div>
@@ -103,6 +102,13 @@ function Post() {
                                 responseStatusGetAllPosts === "success" ?
 
                                     <>
+                                        <div className="d-flex justify-content-center">
+                                            <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
+                                                <div className="card-body">
+                                                    This is some text within a card body.
+                                                </div>
+                                            </div>
+                                        </div>
 
 
                                         {posts?.length === 0 ? <small>Empty Data</small>
@@ -126,17 +132,12 @@ function Post() {
                                                                     <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
                                                                         <div className="card-header bg-transparent">
                                                                             <img src={post.user.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover" }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" />
-                                                                            {post.user.fullName}
+                                                                            <h6>{post.user.fullName}</h6>
                                                                         </div>
                                                                         <div className="card-body">
 
-
-                                                                            <p style={{ marginRight: "20px" }}><strong>Title:</strong>{post.title}</p>
-
-                                                                            <p style={{ marginRight: "20px" }}><i className="bi bi-person-fill"></i> <strong>Description:</strong> {post.description}</p>
-
-
-
+                                                                            <p>{post.title}</p>
+                                                                            <small>{post.description}</small>
 
                                                                             <div className="position-absolute bottom-0 end-0" style={{ padding: "5px" }}>
                                                                                 2023
