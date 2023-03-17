@@ -124,7 +124,7 @@ function Post() {
                                                                 <td>
 
                                                                     <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
-                                                                        <div className="card-header">
+                                                                        <div className="card-header bg-transparent">
                                                                             <img src={post.user.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover" }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" />
                                                                             {post.user.fullName}
                                                                         </div>
@@ -142,7 +142,7 @@ function Post() {
                                                                                 2023
                                                                             </div>
                                                                         </div>
-                                                                        <div className="card-footer text-muted">
+                                                                        <div className="card-footer bg-transparent text-muted">
                                                                             card footer
                                                                         </div>
                                                                     </div>
