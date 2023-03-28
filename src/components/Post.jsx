@@ -41,6 +41,7 @@ function Post() {
     const [postTitle, setPostTitle] = useState(null);
     const [postDescription, setPostDescription] = useState(null);
     const [postImage, setPostImage] = useState(null);
+    const [postImagePreview, setPostImagePreview] = useState(null);
 
     // list
     const [posts, setPosts] = useState([]);
@@ -77,6 +78,13 @@ function Post() {
         setButtonCreatePostIsDisabled(false);
 
         setResponseStatusGetAllPosts("");
+    }
+
+    const handleInputPostImage = (e) => {
+        if (e.target.files) {
+            setPostImage(e.target.files[0]);
+            setPostImagePreview(URL.createObjectURL(e.target.files[0]));
+        }
     }
 
 
@@ -183,7 +191,7 @@ function Post() {
 
         checkAllInputsValidity();
 
-        if (handleInputPostTitleIsValid && handleInputPostDescriptionIsValid) {
+        if (handleInputPostTitleIsValid) {
 
             setButtonCreatePostIsDisabled(true);
 
@@ -295,8 +303,14 @@ function Post() {
                                         </div>
                                     </div>
 
+
+                                    {postImage &&
+                                        <img src={postImagePreview} className="img-fluid rounded" alt="image" />
+                                    }
+
+
                                     <div className="container-fluid mb-3">
-                                        <input type="file" className="form-control form-control-sm" name="postImage" accept="image/jpeg" onChange={(e) => { setPostImage(e.target.files[0]); }} />
+                                        <input type="file" className="form-control form-control-sm" name="postImage" accept="image/jpeg" onChange={(e) => handleInputPostImage(e)} />
                                         <small className="text-secondary">max: 10mb | .jpg</small>
                                     </div>
 
@@ -373,7 +387,7 @@ function Post() {
 
                                                                             <p>{post.title}</p>
                                                                             {post.image &&
-                                                                                <img src={`data:image/png;base64,${post.image}`} className="img-fluid rounded" alt="image" />
+                                                                                <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
                                                                             }
 
                                                                             <small style={{ fontSize: 12 }}>{post.description}</small>
