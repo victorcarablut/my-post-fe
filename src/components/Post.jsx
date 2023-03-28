@@ -87,6 +87,11 @@ function Post() {
         }
     }
 
+    const deletePostImagePreview = () => {
+        setPostImagePreview(null);
+        setPostImage(null);
+    }
+
 
     const getUserDetails = async () => {
 
@@ -303,11 +308,12 @@ function Post() {
                                         </div>
                                     </div>
 
-
                                     {postImage &&
-                                        <img src={postImagePreview} className="img-fluid rounded" alt="image" />
+                                    <>
+                                        <img src={postImagePreview} className="img-fluid rounded mb-3" alt="image" />
+                                        <button type="button" className="btn btn-secondary btn-sm mb-3" onClick={deletePostImagePreview}>Delete Image</button>
+                                        </>
                                     }
-
 
                                     <div className="container-fluid mb-3">
                                         <input type="file" className="form-control form-control-sm" name="postImage" accept="image/jpeg" onChange={(e) => handleInputPostImage(e)} />
