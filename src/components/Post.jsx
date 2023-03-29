@@ -69,6 +69,8 @@ function Post() {
         setPostTitle(null);
         setPostDescription(null);
 
+        deletePostImagePreview();
+
         setHandleInputPostTitleClassName(null);
         setHandleInputPostDescriptionClassName(null);
 
@@ -78,6 +80,7 @@ function Post() {
         setButtonCreatePostIsDisabled(false);
 
         setResponseStatusGetAllPosts("");
+        
     }
 
     const handleInputPostImage = (e) => {
@@ -231,6 +234,8 @@ function Post() {
                     toast.dismiss(toastNotify);
                     toast.success("Published");
 
+                    clearInputs();
+
                     getAllPosts();
 
                     //uploadImage();
@@ -301,7 +306,7 @@ function Post() {
                                 <form onSubmit={handleSubmit}>
 
                                     <div className="form-floating mb-3">
-                                        <input type="text" className={"form-control " + handleInputPostTitleClassName} id="floatingInputPostTitle" placeholder="Title" onChange={(e) => handleInputPostTitle(e)} autoComplete="off" required />
+                                        <input type="text" className={"form-control " + handleInputPostTitleClassName} id="floatingInputPostTitle" placeholder="Title" value={postTitle || ""} maxLength="100" onChange={(e) => handleInputPostTitle(e)} autoComplete="off" required />
                                         <label htmlFor="floatingInputPostTitle">Title</label>
                                         <div className="invalid-feedback">
                                             <small>...</small>
@@ -321,12 +326,14 @@ function Post() {
                                     </div>
 
                                     <div className="form-floating mb-3">
-                                        <textarea type="text" className={"form-control " + handleInputPostDescriptionClassName} id="floatingInputPostDescription" placeholder="Description" onChange={(e) => handleInputPostDescription(e)} autoComplete="off" style={{ height: "100%", minHeight: "100px" }} />
+                                        <textarea type="text" className={"form-control " + handleInputPostDescriptionClassName} id="floatingInputPostDescription" placeholder="Description" value={postDescription || ""} maxLength="500" onChange={(e) => handleInputPostDescription(e)} autoComplete="off" style={{ height: "100%", minHeight: "100px" }} />
                                         <label htmlFor="floatingInputPostDescription">Description</label>
                                         <div className="invalid-feedback">
                                             <small>...</small>
                                         </div>
                                     </div>
+
+                    
 
                                     <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!postTitle || buttonCreatePostIsDisabled} onClick={createPost}>Publish</button>
                                 </form>
