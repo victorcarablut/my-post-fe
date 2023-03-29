@@ -80,10 +80,11 @@ function Post() {
         setButtonCreatePostIsDisabled(false);
 
         setResponseStatusGetAllPosts("");
-        
+
     }
 
     const handleInputPostImage = (e) => {
+        
         if (e.target.files) {
             setPostImage(e.target.files[0]);
             setPostImagePreview(URL.createObjectURL(e.target.files[0]));
@@ -314,15 +315,18 @@ function Post() {
                                     </div>
 
                                     {postImage &&
-                                    <>
-                                        <img src={postImagePreview} className="img-fluid rounded mb-3" alt="image" />
-                                        <button type="button" className="btn btn-secondary btn-sm mb-3" onClick={deletePostImagePreview}>Delete Image</button>
+                                        <>
+                                            <img src={postImagePreview} className="img-fluid rounded mb-3" alt="image" />
+                                            <button type="button" className="btn-close mb-3" aria-label="Close" onClick={deletePostImagePreview}></button>
                                         </>
                                     }
 
-                                    <div className="container-fluid mb-3">
-                                        <input type="file" className="form-control form-control-sm" name="postImage" accept="image/jpeg" onChange={(e) => handleInputPostImage(e)} />
-                                        <small className="text-secondary">max: 10mb | .jpg</small>
+                                    <div className="mb-3">
+                                        <input type="file" className="form-control form-control-sm" name="postImage" id="postImage" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImage(e)} />
+                                        <div>
+                                            <label htmlFor="postImage" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
+                                            <small className="text-secondary">max: 10mb | .jpg</small>
+                                        </div>
                                     </div>
 
                                     <div className="form-floating mb-3">
@@ -333,7 +337,7 @@ function Post() {
                                         </div>
                                     </div>
 
-                    
+
 
                                     <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!postTitle || buttonCreatePostIsDisabled} onClick={createPost}>Publish</button>
                                 </form>
