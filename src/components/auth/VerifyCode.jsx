@@ -211,7 +211,7 @@ const VerifyCode = () => {
 
             <form onSubmit={handleSubmit}>
               <div className="form-floating mb-3">
-                <input type="text" className={"form-control text-center " + handleInputCodeClassName} id="floatingInputCode" placeholder="Code" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
+                <input type="text" className={"form-control text-center " + handleInputCodeClassName} id="floatingInputCode" placeholder="Code" maxLength="6" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
                 <label htmlFor="floatingInputCode">Code</label>
               </div>
               <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!code || buttonVerifyCodeIsDisabled} onClick={verifyCode}>Verify</button>

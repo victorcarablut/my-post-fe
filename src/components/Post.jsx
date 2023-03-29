@@ -303,7 +303,7 @@ function Post() {
                     <div className="d-flex justify-content-center mb-3">
                         <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
                             <div className="card-body">
-                                This is some text within a card body.
+                                <h6>Create Post</h6>
                                 <form onSubmit={handleSubmit}>
 
                                     <div className="form-floating mb-3">
