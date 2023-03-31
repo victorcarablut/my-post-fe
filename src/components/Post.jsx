@@ -84,7 +84,7 @@ function Post() {
     }
 
     const handleInputPostImage = (e) => {
-        
+
         if (e.target.files) {
             setPostImage(e.target.files[0]);
             setPostImagePreview(URL.createObjectURL(e.target.files[0]));
@@ -294,165 +294,200 @@ function Post() {
     }
 
     return (
-        <div className="container-fluid">
 
-            <div className="row">
+        <>
+            <div className="container-fluid">
 
-                <div className="col-xl-6" style={{ paddingBottom: 20 }}>
+                <div className="row">
 
-                    <div className="d-flex justify-content-center mb-3">
-                        <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
-                            <div className="card-body">
-                                <h6>Create Post</h6>
-                                <form onSubmit={handleSubmit}>
+                    <div className="col-xl-6" style={{ paddingBottom: 20 }}>
 
-                                    <div className="form-floating mb-3">
-                                        <input type="text" className={"form-control " + handleInputPostTitleClassName} id="floatingInputPostTitle" placeholder="Title" value={postTitle || ""} maxLength="100" onChange={(e) => handleInputPostTitle(e)} autoComplete="off" required />
-                                        <label htmlFor="floatingInputPostTitle">Title</label>
-                                        <div className="invalid-feedback">
-                                            <small>...</small>
-                                        </div>
-                                    </div>
+                        <div className="d-flex justify-content-center mb-3">
+                            <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
+                                <div className="card-body">
+                                    <h6>Create Post</h6>
+                                    <form onSubmit={handleSubmit}>
 
-                                    {postImage &&
-                                        <>
-                                            <img src={postImagePreview} className="img-fluid rounded mb-3" alt="image" />
-                                            <button type="button" className="btn-close mb-3" aria-label="Close" onClick={deletePostImagePreview}></button>
-                                        </>
-                                    }
-
-                                    <div className="mb-3">
-                                        <input type="file" className="form-control form-control-sm" name="postImage" id="postImage" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImage(e)} />
-                                        <div>
-                                            <label htmlFor="postImage" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
-                                            <small className="text-secondary">max: 10mb | .jpg</small>
-                                        </div>
-                                    </div>
-
-                                    <div className="form-floating mb-3">
-                                        <textarea type="text" className={"form-control " + handleInputPostDescriptionClassName} id="floatingInputPostDescription" placeholder="Description" value={postDescription || ""} maxLength="500" onChange={(e) => handleInputPostDescription(e)} autoComplete="off" style={{ height: "100%", minHeight: "100px" }} />
-                                        <label htmlFor="floatingInputPostDescription">Description</label>
-                                        <div className="invalid-feedback">
-                                            <small>...</small>
-                                        </div>
-                                    </div>
-
-
-
-                                    <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!postTitle || buttonCreatePostIsDisabled} onClick={createPost}>Publish</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="d-flex justify-content-center">
-                        <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
-                            <div className="card-body">
-                                This is some text within a card body.
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-
-                <div className="col-xl-6" style={{ paddingBottom: 20 }}>
-
-                    <div>
-
-                        {responseStatusGetAllPosts === "loading" ? <small>Loading...</small>
-                            :
-                            responseStatusGetAllPosts === "error" ? <small>Error</small>
-                                :
-                                responseStatusGetAllPosts === "success" ?
-
-                                    <>
-                                        <div className="d-flex justify-content-center">
-                                            <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
-                                                <div className="card-body">
-                                                    This is some text within a card body.
-                                                </div>
+                                        <div className="form-floating mb-3">
+                                            <input type="text" className={"form-control " + handleInputPostTitleClassName} id="floatingInputPostTitle" placeholder="Title" value={postTitle || ""} maxLength="100" onChange={(e) => handleInputPostTitle(e)} autoComplete="off" required />
+                                            <label htmlFor="floatingInputPostTitle">Title</label>
+                                            <div className="invalid-feedback">
+                                                <small>...</small>
                                             </div>
                                         </div>
 
-
-                                        {posts?.length === 0 ? <small>Empty Data</small>
-                                            :
-
-                                            <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "800px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
-
-
-
-                                                <table id="table" className="container-fluid">
-
-                                                    <tbody>
-
-                                                        {posts?.map(post =>
-
-
-
-                                                            <tr key={post.id}>
-                                                                <td>
-
-                                                                    <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
-                                                                        <div className="card-header bg-transparent">
-                                                                            <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover" }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" />
-                                                                            <h6>{post?.user?.fullName}</h6>
-                                                                        </div>
-                                                                        <div className="card-body">
-
-                                                                            <p>{post.title}</p>
-                                                                            {post.image &&
-                                                                                <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
-                                                                            }
-
-                                                                            <small style={{ fontSize: 12 }}>{post.description}</small>
-
-                                                                            <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
-
-                                                                                {post?.updatedDate ?
-
-                                                                                    <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
-                                                                                    :
-                                                                                    <small>{moment(post.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
-                                                                                }
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="card-footer bg-transparent text-muted">
-                                                                            card footer
-                                                                        </div>
-                                                                    </div>
-
-                                                                </td>
-                                                            </tr>
-
-
-
-                                                        )}
-
-
-
-                                                    </tbody>
-
-                                                </table>
-                                            </div>
-
-
+                                        {postImage &&
+                                            <>
+                                                <img src={postImagePreview} className="img-fluid rounded mb-3" alt="image" />
+                                                <button type="button" className="btn-close mb-3" aria-label="Close" onClick={deletePostImagePreview}></button>
+                                            </>
                                         }
 
-                                    </>
-                                    :
-                                    <></>
+                                        <div className="mb-3">
+                                            <input type="file" className="form-control form-control-sm" name="postImage" id="postImage" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImage(e)} />
+                                            <div>
+                                                <label htmlFor="postImage" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
+                                                <small className="text-secondary">max: 10mb | .jpg</small>
+                                            </div>
+                                        </div>
 
-                        }
+                                        <div className="form-floating mb-3">
+                                            <textarea type="text" className={"form-control " + handleInputPostDescriptionClassName} id="floatingInputPostDescription" placeholder="Description" value={postDescription || ""} maxLength="500" onChange={(e) => handleInputPostDescription(e)} autoComplete="off" style={{ height: "100%", minHeight: "100px" }} />
+                                            <label htmlFor="floatingInputPostDescription">Description</label>
+                                            <div className="invalid-feedback">
+                                                <small>...</small>
+                                            </div>
+                                        </div>
+
+
+
+                                        <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!postTitle || buttonCreatePostIsDisabled} onClick={createPost}>Publish</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="d-flex justify-content-center">
+                            <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
+                                <div className="card-body">
+                                    This is some text within a card body.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div className="col-xl-6" style={{ paddingBottom: 20 }}>
+
+                        <div>
+
+                            {responseStatusGetAllPosts === "loading" ? <small>Loading...</small>
+                                :
+                                responseStatusGetAllPosts === "error" ? <small>Error</small>
+                                    :
+                                    responseStatusGetAllPosts === "success" ?
+
+                                        <>
+                                            <div className="d-flex justify-content-center">
+                                                <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
+                                                    <div className="card-body">
+                                                        This is some text within a card body.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            {posts?.length === 0 ? <small>Empty Data</small>
+                                                :
+
+                                                <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "800px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
+
+
+
+                                                    <table id="table" className="container-fluid">
+
+                                                        <tbody>
+
+                                                            {posts?.map(post =>
+
+
+
+                                                                <tr key={post.id}>
+                                                                    <td>
+
+                                                                        <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
+                                                                            <div className="card-header bg-transparent">
+                                                                                <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover" }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" />
+                                                                                <h6>{post?.user?.fullName}</h6>
+
+
+                                                                                {
+                                                                                    userId === post?.user?.id &&
+                                                                                    <div className="position-absolute top-0 end-0">
+                                                                                        <button type="button" className="btn btn-secondary btn-sm" style={{margin: 5}} data-bs-toggle="modal" data-bs-target="#editPostModal"><i className="bi bi-pencil-square"></i></button>
+                                                                                    </div>
+                                                                                }
+
+                                                                            </div>
+                                                                            <div className="card-body">
+
+                                                                                <p>{post.title}</p>
+                                                                                {post.image &&
+                                                                                    <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
+                                                                                }
+
+                                                                                <small style={{ fontSize: 12 }}>{post.description}</small>
+
+                                                                                <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
+
+                                                                                    {post?.updatedDate ?
+
+                                                                                        <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                                        :
+                                                                                        <small>{moment(post.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="card-footer bg-transparent text-muted">
+                                                                                card footer
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </td>
+                                                                </tr>
+
+
+
+                                                            )}
+
+
+
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+
+
+                                            }
+
+                                        </>
+                                        :
+                                        <></>
+
+                            }
+                        </div>
+
                     </div>
 
                 </div>
 
             </div>
 
-        </div>
+            {/* --- Modal (Edit Post) --- */}
+            <div className="modal fade" id="editPostModal" tabIndex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true" >
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="editPostModalLabel">Edit</h1>
+                            <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            
+                            <div>
+                                <small>modal</small>
+                            </div>
+
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary btn-sm rounded-pill shadow" id='button-modal-submit-delete-employee-close' data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </>
 
     )
 }
