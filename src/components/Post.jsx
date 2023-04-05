@@ -37,11 +37,19 @@ import toast from 'react-hot-toast';
 function Post() {
 
     const [userId, setUserId] = useState(null);
+    const [postId, setPostId] = useState(null);
 
     const [postTitle, setPostTitle] = useState(null);
     const [postDescription, setPostDescription] = useState(null);
     const [postImage, setPostImage] = useState(null);
     const [postImagePreview, setPostImagePreview] = useState(null);
+
+    // new data
+    const [postTitleNew, setPostTitleNew] = useState(null);
+    const [postDescriptionNew, setPostDescriptionNew] = useState(null);
+    const [postImageNew, setPostImageNew] = useState(null);
+    const [postImagePreviewNew, setPostImagePreviewNew] = useState(null);
+    const [postImagePreviewNewTemporary, setPostImagePreviewNewTemporary] = useState(null);
 
     // list
     const [posts, setPosts] = useState([]);
@@ -66,10 +74,17 @@ function Post() {
 
     // clear/reset inputs, other...
     const clearInputs = () => {
+
+        setPostId(null);
+
         setPostTitle(null);
         setPostDescription(null);
 
+        setPostTitleNew(null);
+        setPostDescriptionNew(null);
+
         deletePostImagePreview();
+        deletePostImagePreviewNew();
 
         setHandleInputPostTitleClassName(null);
         setHandleInputPostDescriptionClassName(null);
@@ -91,9 +106,24 @@ function Post() {
         }
     }
 
+    const handleInputPostImageNew = (e) => {
+
+        if (e.target.files) {
+            setPostImagePreviewNewTemporary(null);
+            setPostImageNew(e.target.files[0]);
+            setPostImagePreviewNew(URL.createObjectURL(e.target.files[0]));
+        }
+    }
+
     const deletePostImagePreview = () => {
         setPostImagePreview(null);
         setPostImage(null);
+    }
+
+    const deletePostImagePreviewNew = () => {
+        setPostImagePreviewNew(null);
+        setPostImageNew(null);
+        setPostImagePreviewNewTemporary(null);
     }
 
 
@@ -163,6 +193,20 @@ function Post() {
         }
     }
 
+    const handleInputPostTitleNew = async (e) => {
+
+        const title = e.target.value;
+        setPostTitleNew(title);
+
+        /*  if (title.length > 100) {
+             setHandleInputPostTitleIsValid(false);
+         } else if (title.length === 0) {
+             setHandleInputPostTitleClassName(null);
+         } else {
+             setHandleInputPostTitleIsValid(true);
+         } */
+    }
+
     const handleInputPostDescription = async (e) => {
 
         const description = e.target.value;
@@ -175,6 +219,27 @@ function Post() {
         } else {
             setHandleInputPostDescriptionIsValid(true);
         }
+    }
+
+    const handleInputPostDescriptionNew = async (e) => {
+
+        const description = e.target.value;
+        setPostDescriptionNew(description);
+
+        /* if (description.length > 500) {
+            setHandleInputPostDescriptionIsValid(false);
+        } else if (description.length === 0) {
+            setHandleInputPostDescriptionClassName(null);
+        } else {
+            setHandleInputPostDescriptionIsValid(true);
+        } */
+    }
+
+    const passPostDataUpdateNew = (id, title, description, image) => {
+        setPostId(id);
+        setPostTitleNew(title);
+        setPostDescriptionNew(description);
+        setPostImagePreviewNewTemporary(image);
     }
 
     const checkAllInputsValidity = () => {
@@ -252,6 +317,78 @@ function Post() {
         } else {
             return;
         }
+    }
+
+
+    const updatePost = async () => {
+
+        const toastNotify = toast.loading("Waiting...");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        console.log(postTitleNew);
+        console.log(postDescriptionNew);
+
+        const formData = new FormData();
+        //formData.append("data", data, {type: "application/json"});
+        formData.append('post_id', new Blob([JSON.stringify({
+            post_id: postId
+        })], {
+            type: "application/json"
+        })); 
+
+        formData.append('data', new Blob([JSON.stringify({
+            user: {
+                id: userId
+            },
+            title: postTitleNew,
+            description: postDescriptionNew
+        })], {
+            type: "application/json"
+        }));
+
+        formData.append("image", postImageNew);
+
+        await axios.put(`${url}/post/update`, formData, config).then((res) => {
+            if (res.status === 200) {
+
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error"); // Error save data to DB
+                    //setEmailNewCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else {
+                    setButtonCreatePostIsDisabled(false);
+
+
+                    toast.dismiss(toastNotify);
+                    toast.success("Updated");
+                    
+                    document.getElementById('button-modal-update-post-close').click();
+                    clearInputs();
+    
+                    getAllPosts();
+    
+                    //uploadImage();
+                }
+
+                
+            }
+
+        }).catch(err => {
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            setButtonCreatePostIsDisabled(false);
+            return;
+        })
+
+
     }
 
     const uploadImage = async (postId) => {
@@ -338,11 +475,9 @@ function Post() {
                                                 <small>...</small>
                                             </div>
                                         </div>
-
-
-
                                         <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!postTitle || buttonCreatePostIsDisabled} onClick={createPost}>Publish</button>
                                     </form>
+
                                 </div>
                             </div>
                         </div>
@@ -406,7 +541,7 @@ function Post() {
                                                                                 {
                                                                                     userId === post?.user?.id &&
                                                                                     <div className="position-absolute top-0 end-0">
-                                                                                        <button type="button" className="btn btn-secondary btn-sm" style={{margin: 5}} data-bs-toggle="modal" data-bs-target="#editPostModal"><i className="bi bi-pencil-square"></i></button>
+                                                                                        <button type="button" className="btn btn-secondary btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)} ><i className="bi bi-pencil-square"></i></button>
                                                                                     </div>
                                                                                 }
 
@@ -470,14 +605,51 @@ function Post() {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="editPostModalLabel">Edit</h1>
-                            <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h1 className="modal-title fs-5" id="editPostModalLabel">Edit Post {postId}</h1>
+                            <button type="button" className="btn-close btn-close-white" id='button-modal-update-post-close' data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            
-                            <div>
-                                <small>modal</small>
-                            </div>
+
+                            <form onSubmit={handleSubmit}>
+
+                                <div className="form-floating mb-3">
+                                    <input type="text" className={"form-control"} id="floatingInputPostTitleNew" placeholder="Title *" value={postTitleNew || ""} maxLength="100" onChange={(e) => handleInputPostTitleNew(e)} autoComplete="off" required />
+                                    <label htmlFor="floatingInputPostTitleNew">Title *</label>
+                                    <div className="invalid-feedback">
+                                        <small>...</small>
+                                    </div>
+                                    {postTitleNew?.length === 0 && <p><small>required *</small></p>} 
+                                </div>
+
+                                {postImagePreviewNewTemporary &&
+                                    <img src={`data:image/png;base64,${postImagePreviewNewTemporary}`} className="img-fluid rounded mb-3" alt="image" />
+
+                                }
+
+                                {postImagePreviewNew &&
+                                    <>
+                                        <img src={postImagePreviewNew} className="img-fluid rounded mb-3" alt="image" />
+                                        <button type="button" className="btn-close mb-3" aria-label="Close" onClick={deletePostImagePreviewNew}></button>
+                                    </>
+                                }
+
+                                <div className="mb-3">
+                                    <input type="file" className="form-control form-control-sm" name="postImageNew" id="postImageNew" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImageNew(e)} />
+                                    <div>
+                                        <label htmlFor="postImageNew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
+                                        <small className="text-secondary">max: 10mb | .jpg</small>
+                                    </div>
+                                </div>
+
+                                <div className="form-floating mb-3">
+                                    <textarea type="text" className={"form-control"} id="floatingInputPostDescriptionNew" placeholder="Description" value={postDescriptionNew || ""} maxLength="500" onChange={(e) => handleInputPostDescriptionNew(e)} autoComplete="off" style={{ height: "100%", minHeight: "100px" }} />
+                                    <label htmlFor="floatingInputPostDescriptionNew">Description</label>
+                                    <div className="invalid-feedback">
+                                        <small>...</small>
+                                    </div>
+                                </div>
+                                <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updatePost}>Update</button>
+                            </form>
 
                         </div>
                         <div className="modal-footer">
