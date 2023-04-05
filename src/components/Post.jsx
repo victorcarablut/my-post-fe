@@ -44,8 +44,6 @@ function Post() {
     const [postImage, setPostImage] = useState(null);
     const [postImagePreview, setPostImagePreview] = useState(null);
 
-    const [postImagePreviewShow, setPostImagePreviewShow] = useState(false);
-
     // new data
     const [postTitleNew, setPostTitleNew] = useState(null);
     const [postDescriptionNew, setPostDescriptionNew] = useState(null);
@@ -105,17 +103,22 @@ function Post() {
     const handleInputPostImage = (e) => {
         //setPostImagePreviewShow(true);
 
-        console.log(postImagePreview);
+        //setPostImagePreviewShow(true); 
+
+        //setPostImagePreviewShow(!postImagePreviewShow); 
+
+        //console.log(postImagePreview);
         //setPostImage(null);
-        //setPostImagePreview(null);
+        //setPostImagePreview(true);
 
         if (e.target.files) {
             setPostImage(e.target.files[0]);
             setPostImagePreview(URL.createObjectURL(e.target.files[0]));
-            setPostImagePreviewShow(true);  
+            //setPostImagePreviewShow(true);
             // important: reset the value to prevent no visible data uploading the same image file twice
             e.target.value = null
-
+        } else {
+            setPostImage(null);
         }
     }
 
@@ -128,214 +131,161 @@ function Post() {
 
         }
     }
-        const deletePostImagePreview = () => {
-            //setPostImagePreview(null);
-            setPostImagePreviewShow(false);
-            //setPostImage(null);
-        }
+    const deletePostImagePreview = () => {
+        //setPostImagePreview(null);
+        //setPostImagePreviewShow(false);
+        //setPostImage(null);
+    }
 
-        const deletePostImagePreviewNew = () => {
-            setPostImagePreviewNew(null);
-            //setPostImagePreviewNew(URL.createObjectURL(null));
-            setPostImageNew(null);
-            setPostImagePreviewNewTemporary(null);
-        }
+    const deletePostImagePreviewNew = () => {
+        setPostImagePreviewNew(null);
+        //setPostImagePreviewNew(URL.createObjectURL(null));
+        setPostImageNew(null);
+        setPostImagePreviewNewTemporary(null);
+    }
 
 
-        const getUserDetails = async () => {
+    const getUserDetails = async () => {
 
-            const jwt_token = secureLocalStorage.getItem("token");
+        const jwt_token = secureLocalStorage.getItem("token");
 
-            const config = {
-                headers: {
-                    Authorization: "Bearer " + jwt_token
-                }
-
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
             }
 
-            await axios.get(`${url}/user/details`, config).then((res) => {
-                if (res.status === 200) {
-                    setUserId(res.data.id);
-                    console.log(res.data.id);
-                }
-
-            }).catch(err => {
-                return;
-            })
-
         }
 
-        const getAllPosts = async () => {
-
-            setResponseStatusGetAllPosts("loading");
-
-            const jwt_token = secureLocalStorage.getItem("token");
-
-            const config = {
-                headers: {
-                    Authorization: "Bearer " + jwt_token
-                }
+        await axios.get(`${url}/user/details`, config).then((res) => {
+            if (res.status === 200) {
+                setUserId(res.data.id);
+                console.log(res.data.id);
             }
 
-            await axios.get(`${url}/post/all`, config).then((res) => {
+        }).catch(err => {
+            return;
+        })
 
-                if (res.status === 200) {
-                    setResponseStatusGetAllPosts("success");
-                    console.log(res.data);
-                    setPosts(res.data);
-                }
+    }
 
-            }).catch(err => {
-                setResponseStatusGetAllPosts("error");
-                //Logout();
-                return;
-            })
+    const getAllPosts = async () => {
 
-        }
+        setResponseStatusGetAllPosts("loading");
 
+        const jwt_token = secureLocalStorage.getItem("token");
 
-        const handleInputPostTitle = async (e) => {
-
-            const title = e.target.value;
-            setPostTitle(title);
-
-            if (title.length > 100) {
-                setHandleInputPostTitleIsValid(false);
-            } else if (title.length === 0) {
-                setHandleInputPostTitleClassName(null);
-            } else {
-                setHandleInputPostTitleIsValid(true);
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
             }
         }
 
-        const handleInputPostTitleNew = async (e) => {
+        await axios.get(`${url}/post/all`, config).then((res) => {
 
-            const title = e.target.value;
-            setPostTitleNew(title);
-
-            /*  if (title.length > 100) {
-                 setHandleInputPostTitleIsValid(false);
-             } else if (title.length === 0) {
-                 setHandleInputPostTitleClassName(null);
-             } else {
-                 setHandleInputPostTitleIsValid(true);
-             } */
-        }
-
-        const handleInputPostDescription = async (e) => {
-
-            const description = e.target.value;
-            setPostDescription(description);
-
-            if (description.length > 500) {
-                setHandleInputPostDescriptionIsValid(false);
-            } else if (description.length === 0) {
-                setHandleInputPostDescriptionClassName(null);
-            } else {
-                setHandleInputPostDescriptionIsValid(true);
-            }
-        }
-
-        const handleInputPostDescriptionNew = async (e) => {
-
-            const description = e.target.value;
-            setPostDescriptionNew(description);
-
-            /* if (description.length > 500) {
-                setHandleInputPostDescriptionIsValid(false);
-            } else if (description.length === 0) {
-                setHandleInputPostDescriptionClassName(null);
-            } else {
-                setHandleInputPostDescriptionIsValid(true);
-            } */
-        }
-
-        const passPostDataUpdateNew = (id, title, description, image) => {
-            setPostId(id);
-            setPostTitleNew(title);
-            setPostDescriptionNew(description);
-            setPostImagePreviewNewTemporary(image);
-        }
-
-        const checkAllInputsValidity = () => {
-
-            if (handleInputPostTitle) {
-                setHandleInputPostTitleClassName("is-valid");
-            } else {
-                setHandleInputPostTitleClassName("is-invalid");
+            if (res.status === 200) {
+                setResponseStatusGetAllPosts("success");
+                console.log(res.data);
+                setPosts(res.data);
             }
 
-            if (handleInputPostDescription) {
-                setHandleInputPostDescriptionClassName("is-valid");
-            } else {
-                setHandleInputPostDescriptionClassName("is-invalid");
-            }
+        }).catch(err => {
+            setResponseStatusGetAllPosts("error");
+            //Logout();
+            return;
+        })
+
+    }
+
+
+    const handleInputPostTitle = async (e) => {
+
+        const title = e.target.value;
+        setPostTitle(title);
+
+        if (title.length > 100) {
+            setHandleInputPostTitleIsValid(false);
+        } else if (title.length === 0) {
+            setHandleInputPostTitleClassName(null);
+        } else {
+            setHandleInputPostTitleIsValid(true);
+        }
+    }
+
+    const handleInputPostTitleNew = async (e) => {
+
+        const title = e.target.value;
+        setPostTitleNew(title);
+
+        /*  if (title.length > 100) {
+             setHandleInputPostTitleIsValid(false);
+         } else if (title.length === 0) {
+             setHandleInputPostTitleClassName(null);
+         } else {
+             setHandleInputPostTitleIsValid(true);
+         } */
+    }
+
+    const handleInputPostDescription = async (e) => {
+
+        const description = e.target.value;
+        setPostDescription(description);
+
+        if (description.length > 500) {
+            setHandleInputPostDescriptionIsValid(false);
+        } else if (description.length === 0) {
+            setHandleInputPostDescriptionClassName(null);
+        } else {
+            setHandleInputPostDescriptionIsValid(true);
+        }
+    }
+
+    const handleInputPostDescriptionNew = async (e) => {
+
+        const description = e.target.value;
+        setPostDescriptionNew(description);
+
+        /* if (description.length > 500) {
+            setHandleInputPostDescriptionIsValid(false);
+        } else if (description.length === 0) {
+            setHandleInputPostDescriptionClassName(null);
+        } else {
+            setHandleInputPostDescriptionIsValid(true);
+        } */
+    }
+
+    const passPostDataUpdateNew = (id, title, description, image) => {
+        setPostId(id);
+        setPostTitleNew(title);
+        setPostDescriptionNew(description);
+        setPostImagePreviewNewTemporary(image);
+    }
+
+    const checkAllInputsValidity = () => {
+
+        if (handleInputPostTitle) {
+            setHandleInputPostTitleClassName("is-valid");
+        } else {
+            setHandleInputPostTitleClassName("is-invalid");
         }
 
-        const handleSubmit = async (e) => {
-            e.preventDefault();
+        if (handleInputPostDescription) {
+            setHandleInputPostDescriptionClassName("is-valid");
+        } else {
+            setHandleInputPostDescriptionClassName("is-invalid");
         }
+    }
 
-        const createPost = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    }
 
-            checkAllInputsValidity();
+    const createPost = async () => {
 
-            if (handleInputPostTitleIsValid) {
+        checkAllInputsValidity();
 
-                setButtonCreatePostIsDisabled(true);
+        if (handleInputPostTitleIsValid) {
 
-                const toastNotify = toast.loading("Waiting...");
-
-                const jwt_token = secureLocalStorage.getItem("token");
-
-                const config = {
-                    headers: {
-                        Authorization: "Bearer " + jwt_token,
-                    }
-                }
-
-                const formData = new FormData();
-                //formData.append("data", data, {type: "application/json"});
-                formData.append('data', new Blob([JSON.stringify({
-                    user: {
-                        id: userId
-                    },
-                    title: postTitle,
-                    description: postDescription
-                })], {
-                    type: "application/json"
-                }));
-
-                formData.append("image", postImage);
-
-                await axios.post(`${url}/post/add`, formData, config).then((res) => {
-                    if (res.status === 200) {
-                        setButtonCreatePostIsDisabled(false);
-
-                        toast.dismiss(toastNotify);
-                        toast.success("Published");
-
-                        clearInputs();
-
-                        getAllPosts();
-
-                        //uploadImage();
-                    }
-
-                }).catch(err => {
-                    toast.dismiss(toastNotify);
-                    toast.error("Error");
-                    setButtonCreatePostIsDisabled(false);
-                    return;
-                })
-
-            } else {
-                return;
-            }
-        }
-
-
-        const updatePost = async () => {
+            setButtonCreatePostIsDisabled(true);
 
             const toastNotify = toast.loading("Waiting...");
 
@@ -343,64 +293,36 @@ function Post() {
 
             const config = {
                 headers: {
-                    Authorization: "Bearer " + jwt_token
+                    Authorization: "Bearer " + jwt_token,
                 }
             }
 
-            //console.log(postTitleNew);
-            //console.log(postDescriptionNew);
-            //console.log(postImageNew);
-
             const formData = new FormData();
             //formData.append("data", data, {type: "application/json"});
-            formData.append('post_id', new Blob([JSON.stringify({
-                post_id: postId
-            })], {
-                type: "application/json"
-            }));
-
             formData.append('data', new Blob([JSON.stringify({
                 user: {
                     id: userId
                 },
-                title: postTitleNew,
-                description: postDescriptionNew
+                title: postTitle,
+                description: postDescription
             })], {
                 type: "application/json"
             }));
 
-            formData.append("image", postImageNew);
+            formData.append("image", postImage);
 
-            formData.append('image_status', new Blob([JSON.stringify({
-                image_status: postImageNew ? "ok" : "no-image"
-            })], {
-                type: "application/json"
-            }));
-
-            await axios.put(`${url}/post/update`, formData, config).then((res) => {
+            await axios.post(`${url}/post/add`, formData, config).then((res) => {
                 if (res.status === 200) {
+                    setButtonCreatePostIsDisabled(false);
 
-                    if (res.data.status_code === 1) {
-                        toast.dismiss(toastNotify);
-                        toast.error("Error"); // Error save data to DB
-                        //setEmailNewCodeStatus("error");
-                        //setButtonSendEmailCodeIsDisabled(false);
-                    } else {
-                        setButtonCreatePostIsDisabled(false);
+                    toast.dismiss(toastNotify);
+                    toast.success("Published");
 
+                    clearInputs();
 
-                        toast.dismiss(toastNotify);
-                        toast.success("Updated");
+                    getAllPosts();
 
-                        document.getElementById('button-modal-update-post-close').click();
-                        clearInputs();
-
-                        getAllPosts();
-
-                        //uploadImage();
-                    }
-
-
+                    //uploadImage();
                 }
 
             }).catch(err => {
@@ -410,291 +332,375 @@ function Post() {
                 return;
             })
 
-
+        } else {
+            return;
         }
-
-        const uploadImage = async (postId) => {
-
-            //checkAllInputsValidity();
-
-            //setButtonCreatePostIsDisabled(true);
-
-            //const toastNotify = toast.loading("Waiting...");
-
-            const jwt_token = secureLocalStorage.getItem("token");
-
-            const config = {
-                headers: {
-                    Authorization: "Bearer " + jwt_token
-                }
-            }
-
-            const formData = new FormData();
-            formData.append("user_id", userId);
-            formData.append("post_id", postId);
-            formData.append("image", postImage);
-
-            await axios.post(`${url}/post/upload/image`, formData, config).then((res) => {
-                if (res.status === 200) {
-                    //setButtonCreatePostIsDisabled(false);
-
-                    //toast.dismiss(toastNotify);
-                    //toast.success("Published");
-
-                    getAllPosts();
-                }
-
-            }).catch(err => {
-                //toast.dismiss(toastNotify);
-                //toast.error("Error");
-                //setButtonCreatePostIsDisabled(false);
-                return;
-            })
-        }
-
-        return (
-
-            <>
-                <div className="container-fluid">
-
-                    <div className="row">
-
-                        <div className="col-xl-6" style={{ paddingBottom: 20 }}>
-
-                            <div className="d-flex justify-content-center mb-3">
-                                <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
-                                    <div className="card-body">
-                                        <h6>Create Post</h6>
-                                        <form onSubmit={handleSubmit}>
-
-                                            <div className="form-floating mb-3">
-                                                <input type="text" className={"form-control " + handleInputPostTitleClassName} id="floatingInputPostTitle" placeholder="Title" value={postTitle || ""} maxLength="100" onChange={(e) => handleInputPostTitle(e)} autoComplete="off" required />
-                                                <label htmlFor="floatingInputPostTitle">Title</label>
-                                                <div className="invalid-feedback">
-                                                    <small>...</small>
-                                                </div>
-                                            </div>
-
-                                            {postImagePreviewShow ?
-                                                <>
-                                                    <img src={postImagePreview} className="img-fluid rounded mb-3" alt="image" />
-                                                    <button type="button" className="btn-close mb-3" aria-label="Close" onClick={deletePostImagePreview}></button>
-                                                </>
-
-                                                :
-
-                                                <p>no preview</p>
-                                            }
-
-                                            <div className="mb-3">
-                                                <input type="file" className="form-control form-control-sm" name="postImage" id="postImage" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImage(e)} />
-                                                <div>
-                                                    <label htmlFor="postImage" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
-                                                    <small className="text-secondary">max: 10mb | .jpg</small>
-                                                </div>
-                                            </div>
-
-                                            <div className="form-floating mb-3">
-                                                <textarea type="text" className={"form-control " + handleInputPostDescriptionClassName} id="floatingInputPostDescription" placeholder="Description" value={postDescription || ""} maxLength="500" onChange={(e) => handleInputPostDescription(e)} autoComplete="off" style={{ height: "100%", minHeight: "100px" }} />
-                                                <label htmlFor="floatingInputPostDescription">Description</label>
-                                                <div className="invalid-feedback">
-                                                    <small>...</small>
-                                                </div>
-                                            </div>
-                                            <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!postTitle || buttonCreatePostIsDisabled} onClick={createPost}>Publish</button>
-                                        </form>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="d-flex justify-content-center">
-                                <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
-                                    <div className="card-body">
-                                        This is some text within a card body.
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-
-
-                        <div className="col-xl-6" style={{ paddingBottom: 20 }}>
-
-                            <div>
-
-                                {responseStatusGetAllPosts === "loading" ? <small>Loading...</small>
-                                    :
-                                    responseStatusGetAllPosts === "error" ? <small>Error</small>
-                                        :
-                                        responseStatusGetAllPosts === "success" ?
-
-                                            <>
-                                                <div className="d-flex justify-content-center">
-                                                    <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
-                                                        <div className="card-body">
-                                                            This is some text within a card body.
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                {posts?.length === 0 ? <small>Empty Data</small>
-                                                    :
-
-                                                    <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "800px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
-
-
-
-                                                        <table id="table" className="container-fluid">
-
-                                                            <tbody>
-
-                                                                {posts?.map(post =>
-
-
-
-                                                                    <tr key={post.id}>
-                                                                        <td>
-
-                                                                            <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
-                                                                                <div className="card-header bg-transparent">
-                                                                                    <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover" }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" />
-                                                                                    <h6>{post?.user?.fullName}</h6>
-
-
-                                                                                    {
-                                                                                        userId === post?.user?.id &&
-                                                                                        <div className="position-absolute top-0 end-0">
-                                                                                            <button type="button" className="btn btn-secondary btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)} ><i className="bi bi-pencil-square"></i></button>
-                                                                                        </div>
-                                                                                    }
-
-                                                                                </div>
-                                                                                <div className="card-body">
-
-                                                                                    <p>{post.title}</p>
-                                                                                    {post.image &&
-                                                                                        <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
-                                                                                    }
-
-                                                                                    <small style={{ fontSize: 12 }}>{post.description}</small>
-
-                                                                                    <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
-
-                                                                                        {post?.updatedDate ?
-
-                                                                                            <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
-                                                                                            :
-                                                                                            <small>{moment(post.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
-                                                                                        }
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div className="card-footer bg-transparent text-muted">
-                                                                                    card footer
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </td>
-                                                                    </tr>
-
-
-
-                                                                )}
-
-
-
-                                                            </tbody>
-
-                                                        </table>
-                                                    </div>
-
-
-                                                }
-
-                                            </>
-                                            :
-                                            <></>
-
-                                }
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                {/* --- Modal (Edit Post) --- */}
-                <div className="modal fade" id="editPostModal" tabIndex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true" >
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h1 className="modal-title fs-5" id="editPostModalLabel">Edit Post {postId}</h1>
-                                <button type="button" className="btn-close btn-close-white" id='button-modal-update-post-close' data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-
-                                <form onSubmit={handleSubmit}>
-
-                                    <div className="form-floating mb-3">
-                                        <input type="text" className={"form-control"} id="floatingInputPostTitleNew" placeholder="Title *" value={postTitleNew || ""} maxLength="100" onChange={(e) => handleInputPostTitleNew(e)} autoComplete="off" required />
-                                        <label htmlFor="floatingInputPostTitleNew">Title *</label>
-                                        <div className="invalid-feedback">
-                                            <small>...</small>
-                                        </div>
-                                        {postTitleNew?.length === 0 && <p><small>required *</small></p>}
-                                    </div>
-
-                                    {postImagePreviewNewTemporary &&
-                                        <img src={`data:image/png;base64,${postImagePreviewNewTemporary}`} className="img-fluid rounded mb-3" alt="image" />
-
-                                    }
-
-                                    {postImagePreviewNew &&
-                                        <>
-                                            <img src={postImagePreviewNew} className="img-fluid rounded mb-3" alt="image" />
-                                            <button type="button" className="btn-close mb-3" aria-label="Close" onClick={deletePostImagePreviewNew}></button>
-                                        </>
-                                    }
-
-                                    <div className="mb-3">
-                                        <input type="file" className="form-control form-control-sm" name="postImageNew" id="postImageNew" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImageNew(e)} />
-                                        <div>
-                                            <label htmlFor="postImageNew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
-                                            <small className="text-secondary">max: 10mb | .jpg</small>
-                                        </div>
-                                    </div>
-
-                                    {postImagePreviewNewTemporary &&
-                                        <div>
-                                            <button type="button" className="btn-secondary btn-sm mb-3" onClick={deletePostImagePreviewNew}>Delete Image</button>
-                                        </div>
-                                    }
-
-
-                                    <div className="form-floating mb-3">
-                                        <textarea type="text" className={"form-control"} id="floatingInputPostDescriptionNew" placeholder="Description" value={postDescriptionNew || ""} maxLength="500" onChange={(e) => handleInputPostDescriptionNew(e)} autoComplete="off" style={{ height: "100%", minHeight: "100px" }} />
-                                        <label htmlFor="floatingInputPostDescriptionNew">Description</label>
-                                        <div className="invalid-feedback">
-                                            <small>...</small>
-                                        </div>
-                                    </div>
-                                    <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updatePost}>Update</button>
-                                </form>
-
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary btn-sm rounded-pill shadow" id='button-modal-submit-delete-employee-close' data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </>
-
-        )
     }
 
-    export default Post;
+
+    const updatePost = async () => {
+
+        const toastNotify = toast.loading("Waiting...");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        //console.log(postTitleNew);
+        //console.log(postDescriptionNew);
+        //console.log(postImageNew);
+
+        const formData = new FormData();
+        //formData.append("data", data, {type: "application/json"});
+        formData.append('post_id', new Blob([JSON.stringify({
+            post_id: postId
+        })], {
+            type: "application/json"
+        }));
+
+        formData.append('data', new Blob([JSON.stringify({
+            user: {
+                id: userId
+            },
+            title: postTitleNew,
+            description: postDescriptionNew
+        })], {
+            type: "application/json"
+        }));
+
+        formData.append("image", postImageNew);
+
+        formData.append('image_status', new Blob([JSON.stringify({
+            image_status: postImageNew ? "ok" : "no-image"
+        })], {
+            type: "application/json"
+        }));
+
+        await axios.put(`${url}/post/update`, formData, config).then((res) => {
+            if (res.status === 200) {
+
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error"); // Error save data to DB
+                    //setEmailNewCodeStatus("error");
+                    //setButtonSendEmailCodeIsDisabled(false);
+                } else {
+                    setButtonCreatePostIsDisabled(false);
+
+
+                    toast.dismiss(toastNotify);
+                    toast.success("Updated");
+
+                    document.getElementById('button-modal-update-post-close').click();
+                    clearInputs();
+
+                    getAllPosts();
+
+                    //uploadImage();
+                }
+
+
+            }
+
+        }).catch(err => {
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            setButtonCreatePostIsDisabled(false);
+            return;
+        })
+
+
+    }
+
+    const uploadImage = async (postId) => {
+
+        //checkAllInputsValidity();
+
+        //setButtonCreatePostIsDisabled(true);
+
+        //const toastNotify = toast.loading("Waiting...");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const formData = new FormData();
+        formData.append("user_id", userId);
+        formData.append("post_id", postId);
+        formData.append("image", postImage);
+
+        await axios.post(`${url}/post/upload/image`, formData, config).then((res) => {
+            if (res.status === 200) {
+                //setButtonCreatePostIsDisabled(false);
+
+                //toast.dismiss(toastNotify);
+                //toast.success("Published");
+
+                getAllPosts();
+            }
+
+        }).catch(err => {
+            //toast.dismiss(toastNotify);
+            //toast.error("Error");
+            //setButtonCreatePostIsDisabled(false);
+            return;
+        })
+    }
+
+    return (
+
+        <>
+            <div className="container-fluid">
+
+                <div className="row">
+
+                    <div className="col-xl-6" style={{ paddingBottom: 20 }}>
+
+                        <div className="d-flex justify-content-center mb-3">
+                            <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
+                                <div className="card-body">
+                                    <h6>Create Post</h6>
+                                    <form onSubmit={handleSubmit}>
+
+                                        <div className="form-floating mb-3">
+                                            <input type="text" className={"form-control " + handleInputPostTitleClassName} id="floatingInputPostTitle" placeholder="Title" value={postTitle || ""} maxLength="100" onChange={(e) => handleInputPostTitle(e)} autoComplete="off" required />
+                                            <label htmlFor="floatingInputPostTitle">Title</label>
+                                            <div className="invalid-feedback">
+                                                <small>...</small>
+                                            </div>
+                                        </div>
+
+                                        {postImage ?
+                                            <>
+                                                <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImage(null)}></button>
+                                                <img src={postImagePreview} className="img-fluid rounded mb-3" alt="image" />
+                                            </>
+
+                                            :
+
+                                            <div className="mb-3">
+                                                <p><small>no image selected yet</small></p>
+
+                                                <input type="file" className="form-control form-control-sm" name="postImage" id="postImage" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImage(e)} />
+
+                                                <label htmlFor="postImage" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
+                                                <small className="text-secondary"> max: 10mb / .jpg</small>
+                                            </div>
+
+
+                                        }
+
+
+
+                                        <div className="form-floating mb-3">
+                                            <textarea type="text" className={"form-control " + handleInputPostDescriptionClassName} id="floatingInputPostDescription" placeholder="Description" value={postDescription || ""} maxLength="500" onChange={(e) => handleInputPostDescription(e)} autoComplete="off" style={{ height: "100%", minHeight: "100px" }} />
+                                            <label htmlFor="floatingInputPostDescription">Description</label>
+                                            <div className="invalid-feedback">
+                                                <small>...</small>
+                                            </div>
+                                        </div>
+                                        <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!postTitle || buttonCreatePostIsDisabled} onClick={createPost}>Publish</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="d-flex justify-content-center">
+                            <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
+                                <div className="card-body">
+                                    This is some text within a card body.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div className="col-xl-6" style={{ paddingBottom: 20 }}>
+
+                        <div>
+
+                            {responseStatusGetAllPosts === "loading" ? <small>Loading...</small>
+                                :
+                                responseStatusGetAllPosts === "error" ? <small>Error</small>
+                                    :
+                                    responseStatusGetAllPosts === "success" ?
+
+                                        <>
+                                            <div className="d-flex justify-content-center">
+                                                <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
+                                                    <div className="card-body">
+                                                        This is some text within a card body.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            {posts?.length === 0 ? <small>Empty Data</small>
+                                                :
+
+                                                <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "800px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
+
+
+
+                                                    <table id="table" className="container-fluid">
+
+                                                        <tbody>
+
+                                                            {posts?.map(post =>
+
+
+
+                                                                <tr key={post.id}>
+                                                                    <td>
+
+                                                                        <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
+                                                                            <div className="card-header bg-transparent">
+                                                                                <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover" }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" />
+                                                                                <h6>{post?.user?.fullName}</h6>
+
+
+                                                                                {
+                                                                                    userId === post?.user?.id &&
+                                                                                    <div className="position-absolute top-0 end-0">
+                                                                                        <button type="button" className="btn btn-secondary btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)} ><i className="bi bi-pencil-square"></i></button>
+                                                                                    </div>
+                                                                                }
+
+                                                                            </div>
+                                                                            <div className="card-body">
+
+                                                                                <p>{post.title}</p>
+                                                                                {post.image &&
+                                                                                    <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
+                                                                                }
+
+                                                                                <small style={{ fontSize: 12 }}>{post.description}</small>
+
+                                                                                <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
+
+                                                                                    {post?.updatedDate ?
+
+                                                                                        <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                                        :
+                                                                                        <small>{moment(post.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="card-footer bg-transparent text-muted">
+                                                                                card footer
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </td>
+                                                                </tr>
+
+
+
+                                                            )}
+
+
+
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+
+
+                                            }
+
+                                        </>
+                                        :
+                                        <></>
+
+                            }
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {/* --- Modal (Edit Post) --- */}
+            <div className="modal fade" id="editPostModal" tabIndex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true" >
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="editPostModalLabel">Edit Post {postId}</h1>
+                            <button type="button" className="btn-close btn-close-white" id='button-modal-update-post-close' data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+
+                            <form onSubmit={handleSubmit}>
+
+                                <div className="form-floating mb-3">
+                                    <input type="text" className={"form-control"} id="floatingInputPostTitleNew" placeholder="Title *" value={postTitleNew || ""} maxLength="100" onChange={(e) => handleInputPostTitleNew(e)} autoComplete="off" required />
+                                    <label htmlFor="floatingInputPostTitleNew">Title *</label>
+                                    <div className="invalid-feedback">
+                                        <small>...</small>
+                                    </div>
+                                    {postTitleNew?.length === 0 && <p><small>required *</small></p>}
+                                </div>
+
+                                {postImagePreviewNewTemporary &&
+                                    <img src={`data:image/png;base64,${postImagePreviewNewTemporary}`} className="img-fluid rounded mb-3" alt="image" />
+
+                                }
+
+                                {postImagePreviewNew &&
+                                    <>
+                                        <img src={postImagePreviewNew} className="img-fluid rounded mb-3" alt="image" />
+                                        <button type="button" className="btn-close mb-3" aria-label="Close" onClick={deletePostImagePreviewNew}></button>
+                                    </>
+                                }
+
+                                <div className="mb-3">
+                                    <input type="file" className="form-control form-control-sm" name="postImageNew" id="postImageNew" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImageNew(e)} />
+                                    <div>
+                                        <label htmlFor="postImageNew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
+                                        <small className="text-secondary">max: 10mb | .jpg</small>
+                                    </div>
+                                </div>
+
+                                {postImagePreviewNewTemporary &&
+                                    <div>
+                                        <button type="button" className="btn-secondary btn-sm mb-3" onClick={deletePostImagePreviewNew}>Delete Image</button>
+                                    </div>
+                                }
+
+
+                                <div className="form-floating mb-3">
+                                    <textarea type="text" className={"form-control"} id="floatingInputPostDescriptionNew" placeholder="Description" value={postDescriptionNew || ""} maxLength="500" onChange={(e) => handleInputPostDescriptionNew(e)} autoComplete="off" style={{ height: "100%", minHeight: "100px" }} />
+                                    <label htmlFor="floatingInputPostDescriptionNew">Description</label>
+                                    <div className="invalid-feedback">
+                                        <small>...</small>
+                                    </div>
+                                </div>
+                                <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updatePost}>Update</button>
+                            </form>
+
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary btn-sm rounded-pill shadow" id='button-modal-submit-delete-employee-close' data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </>
+
+    )
+}
+
+export default Post;
