@@ -136,6 +136,7 @@ function Post() {
             setPostImageNew(null);
         }
     }
+    
     const deletePostImagePreview = () => {
         //setPostImagePreview(null);
         //setPostImagePreviewShow(false);

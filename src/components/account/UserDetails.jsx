@@ -53,9 +53,10 @@ function UserDetails() {
     const [fullNameNew, setFullNameNew] = useState(null);
     const [emailNew, setEmailNew] = useState(null);
     const [usernameNew, setUsernameNew] = useState(null);
-    const [passwordNew, setPasswordNew] = useState();
-    const [passwordRepeatNew, setPasswordRepeatNew] = useState();
-    const [userProfileImgNew, setUserProfileImgNew] = useState();
+    const [passwordNew, setPasswordNew] = useState(null);
+    const [passwordRepeatNew, setPasswordRepeatNew] = useState(null);
+    const [userProfileImgNew, setUserProfileImgNew] = useState(null);
+    const [userProfileImgPreviewNew, setUserProfileImgPreviewNew] = useState(null);
 
     // http response status
     const [responseStatusGeUserDetails, setResponseStatusGetUserDetails] = useState("");
@@ -87,6 +88,7 @@ function UserDetails() {
         setPasswordNew(null);
         setPasswordRepeatNew(null);
         setUserProfileImgNew(null);
+        setUserProfileImgPreviewNew(null);
         setCode(null);
         setEmailNewCodeStatus("");
         setResponseStatusGetUserDetails("");
@@ -164,6 +166,19 @@ function UserDetails() {
     const handleInputCode = async (e) => {
         const code = e.target.value;
         setCode(code);
+    }
+
+    const handleInputUserImageNew = (e) => {
+
+        if (e.target.files) {
+            setUserProfileImgNew(e.target.files[0]);
+            setUserProfileImgPreviewNew(URL.createObjectURL(e.target.files[0]));
+            //setPostImagePreviewNew(URL.createObjectURL(e.target.files[0]));
+
+            // important: reset the value...
+            e.target.value = null
+
+        }
     }
 
     const getUserDetails = async () => {
@@ -830,18 +845,37 @@ function UserDetails() {
                                             <ul className="list-group list-group-flush">
                                                 <li className="list-group-item">
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+
                                                         <img src={user?.userProfileImg ? `data:image/png;base64,${user.userProfileImg}` : default_user_profile_img} width="90" height="90" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
+
                                                     </div>
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                                                         <div className="dropdown">
                                                             <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                {userProfileImgPreviewNew &&
+                                                                    <>
+                                                                        <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => { setUserProfileImgPreviewNew(null); setUserProfileImgNew(null) }}></button>
+                                                                        <img src={userProfileImgPreviewNew} width="90" height="90" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-primary border-3 mb-3" />
+                                                                    </>
+
+                                                                }
                                                                 <form onSubmit={handleSubmit}>
                                                                     <li className="container-fluid mb-3">
-                                                                        <input type="file" className="form-control form-control-sm" name="userProfileImagenew" accept="image/jpeg" onChange={(e) => { setUserProfileImgNew(e.target.files[0]); }} required />
-                                                                        <small className="text-secondary">max: 10mb | .jpg</small>
+
+                                                                        {(!userProfileImgNew && !userProfileImgPreviewNew) &&
+
+                                                                            <>
+                                                                                <input type="file" className="form-control form-control-sm" name="userProfileImagenew" id="userProfileImagenew" accept="image/jpeg" style={{ display: 'none' }} onChange={(e) => handleInputUserImageNew(e)} required />
+                                                                                <label htmlFor="userProfileImagenew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
+                                                                                <small className="text-secondary">max: 10mb / .jpg</small>
+                                                                            </>
+                                                                        }
+
+
+
                                                                     </li>
-                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserProfileImage} disabled={!userProfileImgNew}>Update</button></li>
+                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserProfileImage} disabled={!userProfileImgNew}>Update</button></li>
                                                                 </form>
                                                             </ul>
                                                         </div>
@@ -955,7 +989,7 @@ function UserDetails() {
                                                                     <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordNew" placeholder="New: Password" onChange={(e) => handleInputPasswordNew(e)} autoComplete="off" required /></li>
                                                                     <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordRepeatNew" placeholder="New: Password Repeat" onChange={(e) => handleInputPasswordRepeatNew(e)} autoComplete="off" required /></li>
                                                                     {passwordNew !== passwordRepeatNew &&
-                                                                        <small>Warning: new passwords not match!</small>
+                                                                        <small>Warning: new passwords must match!</small>
                                                                     }
                                                                     <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserPassword} disabled={!password || !passwordNew || passwordRepeatNew !== passwordNew || passwordNew.length > 100}>Update</button></li>
                                                                 </form>
