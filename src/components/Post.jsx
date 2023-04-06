@@ -379,7 +379,7 @@ function Post() {
         formData.append("image", postImageNew);
 
         formData.append('image_status', new Blob([JSON.stringify({
-            image_status: postImageNew ? "ok" : "no-image"
+            image_status: postImageNew || postImagePreviewNewTemporary ? "ok" : "no-image"
         })], {
             type: "application/json"
         }));
@@ -702,7 +702,7 @@ function Post() {
                                         <small>...</small>
                                     </div>
                                 </div>
-                                <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updatePost}>Update</button>
+                                <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!postTitleNew} onClick={updatePost}>Update</button>
                             </form>
 
                         </div>
