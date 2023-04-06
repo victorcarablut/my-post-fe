@@ -354,7 +354,6 @@ function Post() {
                 Authorization: "Bearer " + jwt_token
             }
         }
-
         //console.log(postTitleNew);
         //console.log(postDescriptionNew);
         //console.log(postImageNew);
