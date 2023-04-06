@@ -851,8 +851,11 @@ function UserDetails() {
                                                     </div>
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                                                         <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                                                    <i className="bi bi-x-lg"></i>
+                                                                </span>
                                                                 {userProfileImgPreviewNew &&
                                                                     <>
                                                                         <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => { setUserProfileImgPreviewNew(null); setUserProfileImgNew(null) }}></button>
@@ -860,6 +863,7 @@ function UserDetails() {
                                                                     </>
 
                                                                 }
+
                                                                 <form onSubmit={handleSubmit}>
                                                                     <li className="container-fluid mb-3">
 
@@ -881,7 +885,7 @@ function UserDetails() {
                                                         </div>
                                                         {user?.userProfileImg &&
                                                             <div className="dropdown">
-                                                                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-circle-fill text-danger"></i></button>
+                                                                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-x-circle-fill text-danger"></i></button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Delete Imgae?</small></p>
                                                                     <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={deleteUserProfileImage}>Yes</button>
@@ -898,8 +902,11 @@ function UserDetails() {
                                                     <div className="d-grid gap-2 d-md-flex">
                                                         <small className="me-md-2"><strong>Full Name:</strong> {user?.fullName}</small>
                                                         <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                                                    <i className="bi bi-x-lg"></i>
+                                                                </span>
                                                                 <form onSubmit={handleSubmit}>
                                                                     <li className="container-fluid mb-3">
                                                                         <input type="text" className="form-control form-control-sm" id="inputFullNameNew" placeholder="New: Full Name" value={fullNameNew} onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
@@ -918,8 +925,11 @@ function UserDetails() {
                                                     <div className="d-grid gap-2 d-md-flex">
                                                         <small><strong>Email:</strong> {user?.email}</small>
                                                         <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                                                    <i className="bi bi-x-lg"></i>
+                                                                </span>
                                                                 <form onSubmit={handleSubmit}>
                                                                     <li className="container-fluid mb-3">
                                                                         {emailNew && code ?
@@ -959,8 +969,11 @@ function UserDetails() {
                                                     <div className="d-grid gap-2 d-md-flex">
                                                         <small><strong>Username:</strong> {user?.username}</small>
                                                         <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{cursor: 'pointer'}}>
+                                                                    <i className="bi bi-x-lg"></i>
+                                                                </span>
                                                                 <form onSubmit={handleSubmit} className="container-fluid">
                                                                     <li className="mb-3">
                                                                         <input type="text" className="form-control form-control-sm" id="inputUsernameNew" placeholder="New: Username" value={usernameNew} onChange={(e) => handleInputUsername(e)} autoComplete="off" required />
@@ -982,8 +995,11 @@ function UserDetails() {
                                                     <div className="d-grid gap-2 d-md-flex">
                                                         <small><strong>Password:</strong> ******</small>
                                                         <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{cursor: 'pointer'}}>
+                                                                    <i className="bi bi-x-lg"></i>
+                                                                </span>
                                                                 <form onSubmit={handleSubmit} className="container-fluid">
                                                                     <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordOld" placeholder="Old: Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
                                                                     <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordNew" placeholder="New: Password" onChange={(e) => handleInputPasswordNew(e)} autoComplete="off" required /></li>
