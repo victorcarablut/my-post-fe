@@ -85,7 +85,8 @@ function Post() {
         setPostTitleNew(null);
         setPostDescriptionNew(null);
 
-        deletePostImagePreview();
+        //deletePostImagePreview();
+        setPostImage(null);
         deletePostImagePreviewNew();
 
         setHandleInputPostTitleClassName(null);
@@ -128,7 +129,11 @@ function Post() {
             setPostImagePreviewNewTemporary(null);
             setPostImageNew(e.target.files[0]);
             setPostImagePreviewNew(URL.createObjectURL(e.target.files[0]));
+            // important: reset the value...
+            e.target.value = null
 
+        } else {
+            setPostImageNew(null);
         }
     }
     const deletePostImagePreview = () => {
@@ -654,30 +659,41 @@ function Post() {
                                 </div>
 
                                 {postImagePreviewNewTemporary &&
-                                    <img src={`data:image/png;base64,${postImagePreviewNewTemporary}`} className="img-fluid rounded mb-3" alt="image" />
-
-                                }
-
-                                {postImagePreviewNew &&
                                     <>
-                                        <img src={postImagePreviewNew} className="img-fluid rounded mb-3" alt="image" />
-                                        <button type="button" className="btn-close mb-3" aria-label="Close" onClick={deletePostImagePreviewNew}></button>
+                                        <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImagePreviewNewTemporary(null)}></button>
+                                        <img src={`data:image/png;base64,${postImagePreviewNewTemporary}`} className="img-fluid rounded mb-3" alt="image" />
                                     </>
                                 }
 
-                                <div className="mb-3">
-                                    <input type="file" className="form-control form-control-sm" name="postImageNew" id="postImageNew" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImageNew(e)} />
-                                    <div>
-                                        <label htmlFor="postImageNew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
-                                        <small className="text-secondary">max: 10mb | .jpg</small>
-                                    </div>
-                                </div>
+                                {postImageNew &&
+                                    <>
+                                        <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImageNew(null)}></button>
+                                        <img src={postImagePreviewNew} className="img-fluid rounded mb-3" alt="image" />
 
-                                {postImagePreviewNewTemporary &&
+                                    </>
+
+                                }
+
+                                {
+                                    (!postImageNew && !postImagePreviewNewTemporary) &&
+
+                                    <div className="mb-3">
+                                        <p><small>no image selected yet</small></p>
+                                        <input type="file" className="form-control form-control-sm" name="postImageNew" id="postImageNew" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImageNew(e)} />
+
+                                        <label htmlFor="postImageNew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
+                                        <small className="text-secondary"> max: 10mb / .jpg</small>
+
+                                    </div>
+                                }
+
+
+
+                                {/*  {postImagePreviewNewTemporary &&
                                     <div>
                                         <button type="button" className="btn-secondary btn-sm mb-3" onClick={deletePostImagePreviewNew}>Delete Image</button>
                                     </div>
-                                }
+                                } */}
 
 
                                 <div className="form-floating mb-3">
