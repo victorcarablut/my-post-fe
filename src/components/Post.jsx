@@ -136,7 +136,7 @@ function Post() {
             setPostImageNew(null);
         }
     }
-    
+
     const deletePostImagePreview = () => {
         //setPostImagePreview(null);
         //setPostImagePreviewShow(false);
@@ -492,7 +492,7 @@ function Post() {
                                             :
 
                                             <div className="mb-3">
-                                                <p><small>no image selected yet</small></p>
+                                                <p><small>no image selected</small></p>
 
                                                 <input type="file" className="form-control form-control-sm" name="postImage" id="postImage" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImage(e)} />
 
@@ -642,7 +642,7 @@ function Post() {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="editPostModalLabel">Edit Post {postId}</h1>
+                            <h1 className="modal-title fs-5" id="editPostModalLabel">Edit Post</h1>
                             <button type="button" className="btn-close btn-close-white" id='button-modal-update-post-close' data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
@@ -678,7 +678,7 @@ function Post() {
                                     (!postImageNew && !postImagePreviewNewTemporary) &&
 
                                     <div className="mb-3">
-                                        <p><small>no image selected yet</small></p>
+                                        <p><small>no image selected</small></p>
                                         <input type="file" className="form-control form-control-sm" name="postImageNew" id="postImageNew" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImageNew(e)} />
 
                                         <label htmlFor="postImageNew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
