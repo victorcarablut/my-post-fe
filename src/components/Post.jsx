@@ -77,6 +77,13 @@ function Post() {
         // auto refresh
         interval = setInterval(getAllPosts, 5000);  // 5000 - 5 sec
 
+        // examples: 
+        // 1000 // 1 sec <- time in ms
+        // 10000 // 10 sec <- time in ms
+        // 15000 // 15 sec <- time in ms
+        // 1000 * 60 * 50 // 50 min 
+        // 1000 * 60 * 20 // 20 min
+
         return function () {
 
             // auto refresh
