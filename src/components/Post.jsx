@@ -67,12 +67,28 @@ function Post() {
     // http response status
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
 
-
+    // auto refresh
+    let interval = null;
 
     useEffect(() => {
-        getAllPosts();
         getUserDetails();
+        //getAllPosts();
+
+        // auto refresh
+        interval = setInterval(getAllPosts, 5000);  // 5000 - 5 sec
+
+        return function () {
+
+            // auto refresh
+            stopInterval();
+        };
+
     }, [])
+
+    // auto refresh
+    const stopInterval = () => {
+        clearInterval(interval);
+    }
 
     // clear/reset inputs, other...
     const clearInputs = () => {
@@ -165,7 +181,9 @@ function Post() {
         await axios.get(`${url}/user/details`, config).then((res) => {
             if (res.status === 200) {
                 setUserId(res.data.id);
-                console.log(res.data.id);
+                //console.log(res.data.id);
+
+                getAllPosts();
             }
 
         }).catch(err => {
@@ -176,7 +194,9 @@ function Post() {
 
     const getAllPosts = async () => {
 
-        setResponseStatusGetAllPosts("loading");
+        //console.log("load 1 time");
+
+        //setResponseStatusGetAllPosts("loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
 
@@ -189,9 +209,16 @@ function Post() {
         await axios.get(`${url}/post/all`, config).then((res) => {
 
             if (res.status === 200) {
-                setResponseStatusGetAllPosts("success");
-                console.log(res.data);
+                //setResponseStatusGetAllPosts("success");
+                //console.log(res.data);
                 setPosts(res.data);
+
+                /* setTimeout(async () => {
+                    console.log("load 1 time");
+                    await getAllPosts();
+                  }, 5000); */
+
+
             }
 
         }).catch(err => {
@@ -596,7 +623,7 @@ function Post() {
                             </div>
 
 
-                            {posts?.length === 0 ? <small>Empty Data</small>
+                            {(posts?.length === 0 && responseStatusGetAllPosts !== "error") ? <small>Empty Data</small>
                                 :
 
                                 <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "800px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
