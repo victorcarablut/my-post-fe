@@ -421,6 +421,45 @@ function Post() {
 
     }
 
+    const deletePost = async (postId) => {
+
+        const toastNotify = toast.loading("Waiting...");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        console.log("user_id: " + userId);
+        console.log("post_id: " + postId);
+
+        const data = {
+            user_id: userId,
+            post_id: postId
+        }
+
+        await axios.post(`${url}/post/delete`, data, config).then((res) => {
+            if (res.status === 200) {
+                //setButtonCreatePostIsDisabled(false);
+
+                toast.dismiss(toastNotify);
+                toast.success("Deleted");
+
+                getAllPosts();
+            }
+
+        }).catch(err => {
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            //setButtonCreatePostIsDisabled(false);
+            return;
+        })
+
+    }
+
     const uploadImage = async (postId) => {
 
         //checkAllInputsValidity();
@@ -578,7 +617,18 @@ function Post() {
                                                                                 {
                                                                                     userId === post?.user?.id &&
                                                                                     <div className="position-absolute top-0 end-0">
-                                                                                        <button type="button" className="btn btn-secondary btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)} ><i className="bi bi-pencil-square"></i></button>
+                                                                                        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                                                            <button type="button" className="btn btn-secondary btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)} ><i className="bi bi-pencil-square"></i></button>
+                                                                                            <div className="dropdown">
+                                                                                                <button className="btn btn-danger btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg"></i></button>
+                                                                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                                                    <p><small className="text-secondary">Delete Post?</small></p>
+                                                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deletePost(post.id)}>Yes</button>
+                                                                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
+                                                                                                </ul>
+                                                                                            </div>
+                                                                                        </div>
+
                                                                                     </div>
                                                                                 }
 
