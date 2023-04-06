@@ -562,6 +562,7 @@ function Post() {
                             <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
                                 <div className="card-body">
                                     This is some text within a card body.
+
                                 </div>
                             </div>
                         </div>
@@ -574,111 +575,114 @@ function Post() {
 
                         <div>
 
-                            {responseStatusGetAllPosts === "loading" ? <small>Loading...</small>
-                                :
-                                responseStatusGetAllPosts === "error" ? <small>Error</small>
-                                    :
-                                    responseStatusGetAllPosts === "success" ?
-
-                                        <>
-                                            <div className="d-flex justify-content-center">
-                                                <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
-                                                    <div className="card-body">
-                                                        This is some text within a card body.
-                                                    </div>
-                                                </div>
-                                            </div>
 
 
-                                            {posts?.length === 0 ? <small>Empty Data</small>
+                            <div className="d-flex justify-content-center">
+                                <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
+                                    <div className="card-body">
+                                        This is some text within a card body.
+
+                                        {
+                                            responseStatusGetAllPosts === "loading" ? <small>Loading...</small>
                                                 :
-
-                                                <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "800px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
-
-
-
-                                                    <table id="table" className="container-fluid">
-
-                                                        <tbody>
-
-                                                            {posts?.map(post =>
-
+                                                responseStatusGetAllPosts === "error" ? <small>Error</small>
+                                                    :
+                                                    responseStatusGetAllPosts === "success" ? <small>OK</small>
+                                                        :
+                                                        <></>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
 
 
-                                                                <tr key={post.id}>
-                                                                    <td>
+                            {posts?.length === 0 ? <small>Empty Data</small>
+                                :
 
-                                                                        <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
-                                                                            <div className="card-header bg-transparent">
-                                                                                <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover" }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" />
-                                                                                <h6>{post?.user?.fullName}</h6>
+                                <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "800px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
 
 
-                                                                                {
-                                                                                    userId === post?.user?.id &&
-                                                                                    <div className="position-absolute top-0 end-0">
-                                                                                        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                                                            <button type="button" className="btn btn-secondary btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)} ><i className="bi bi-pencil-square"></i></button>
-                                                                                            <div className="dropdown">
-                                                                                                <button className="btn btn-danger btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg"></i></button>
-                                                                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                                                    <p><small className="text-secondary">Delete Post?</small></p>
-                                                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deletePost(post.id)}>Yes</button>
-                                                                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
-                                                                                                </ul>
-                                                                                            </div>
-                                                                                        </div>
 
-                                                                                    </div>
-                                                                                }
+                                    <table id="table" className="container-fluid">
 
-                                                                            </div>
-                                                                            <div className="card-body">
+                                        <tbody>
 
-                                                                                <p>{post.title}</p>
-                                                                                {post.image &&
-                                                                                    <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
-                                                                                }
+                                            {posts?.map(post =>
 
-                                                                                <small style={{ fontSize: 12 }}>{post.description}</small>
 
-                                                                                <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
 
-                                                                                    {post?.updatedDate ?
+                                                <tr key={post.id}>
+                                                    <td>
 
-                                                                                        <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
-                                                                                        :
-                                                                                        <small>{moment(post.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
-                                                                                    }
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="card-footer bg-transparent text-muted">
-                                                                                card footer
+                                                        <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
+                                                            <div className="card-header bg-transparent">
+                                                                <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover" }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" />
+                                                                <h6>{post?.user?.fullName}</h6>
+
+
+                                                                {
+                                                                    userId === post?.user?.id &&
+                                                                    <div className="position-absolute top-0 end-0">
+                                                                        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                                            <button type="button" className="btn btn-secondary btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)} ><i className="bi bi-pencil-square"></i></button>
+                                                                            <div className="dropdown">
+                                                                                <button className="btn btn-danger btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg"></i></button>
+                                                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                                    <p><small className="text-secondary">Delete Post?</small></p>
+                                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deletePost(post.id)}>Yes</button>
+                                                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
+                                                                                </ul>
                                                                             </div>
                                                                         </div>
 
-                                                                    </td>
-                                                                </tr>
+                                                                    </div>
+                                                                }
+
+                                                            </div>
+                                                            <div className="card-body">
+
+                                                                <p>{post.title}</p>
+                                                                {post.image &&
+                                                                    <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
+                                                                }
+
+                                                                <small style={{ fontSize: 12 }}>{post.description}</small>
+
+                                                                <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
+
+                                                                    {post?.updatedDate ?
+
+                                                                        <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                        :
+                                                                        <small>{moment(post.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <div className="card-footer bg-transparent text-muted">
+                                                                card footer
+                                                            </div>
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
 
 
 
-                                                            )}
+                                            )}
 
 
 
-                                                        </tbody>
+                                        </tbody>
 
-                                                    </table>
-                                                </div>
+                                    </table>
+                                </div>
 
-
-                                            }
-
-                                        </>
-                                        :
-                                        <></>
 
                             }
+
+
+
+
                         </div>
 
                     </div>
