@@ -810,30 +810,31 @@ function Post() {
 
 
 
-                                                                        <button type="button" className="btn btn-light rounded-pill btn-sm" onClick={() => post.likes?.map(like => like.userId === userId ? removeLike(post.id) : addLike(post.id))}>
 
-                                                                            {post.likes.map(like => (like.userId === userId) &&
-                                                                                <i className="bi bi-hand-thumbs-up-fill text-primary"></i>
+
+                                                                        <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => post.likes?.map(like => like.userId === userId ? removeLike(post.id) : addLike(post.id))}>
+
+
+                                                                            {post.likes.map(like => (like.userId === userId) ?
+                                                                                <>
+                                                                                    <i className="bi bi-hand-thumbs-up-fill text-primary me-md-2"></i>
+                                                                                    <small className="text-primary">Liked</small>
+                                                                                </>
+                                                                                :
+                                                                                (like.userId !== userId && post.isOwnerLike === false) ?
+                                                                                    <>
+                                                                                        <i className="bi bi-hand-thumbs-up me-md-2"></i>
+                                                                                        <small>Like</small>
+                                                                                    </>
+                                                                                    :
+                                                                                    <></>
                                                                             )
                                                                             }
 
-                                                                            {post.likes.map(like => (like.userId !== userId && post.isOwnerLike === false) &&
-                                                                                <i className="bi bi-hand-thumbs-up"></i>
-                                                                            )
-                                                                            }
 
 
 
-                                                                            {post.likes.map(like => (like.userId === userId) &&
-                                                                                
-                                                                                <small className="text-primary">Liked</small>
-                                                                            )
-                                                                            }
 
-                                                                            {post.likes.map(like => (like.userId !== userId && post.isOwnerLike === false) &&
-                                                                                <small>Like</small>
-                                                                            )
-                                                                            }
 
 
                                                                         </button>
@@ -841,9 +842,9 @@ function Post() {
 
 
                                                                         <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
-                                                                                {post.likes.length}
-                                                                            </span>
+                                                                            <small>{post.likes.length}</small>
+                                                                                
+                                                                            
                                                                         </button>
                                                                         <ul className="dropdown-menu">
 
@@ -863,7 +864,7 @@ function Post() {
                                                                     :
 
                                                                     <button type="button" className="btn btn-light rounded-pill btn-sm" onClick={() => addLike(post.id)}>
-                                                                        <i className="bi bi-hand-thumbs-up"></i>
+                                                                        <i className="bi bi-hand-thumbs-up me-md-2"></i>
                                                                         <small>Like</small>
                                                                     </button>
                                                                 }
