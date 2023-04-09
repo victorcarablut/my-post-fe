@@ -767,9 +767,9 @@ function Post() {
                                                                     userId === post?.user?.id &&
                                                                     <div className="position-absolute top-0 end-0">
                                                                         <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                                            <button type="button" className="btn btn-secondary btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)} ><i className="bi bi-pencil-square"></i></button>
+                                                                            <button type="button" className="btn btn-light btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)} ><i className="bi bi-pencil-square"></i></button>
                                                                             <div className="dropdown">
-                                                                                <button className="btn btn-danger btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg"></i></button>
+                                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg text-danger"></i></button>
                                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                                     <p><small className="text-secondary">Delete Post?</small></p>
                                                                                     <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deletePost(post.id)}>Yes</button>
@@ -847,11 +847,12 @@ function Post() {
                                                                             
                                                                         </button>
                                                                         <ul className="dropdown-menu">
+                                                                        <li><span class="dropdown-item-text"><small>total likes: {post.likes.length}</small></span></li>
 
                                                                             {
                                                                                 post.likes?.map(like =>
                                                                                     <ul className="list-group list-group-flush" key={like.likeId}>
-                                                                                        <li className="list-group-item"><small>{like.userFullName}</small></li>
+                                                                                        <li className="list-group-item list-group-item-action">{like.userId === userId ? <strong className="text-primary">{like.userFullName}</strong> : <small>{like.userFullName}</small>}</li>
                                                                                     </ul>
                                                                                 )
                                                                             }
