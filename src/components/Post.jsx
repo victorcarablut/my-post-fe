@@ -218,14 +218,8 @@ function Post() {
             if (res.status === 200) {
                 //setResponseStatusGetAllPosts("success");
                 //console.log(res.data);
+
                 setPosts(res.data);
-
-                /* setTimeout(async () => {
-                    console.log("load 1 time");
-                    await getAllPosts();
-                  }, 5000); */
-
-
             }
 
         }).catch(err => {
@@ -533,6 +527,121 @@ function Post() {
         })
     }
 
+    // ------ Like ------
+
+    const addLike = async (postId) => {
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            post: {
+                id: postId
+            },
+            user: {
+                id: userId
+            }
+        }
+
+        await axios.post(`${url}/post/add/like`, data, config).then((res) => {
+            if (res.status === 200) {
+                //setButtonCreatePostIsDisabled(false);
+
+                //toast.dismiss(toastNotify);
+                //toast.success("Published");
+
+                getAllPosts();
+            }
+
+        }).catch(err => {
+            //toast.dismiss(toastNotify);
+            //toast.error("Error");
+            //setButtonCreatePostIsDisabled(false);
+            return;
+        })
+
+
+    }
+
+    const removeLike = async (postId) => {
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            post: {
+                id: postId
+            },
+            user: {
+                id: userId
+            }
+        }
+
+        await axios.post(`${url}/post/remove/like`, data, config).then((res) => {
+            if (res.status === 200) {
+                //setButtonCreatePostIsDisabled(false);
+
+                //toast.dismiss(toastNotify);
+                //toast.success("Published");
+
+                getAllPosts();
+            }
+
+        }).catch(err => {
+            //toast.dismiss(toastNotify);
+            //toast.error("Error");
+            //setButtonCreatePostIsDisabled(false);
+            return;
+        })
+
+
+    }
+
+    const findLikes = async (postId) => {
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            postId: postImage
+        }
+
+        await axios.post(`${url}/post/find/likes`, data, config).then((res) => {
+            if (res.status === 200) {
+                //setButtonCreatePostIsDisabled(false);
+
+                //toast.dismiss(toastNotify);
+                //toast.success("Published");
+
+
+                getAllPosts();
+            }
+
+        }).catch(err => {
+            //toast.dismiss(toastNotify);
+            //toast.error("Error");
+            //setButtonCreatePostIsDisabled(false);
+            return;
+        })
+
+
+    }
+
     return (
 
         <>
@@ -693,7 +802,119 @@ function Post() {
                                                                 </div>
                                                             </div>
                                                             <div className="card-footer bg-transparent text-muted">
-                                                                card footer
+
+                                                                {(post?.likes.length !== 0) ?
+
+
+                                                                    <div className="btn-group dropup">
+
+
+
+                                                                        <button type="button" className="btn btn-light rounded-pill btn-sm" onClick={() => post.likes?.map(like => like.userId === userId ? removeLike(post.id) : addLike(post.id))}>
+
+                                                                            {post.likes.map(like => (like.userId === userId) &&
+                                                                                <i className="bi bi-hand-thumbs-up-fill text-primary"></i>
+                                                                            )
+                                                                            }
+
+                                                                            {post.likes.map(like => (like.userId !== userId && post.isOwnerLike === false) &&
+                                                                                <i className="bi bi-hand-thumbs-up"></i>
+                                                                            )
+                                                                            }
+
+
+
+                                                                            {post.likes.map(like => (like.userId === userId) &&
+                                                                                
+                                                                                <small className="text-primary">Liked</small>
+                                                                            )
+                                                                            }
+
+                                                                            {post.likes.map(like => (like.userId !== userId && post.isOwnerLike === false) &&
+                                                                                <small>Like</small>
+                                                                            )
+                                                                            }
+
+
+                                                                        </button>
+
+
+
+                                                                        <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                                                                                {post.likes.length}
+                                                                            </span>
+                                                                        </button>
+                                                                        <ul className="dropdown-menu">
+
+                                                                            {
+                                                                                post.likes?.map(like =>
+                                                                                    <ul className="list-group list-group-flush" key={like.likeId}>
+                                                                                        <li className="list-group-item"><small>{like.userFullName}</small></li>
+                                                                                    </ul>
+                                                                                )
+                                                                            }
+
+                                                                        </ul>
+
+                                                                    </div>
+
+
+                                                                    :
+
+                                                                    <button type="button" className="btn btn-light rounded-pill btn-sm" onClick={() => addLike(post.id)}>
+                                                                        <i className="bi bi-hand-thumbs-up"></i>
+                                                                        <small>Like</small>
+                                                                    </button>
+                                                                }
+
+                                                                {/* {post?.likes?.map(like =>
+
+
+
+
+                                                                    like.userId === userId ?
+                                                                        <small>blue: remove like {like.userId}</small>
+                                                                        :
+                                                                        <small>click like {like.userId}</small>
+
+
+                                                                )} */}
+
+                                                                {/* {post?.isOwnerLike === true ?
+
+
+                                                                    <button type="button" className="btn btn-primary btn-sm position-relative" onClick={() => removeLike(post.id)}>
+                                                                        <i className="bi bi-hand-thumbs-up"></i> Like
+
+                                                                        {(post?.totalLikes !== 0) &&
+                                                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                                                                                {post?.totalLikes}
+                                                                            </span>
+                                                                        }
+
+                                                                    </button>
+
+
+                                                                    :
+
+
+                                                                    <button type="button" className="btn btn-light btn-sm position-relative" onClick={() => addLike(post.id)}>
+                                                                        <i className="bi bi-hand-thumbs-up"></i> Like
+
+                                                                        {(post?.totalLikes !== 0) &&
+                                                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                                                                                {post?.totalLikes}
+                                                                            </span>
+                                                                        }
+
+                                                                    </button>
+
+
+                                                                } */}
+
+
+
                                                             </div>
                                                         </div>
 
