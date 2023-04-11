@@ -12,7 +12,7 @@ import { url } from "../../config.js";
 
 // Date Time Format (moment.js)
 import moment from 'moment/min/moment-with-locales';
-import { moment_locale, moment_format_date_time_long } from '../_resources/date-time/DateTime.js';
+import { moment_locale, moment_format_date_long } from '../_resources/date-time/DateTime.js';
 //import UserPasswordRecover from './UserPasswordRecover.jsx';
 
 import default_user_profile_img from '../../assets/images/user.jpg';
@@ -97,8 +97,13 @@ function UserProfile() {
                                     <h6>{user?.fullName}</h6>
                                 </div>
 
-                                <h6>Create Post</h6>
-                                <NavLink to="/account" type="button" className="btn btn-light btn-sm">Edit User</NavLink>
+                                <hr />
+                                <p><small className="text-secondary">Username: @{user?.username}</small></p>
+                                <p><small className="text-secondary">Account created: {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_long)}</small></p>
+                             
+
+
+                                {/* <NavLink to="/account" type="button" className="btn btn-light btn-sm">Edit User</NavLink> */}
 
 
                             </div>
