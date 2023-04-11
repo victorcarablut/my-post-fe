@@ -203,7 +203,7 @@ function Post() {
 
         //console.log("load 1 time");
 
-        //setResponseStatusGetAllPosts("loading");
+        setResponseStatusGetAllPosts("loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
 
@@ -216,7 +216,7 @@ function Post() {
         await axios.get(`${url}/post/all`, config).then((res) => {
 
             if (res.status === 200) {
-                //setResponseStatusGetAllPosts("success");
+                setResponseStatusGetAllPosts("success");
                 //console.log(res.data);
 
                 setPosts(res.data);
@@ -723,9 +723,20 @@ function Post() {
                             <div className="d-flex justify-content-center">
                                 <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
                                     <div className="card-body">
-                                        This is some text within a card body.
+                                        <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                                            <span className="badge text-bg-primary">Primary</span>
+                                            <span className="badge text-bg-success">Success</span>
+                                            <span className="badge text-bg-danger">Danger</span>
+                                            <span className="badge text-bg-warning">Warning</span>
+                                            <span className="badge text-bg-info">Info</span>
+                                            <span className="badge text-bg-light">Light</span>
+                                            <span className="badge text-bg-dark">Dar</span>
+                                        </div>
 
-                                        {
+
+
+
+                                        {/* {
                                             responseStatusGetAllPosts === "loading" ? <small>Loading...</small>
                                                 :
                                                 responseStatusGetAllPosts === "error" ? <small>Error</small>
@@ -733,7 +744,7 @@ function Post() {
                                                     responseStatusGetAllPosts === "success" ? <small>OK</small>
                                                         :
                                                         <></>
-                                        }
+                                        } */}
                                     </div>
                                 </div>
                             </div>
@@ -821,18 +832,14 @@ function Post() {
                                                                                     <small className="text-primary">Liked</small>
                                                                                 </>
                                                                                 :
-                                                                                (like.userId !== userId && post.isOwnerLike === false) ?
+                                                                                ((like.userId !== userId) && (post.isOwnerLike === false)) &&
                                                                                     <>
                                                                                         <i className="bi bi-hand-thumbs-up me-md-2"></i>
                                                                                         <small>Like</small>
                                                                                     </>
-                                                                                    :
-                                                                                    <></>
+                                                                                    
                                                                             )
-                                                                            }
-
-
-
+                                                                            } 
 
 
 
@@ -840,14 +847,16 @@ function Post() {
                                                                         </button>
 
 
+
+                                                      
 
                                                                         <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                                                             <small>{post.likes.length}</small>
-                                                                                
-                                                                            
+
+
                                                                         </button>
                                                                         <ul className="dropdown-menu">
-                                                                        <li><span class="dropdown-item-text"><small>total likes: {post.likes.length}</small></span></li>
+                                                                            <li><span class="dropdown-item-text"><small>total likes: {post.likes.length}</small></span></li>
 
                                                                             {
                                                                                 post.likes?.map(like =>
