@@ -10,7 +10,7 @@ import axios from "axios";
 import { url } from "../config.js";
 
 // Link 
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 //import { VerifyToken } from './security/VerifyToken.js';
 import { Logout } from './account/Logout.js';
@@ -35,6 +35,8 @@ import toast from 'react-hot-toast';
 
 
 function Post() {
+
+    const navigate = useNavigate();
 
     const [userId, setUserId] = useState(null);
     const [postId, setPostId] = useState(null);
@@ -770,7 +772,7 @@ function Post() {
 
                                                         <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
                                                             <div className="card-header bg-transparent">
-                                                                <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover" }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" />
+                                                                <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post?.user.username)} />
                                                                 <h6>{post?.user?.fullName}</h6>
 
 
@@ -827,19 +829,19 @@ function Post() {
 
 
                                                                             {post.likes.map(like => (like.userId === userId) ?
-                                                                                <>
+                                                                                <div key={like.likeId}>
                                                                                     <i className="bi bi-hand-thumbs-up-fill text-primary me-md-2"></i>
                                                                                     <small className="text-primary">Liked</small>
-                                                                                </>
+                                                                                </div>
                                                                                 :
                                                                                 ((like.userId !== userId) && (post.isOwnerLike === false)) &&
-                                                                                    <>
-                                                                                        <i className="bi bi-hand-thumbs-up me-md-2"></i>
-                                                                                        <small>Like</small>
-                                                                                    </>
-                                                                                    
+                                                                                <div key={like.likeId}>
+                                                                                    <i className="bi bi-hand-thumbs-up me-md-2"></i>
+                                                                                    <small>Like</small>
+                                                                                    </div>
+
                                                                             )
-                                                                            } 
+                                                                            }
 
 
 
@@ -848,7 +850,7 @@ function Post() {
 
 
 
-                                                      
+
 
                                                                         <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                                                             <small>{post.likes.length}</small>
@@ -856,7 +858,7 @@ function Post() {
 
                                                                         </button>
                                                                         <ul className="dropdown-menu">
-                                                                            <li><span class="dropdown-item-text"><small>total likes: {post.likes.length}</small></span></li>
+                                                                            <li><span className="dropdown-item-text"><small>total likes: {post.likes.length}</small></span></li>
 
                                                                             {
                                                                                 post.likes?.map(like =>
@@ -878,52 +880,6 @@ function Post() {
                                                                         <small>Like</small>
                                                                     </button>
                                                                 }
-
-                                                                {/* {post?.likes?.map(like =>
-
-
-
-
-                                                                    like.userId === userId ?
-                                                                        <small>blue: remove like {like.userId}</small>
-                                                                        :
-                                                                        <small>click like {like.userId}</small>
-
-
-                                                                )} */}
-
-                                                                {/* {post?.isOwnerLike === true ?
-
-
-                                                                    <button type="button" className="btn btn-primary btn-sm position-relative" onClick={() => removeLike(post.id)}>
-                                                                        <i className="bi bi-hand-thumbs-up"></i> Like
-
-                                                                        {(post?.totalLikes !== 0) &&
-                                                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
-                                                                                {post?.totalLikes}
-                                                                            </span>
-                                                                        }
-
-                                                                    </button>
-
-
-                                                                    :
-
-
-                                                                    <button type="button" className="btn btn-light btn-sm position-relative" onClick={() => addLike(post.id)}>
-                                                                        <i className="bi bi-hand-thumbs-up"></i> Like
-
-                                                                        {(post?.totalLikes !== 0) &&
-                                                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
-                                                                                {post?.totalLikes}
-                                                                            </span>
-                                                                        }
-
-                                                                    </button>
-
-
-                                                                } */}
-
 
 
                                                             </div>

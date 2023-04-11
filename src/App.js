@@ -20,11 +20,13 @@ import PrivacyPolicy from './components/other/PrivacyPolicy';
 
 // account
 import UserDetails from './components/account/UserDetails';
+import UserProfile from './components/account/UserProfile';
 
 import NotFound from './components/other/NotFound';
 
 // Notifications
 import { Toaster } from 'react-hot-toast';
+
 
 
 function App() {
@@ -46,6 +48,7 @@ function App() {
             <Route element={<PrivateRoute />}>
               <Route path="/private" element={<Private />} />
               <Route path="/account" element={<UserDetails />} />
+              <Route path="/user/:username" element={<UserProfile />} />
             </Route>
 
             {/* public */}
