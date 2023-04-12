@@ -756,7 +756,7 @@ function Post(props) {
                             {(posts?.length === 0 && responseStatusGetAllPosts !== "error") ? <small>Empty Data</small>
                                 :
 
-                                <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "800px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
+                                <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "900px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
 
 
 
