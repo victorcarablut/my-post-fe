@@ -34,7 +34,7 @@ import default_user_profile_img from '../assets/images/user.jpg';
 import toast from 'react-hot-toast';
 
 
-function Post() {
+function Post(props) {
 
     const navigate = useNavigate();
 
@@ -657,6 +657,7 @@ function Post() {
                             <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
                                 <div className="card-body">
                                     <h6>Create Post</h6>
+                                    {props.name}
                                     <form onSubmit={handleSubmit}>
 
                                         <div className="form-floating mb-3">

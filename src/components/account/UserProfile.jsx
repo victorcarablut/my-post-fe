@@ -16,6 +16,9 @@ import { moment_locale, moment_format_date_long } from '../_resources/date-time/
 //import UserPasswordRecover from './UserPasswordRecover.jsx';
 
 import default_user_profile_img from '../../assets/images/user.jpg';
+import default_user_cover_img from '../../assets/images/cover.jpg';
+
+import Post from "../Post.jsx";
 
 
 function UserProfile() {
@@ -81,115 +84,48 @@ function UserProfile() {
 
     return (
 
-        <div className="container-fluid">
-
-            <div className="row">
-
-                <div className="col-xl-6" style={{ paddingBottom: 20 }}>
-
-                    <div className="d-flex justify-content-center mb-3">
-                        <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
-                            <div className="card-body">
-
-                                <div className="d-grid gap-2 d-md-flex justify-content-md-left">
-
-                                    <img src={user?.userProfileImg ? `data:image/png;base64,${user.userProfileImg}` : default_user_profile_img} width="90" height="90" style={{ objectFit: "cover", marginTop: -60 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
-                                    <h6>{user?.fullName}</h6>
-                                </div>
-
-                                <hr />
-                                <p><small className="text-secondary">Username: @{user?.username}</small></p>
-                                <p><small className="text-secondary">Account created: {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_long)}</small></p>
-                             
+        <>
 
 
-                                {/* <NavLink to="/account" type="button" className="btn btn-light btn-sm">Edit User</NavLink> */}
+ <div className="d-flex justify-content-center mb-3">
+            <div className="container-fluid" style={{ maxWidth: 1400 }}>
 
+               
 
+                    <div className="card shadow">
+
+                        <img src={default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top" />
+
+                        <div className="card-body">
+
+                            <div className="d-grid gap-2 d-md-flex justify-content-md-left">
+                                <img src={user?.userProfileImg ? `data:image/png;base64,${user.userProfileImg}` : default_user_profile_img} width="90" height="90" style={{ objectFit: "cover", marginTop: -60 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
+                                <h6>{user?.fullName}</h6>
                             </div>
+
+                            <hr />
+                            <p><small className="text-secondary">Username: @{user?.username}</small></p>
+                            <p><small className="text-secondary">Account created: {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_long)}</small></p>
+
+
+
+                            {/* <NavLink to="/account" type="button" className="btn btn-light btn-sm">Edit User</NavLink> */}
+
+
                         </div>
-                    </div>
-
-                    <div className="d-flex justify-content-center">
-                        <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
-                            <div className="card-body">
-                                This is some text within a card body.
-
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-
-                <div className="col-xl-6" style={{ paddingBottom: 20 }}>
-
-                    <div>
-
-
-
-                        <div className="d-flex justify-content-center">
-                            <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
-                                <div className="card-body">
-                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                                        <span className="badge text-bg-primary">Primary</span>
-                                        <span className="badge text-bg-success">Success</span>
-                                        <span className="badge text-bg-danger">Danger</span>
-                                        <span className="badge text-bg-warning">Warning</span>
-                                        <span className="badge text-bg-info">Info</span>
-                                        <span className="badge text-bg-light">Light</span>
-                                        <span className="badge text-bg-dark">Dar</span>
-                                    </div>
-
-
-
-
-                                    {/* {
-                                            responseStatusGetAllPosts === "loading" ? <small>Loading...</small>
-                                                :
-                                                responseStatusGetAllPosts === "error" ? <small>Error</small>
-                                                    :
-                                                    responseStatusGetAllPosts === "success" ? <small>OK</small>
-                                                        :
-                                                        <></>
-                                        } */}
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "800px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
-
-
-
-                            <table id="table" className="container-fluid">
-
-                                <tbody>
-
-
-
-
-
-                                </tbody>
-
-                            </table>
-                        </div>
-
-
-
-
-
-
-
                     </div>
 
                 </div>
 
             </div>
 
-        </div>
+   
+
+
+
+            <Post name="profile" />
+
+        </>
     )
 }
 
