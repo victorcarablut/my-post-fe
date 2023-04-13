@@ -534,7 +534,7 @@ function Post(props) {
 
     // ------ Like ------
 
-    const addLike = async (postId) => {
+    const postLike = async (postId) => {
 
         const jwt_token = secureLocalStorage.getItem("token");
 
@@ -553,7 +553,7 @@ function Post(props) {
             }
         }
 
-        await axios.post(`${url}/post/add/like`, data, config).then((res) => {
+        await axios.post(`${url}/post/like`, data, config).then((res) => {
             if (res.status === 200) {
                 //setButtonCreatePostIsDisabled(false);
 
@@ -573,79 +573,6 @@ function Post(props) {
 
     }
 
-    const removeLike = async (postId) => {
-
-        const jwt_token = secureLocalStorage.getItem("token");
-
-        const config = {
-            headers: {
-                Authorization: "Bearer " + jwt_token
-            }
-        }
-
-        const data = {
-            post: {
-                id: postId
-            },
-            user: {
-                id: userId
-            }
-        }
-
-        await axios.post(`${url}/post/remove/like`, data, config).then((res) => {
-            if (res.status === 200) {
-                //setButtonCreatePostIsDisabled(false);
-
-                //toast.dismiss(toastNotify);
-                //toast.success("Published");
-
-                getAllPosts();
-            }
-
-        }).catch(err => {
-            //toast.dismiss(toastNotify);
-            //toast.error("Error");
-            //setButtonCreatePostIsDisabled(false);
-            return;
-        })
-
-
-    }
-
-    const findLikes = async (postId) => {
-
-        const jwt_token = secureLocalStorage.getItem("token");
-
-        const config = {
-            headers: {
-                Authorization: "Bearer " + jwt_token
-            }
-        }
-
-        const data = {
-            postId: postImage
-        }
-
-        await axios.post(`${url}/post/find/likes`, data, config).then((res) => {
-            if (res.status === 200) {
-                //setButtonCreatePostIsDisabled(false);
-
-                //toast.dismiss(toastNotify);
-                //toast.success("Published");
-
-
-                getAllPosts();
-            }
-
-        }).catch(err => {
-            //toast.dismiss(toastNotify);
-            //toast.error("Error");
-            //setButtonCreatePostIsDisabled(false);
-            return;
-        })
-
-
-    }
 
     return (
 
@@ -833,8 +760,8 @@ function Post(props) {
 
 
 
-                                                                    {post?.likes.length !== 0 ?
-                                                                        <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => post.likes?.map(like => like.userId === userId ? removeLike(post.id) : addLike(post.id))}>
+                                                                   
+                                                                        <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() =>  postLike(post.id)}>
 
                                                                             <i className="bi bi-hand-thumbs-up me-md-2"></i>
 
@@ -857,16 +784,14 @@ function Post(props) {
 
                                                                         </button>
 
-                                                                        :
+                                                                   
 
-                                                                        <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => addLike(post.id)}>
-                                                                            <i className="bi bi-hand-thumbs-up"></i>
+                                                                    {/* <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() =>  postLike(post.id)}>
+                                                                        <i className="bi bi-hand-thumbs-up"></i>
+                                                                        user
+                                                                    </button> */}
 
-
-
-
-                                                                        </button>
-                                                                    }
+                                                                   
 
 
 
