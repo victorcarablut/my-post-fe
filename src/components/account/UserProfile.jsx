@@ -101,7 +101,7 @@ function UserProfile() {
                             <div className="d-grid gap-2 d-md-flex justify-content-md-left">
                                 <img src={user?.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="120" height="120" style={{ objectFit: "cover", marginTop: -75 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
                                 <h5 className="me-md-2">{user?.fullName}</h5>
-                                <button type="button" class="btn btn-secondary btn-sm">Small button</button>
+                                <button type="button" className="btn btn-secondary btn-sm">Small button</button>
                             </div>
 
                             <hr />
@@ -114,7 +114,7 @@ function UserProfile() {
 
 
                         </div>
-                        <div class="card-footer">
+                        <div className="card-footer">
                         <small className="text-secondary">Account created on {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_long)}</small>
                         </div>
                     </div>
@@ -127,7 +127,7 @@ function UserProfile() {
 
 
 
-            <Post filter="owner" />
+            <Post filter={username} />
 
         </>
     )

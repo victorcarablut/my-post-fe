@@ -40,6 +40,7 @@ function Post(props) {
 
     const [userId, setUserId] = useState(null);
     const [postId, setPostId] = useState(null);
+    const [username, setUsername] = useState(null);
 
     const [postTitle, setPostTitle] = useState(null);
     const [postDescription, setPostDescription] = useState(null);
@@ -193,6 +194,7 @@ function Post(props) {
         await axios.get(`${url}/user/details`, config).then((res) => {
             if (res.status === 200) {
                 setUserId(res.data.id);
+                setUsername(res.data.username);
 
                 getAllPosts();
             }
@@ -218,6 +220,8 @@ function Post(props) {
         }
 
         console.log(props.filter);
+
+        //await axios.get(`${url}/post/all/${props.filter}`, config).then((res) => {
 
         await axios.get(`${url}/post/all/${props.filter}`, config).then((res) => {
 
@@ -585,56 +589,66 @@ function Post(props) {
 
                     <div className="col-xl-6" style={{ paddingBottom: 20 }}>
 
-                        <div className="d-flex justify-content-center mb-3">
-                            <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
-                                <div className="card-body">
-                                    <h6>Create Post</h6>
-                                    {props.name}
-                                    <form onSubmit={handleSubmit}>
+                        {props.filter}
+                        <br/>
+                        {username} 
 
-                                        <div className="form-floating mb-3">
-                                            <input type="text" className={"form-control " + handleInputPostTitleClassName} id="floatingInputPostTitle" placeholder="Title" value={postTitle || ""} maxLength="100" onChange={(e) => handleInputPostTitle(e)} autoComplete="off" required />
-                                            <label htmlFor="floatingInputPostTitle">Title</label>
-                                            <div className="invalid-feedback">
-                                                <small>...</small>
-                                            </div>
-                                        </div>
+                        {(username === props.filter || props.filter === "all") &&
 
-                                        {postImage ?
-                                            <>
-                                                <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImage(null)}></button>
-                                                <img src={postImagePreview} className="img-fluid rounded mb-3" alt="image" />
-                                            </>
 
-                                            :
 
-                                            <div className="mb-3">
-                                                <p><small>no image selected</small></p>
+                            <div className="d-flex justify-content-center mb-3">
+                                <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
+                                    <div className="card-body">
+                                        <h6>Create Post</h6>
 
-                                                <input type="file" className="form-control form-control-sm" name="postImage" id="postImage" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImage(e)} />
+                                        <form onSubmit={handleSubmit}>
 
-                                                <label htmlFor="postImage" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
-                                                <small className="text-secondary"> max: 10mb / .jpg</small>
+                                            <div className="form-floating mb-3">
+                                                <input type="text" className={"form-control " + handleInputPostTitleClassName} id="floatingInputPostTitle" placeholder="Title" value={postTitle || ""} maxLength="100" onChange={(e) => handleInputPostTitle(e)} autoComplete="off" required />
+                                                <label htmlFor="floatingInputPostTitle">Title</label>
+                                                <div className="invalid-feedback">
+                                                    <small>...</small>
+                                                </div>
                                             </div>
 
+                                            {postImage ?
+                                                <>
+                                                    <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImage(null)}></button>
+                                                    <img src={postImagePreview} className="img-fluid rounded mb-3" alt="image" />
+                                                </>
 
-                                        }
+                                                :
+
+                                                <div className="mb-3">
+                                                    <p><small>no image selected</small></p>
+
+                                                    <input type="file" className="form-control form-control-sm" name="postImage" id="postImage" accept="image/jpeg" style={{ color: "red", display: 'none' }} onChange={(e) => handleInputPostImage(e)} />
+
+                                                    <label htmlFor="postImage" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
+                                                    <small className="text-secondary"> max: 10mb / .jpg</small>
+                                                </div>
+
+
+                                            }
 
 
 
-                                        <div className="form-floating mb-3">
-                                            <textarea type="text" className={"form-control " + handleInputPostDescriptionClassName} id="floatingInputPostDescription" placeholder="Description" value={postDescription || ""} maxLength="500" onChange={(e) => handleInputPostDescription(e)} autoComplete="off" style={{ height: "100%", minHeight: "100px" }} />
-                                            <label htmlFor="floatingInputPostDescription">Description</label>
-                                            <div className="invalid-feedback">
-                                                <small>...</small>
+                                            <div className="form-floating mb-3">
+                                                <textarea type="text" className={"form-control " + handleInputPostDescriptionClassName} id="floatingInputPostDescription" placeholder="Description" value={postDescription || ""} maxLength="500" onChange={(e) => handleInputPostDescription(e)} autoComplete="off" style={{ height: "100%", minHeight: "100px" }} />
+                                                <label htmlFor="floatingInputPostDescription">Description</label>
+                                                <div className="invalid-feedback">
+                                                    <small>...</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!postTitle || buttonCreatePostIsDisabled} onClick={createPost}>Publish</button>
-                                    </form>
+                                            <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!postTitle || buttonCreatePostIsDisabled} onClick={createPost}>Publish</button>
+                                        </form>
 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+
+                        }
 
                         <div className="d-flex justify-content-center">
                             <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
@@ -762,25 +776,25 @@ function Post(props) {
 
 
 
-                                                                   
-                                                                        <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() =>  postLike(post.id)}>
 
-                                                                            <i className="bi bi-hand-thumbs-up me-md-2"></i>
+                                                                    <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => postLike(post.id)}>
+
+                                                                        <i className="bi bi-hand-thumbs-up me-md-2"></i>
 
 
 
-                                                                            {/* {post.likes?.map(like => like.userId === userId &&
+                                                                        {/* {post.likes?.map(like => like.userId === userId &&
                                                                                 <i className="bi bi-hand-thumbs-up-fill text-primary me-md-2"></i>)
                                                                             } */}
-                                                                            {post.likes?.map(like => like.userId === userId &&
+                                                                        {post.likes?.map(like => like.userId === userId &&
 
-                                                                                <small className="text-primary me-md-2" key={like.likeId}>Liked</small>
-                                                                            )
-                                                                            }
+                                                                            <small className="text-primary me-md-2" key={like.likeId}>Liked</small>
+                                                                        )
+                                                                        }
 
-                                                                            <small>{post.likes.length}</small>
+                                                                        <small>{post.likes.length}</small>
 
-                                                                        </button>
+                                                                    </button>
 
 
 
@@ -793,7 +807,7 @@ function Post(props) {
                                                                         {
                                                                             post.likes?.map(like =>
                                                                                 <ul className="list-group list-group-flush" key={like.likeId}>
-                                                                                    <li className="list-group-item list-group-item-action">{like.userId === userId ? <small className="text-primary">{like.userFullName}</small> : <small>{like.userFullName}</small>}</li>
+                                                                                    <li className="list-group-item list-group-item-action" style={{ cursor: 'pointer' }}>{like.userId === userId ? <small className="text-primary">{like.userFullName}</small> : <small>{like.userFullName}</small>}</li>
                                                                                 </ul>
                                                                             )
                                                                         }
