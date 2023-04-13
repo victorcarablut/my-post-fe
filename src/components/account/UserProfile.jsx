@@ -32,7 +32,8 @@ function UserProfile() {
             username: null,
             //role: null,
             registeredDate: null,
-            userProfileImg: null
+            userProfileImg: null,
+            coverProfileImg: null
         }
     )
 
@@ -67,7 +68,8 @@ function UserProfile() {
                     username: res.data.username,
                     //role: res.data.role,
                     registeredDate: res.data.registeredDate,
-                    userProfileImg: res.data.userProfileImg
+                    userProfileImg: res.data.userProfileImg,
+                    coverProfileImg: res.data.coverProfileImg
                 })
 
 
@@ -87,25 +89,24 @@ function UserProfile() {
         <>
 
 
- <div className="d-flex justify-content-center mb-3">
-            <div className="container-fluid" style={{ maxWidth: 1400 }}>
-
-               
+            <div className="d-flex justify-content-center mb-3">
+                <div className="container-fluid" style={{ maxWidth: 1400 }}>
 
                     <div className="card shadow">
 
-                        <img src={default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top" />
+                        <img src={user?.coverProfileImg ? `data:image/jpg;base64,${user.coverProfileImg}` : default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top" style={{objectFit: "cover"}} />
 
                         <div className="card-body">
 
                             <div className="d-grid gap-2 d-md-flex justify-content-md-left">
-                                <img src={user?.userProfileImg ? `data:image/png;base64,${user.userProfileImg}` : default_user_profile_img} width="90" height="90" style={{ objectFit: "cover", marginTop: -60 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
-                                <h6>{user?.fullName}</h6>
+                                <img src={user?.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="120" height="120" style={{ objectFit: "cover", marginTop: -75 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
+                                <h5 className="me-md-2">{user?.fullName}</h5>
+                                <button type="button" class="btn btn-secondary btn-sm">Small button</button>
                             </div>
 
                             <hr />
-                            <p><small className="text-secondary">Username: @{user?.username}</small></p>
-                            <p><small className="text-secondary">Account created: {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_long)}</small></p>
+                            <small className="text-secondary">Username: @{user?.username}</small>
+                            
 
 
 
@@ -113,13 +114,16 @@ function UserProfile() {
 
 
                         </div>
+                        <div class="card-footer">
+                        <small className="text-secondary">Account created on {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_long)}</small>
+                        </div>
                     </div>
 
                 </div>
 
             </div>
 
-   
+
 
 
 
