@@ -224,6 +224,7 @@ function Post(props) {
                 //console.log(res.data);
 
                 setPosts(res.data);
+
             }
 
         }).catch(err => {
@@ -830,17 +831,27 @@ function Post(props) {
 
 
 
+
+
                                                                     {post?.likes.length !== 0 ?
                                                                         <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => post.likes?.map(like => like.userId === userId ? removeLike(post.id) : addLike(post.id))}>
+
                                                                             <i className="bi bi-hand-thumbs-up me-md-2"></i>
+
+
 
                                                                             {/* {post.likes?.map(like => like.userId === userId &&
                                                                                 <i className="bi bi-hand-thumbs-up-fill text-primary me-md-2"></i>)
                                                                             } */}
                                                                             {post.likes?.map(like => like.userId === userId &&
-                                                                                <small className="text-primary">Liked</small>)
+
+                                                                                <small className="text-primary me-md-2" key={like.likeId}>Liked</small>
+
+                                                                            )
                                                                             }
 
+
+                                                                            <small>{post.likes.length}</small>
 
 
 
@@ -849,9 +860,9 @@ function Post(props) {
                                                                         :
 
                                                                         <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => addLike(post.id)}>
-                                                                            <i className="bi bi-hand-thumbs-up me-md-2"></i>
+                                                                            <i className="bi bi-hand-thumbs-up"></i>
 
-                                                                            
+
 
 
                                                                         </button>
@@ -981,18 +992,16 @@ function Post(props) {
 
 
 
-                                                                    <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                        <small>{post.likes.length}</small>
+                                                                    {post?.likes.length !== 0 &&
+                                                                        <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" />}
 
 
-                                                                    </button>
                                                                     <ul className="dropdown-menu">
-                                                                        <li><span className="dropdown-item-text"><small>total likes: {post.likes.length}</small></span></li>
 
                                                                         {
                                                                             post.likes?.map(like =>
                                                                                 <ul className="list-group list-group-flush" key={like.likeId}>
-                                                                                    <li className="list-group-item list-group-item-action">{like.userId === userId ? <strong className="text-primary">{like.userFullName}</strong> : <small>{like.userFullName}</small>}</li>
+                                                                                    <li className="list-group-item list-group-item-action">{like.userId === userId ? <small className="text-primary">{like.userFullName}</small> : <small>{like.userFullName}</small>}</li>
                                                                                 </ul>
                                                                             )
                                                                         }
