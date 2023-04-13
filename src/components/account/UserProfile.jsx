@@ -127,7 +127,7 @@ function UserProfile() {
 
 
 
-            <Post name="profile" />
+            <Post filter="owner" />
 
         </>
     )

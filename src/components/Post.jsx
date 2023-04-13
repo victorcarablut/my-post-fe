@@ -217,7 +217,9 @@ function Post(props) {
             }
         }
 
-        await axios.get(`${url}/post/all`, config).then((res) => {
+        console.log(props.filter);
+
+        await axios.get(`${url}/post/all/${props.filter}`, config).then((res) => {
 
             if (res.status === 200) {
                 setResponseStatusGetAllPosts("success");
@@ -773,147 +775,12 @@ function Post(props) {
                                                                             {post.likes?.map(like => like.userId === userId &&
 
                                                                                 <small className="text-primary me-md-2" key={like.likeId}>Liked</small>
-
                                                                             )
                                                                             }
 
-
                                                                             <small>{post.likes.length}</small>
 
-
-
                                                                         </button>
-
-                                                                   
-
-                                                                    {/* <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() =>  postLike(post.id)}>
-                                                                        <i className="bi bi-hand-thumbs-up"></i>
-                                                                        user
-                                                                    </button> */}
-
-                                                                   
-
-
-
-
-
-                                                                    {/*          {post.likes?.map(like => like.userId === userId ?
-                                                                                <small className="text-primary">Like</small>
-
-                                                                                :
-                                                                                <small className="text-secondary">Like</small>
-
-                                                                            )} 
-
-                                                                            {/* <small className={(post.likes?.map(like => like.userId === userId && "text-danger") ) }>Like</small> */}
-
-                                                                    {/* {post.likes.length} */}
-
-
-
-                                                                    {/*  {post.likes?.map(like => (like.userId === userId && like.isOwnerLike) &&
-                                                                                <small>Like</small>
-
-                                                                            )} */}
-                                                                    {/* {post.isUserLike ? <small>Liked</small> : <small>Like</small>} */}
-
-
-                                                                    {/* {
-                                                                            (post?.likes.length === 0 && post.isUserLike)  && 
-
-                                                                            <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => addLike(post.id)}>Like perche 0</button>
-                                                                        } */}
-
-
-
-
-
-                                                                    {/* {post.likes.map(like => (like.userId === userId) ?
-                                                                                <div key={like.likeId}>
-                                                                                    <i className={"bi bi-hand-thumbs-up-fill " + likeButtonClassName + " me-md-2"}></i>
-                                                                                    <small className="text-primary">Liked</small>
-                                                                                </div>
-                                                                                :
-                                                                                ((like.userId !== userId) && (post.isOwnerLike === false)) ?
-                                                                                <div key={like.likeId}>
-                                                                                    <i className="bi bi-hand-thumbs-up me-md-2"></i>
-                                                                                    <small>Like</small>
-                                                                                </div>
-
-                                                                                :
-
-                                                                                <div key={like.likeId}>
-                                                                                    <i className="bi bi-hand-thumbs-up me-md-2"></i>
-                                                                                    <small>Like</small>
-                                                                                </div>
-
-                                                                            )
-                                                                            } */}
-
-
-
-
-
-                                                                    {/* {(post?.isOwnerLike === true) && post.likes.map(like => (like.postId === post.id) && (like.userId === userId)) &&
-
-                                                                                <div>
-                                                                                    <i className={"bi bi-hand-thumbs-up-fill text-primary me-md-2"}></i>
-                                                                                    <small className="text-primary">Liked</small>
-                                                                                </div>
-                                                                            } */}
-
-
-                                                                    {/*   {post.likes.map(like => (like.userId === userId) ?
-                                                                                <div key={like.likeId}>
-                                                                                    <i className={"bi bi-hand-thumbs-up-fill " + likeButtonClassName + " me-md-2"}></i>
-                                                                                    <small className="text-primary">Liked</small>
-                                                                                </div>
-                                                                                
-                                                                             
-
-                                                                                   
-
-                                                                            )
-                                                                            } */}
-
-
-                                                                    {/* {post.likes.map(like => ((like.isOwnerLike) && (like.userId === userId)) ?
-                                                                            <div key={like.likeId}>
-                                                                                <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => post.likes?.map(like => like.userId === userId ? removeLike(post.id) : addLike(post.id))}>
-                                                                                    <i className={"bi bi-hand-thumbs-up-fill text-primary me-md-2"}></i>
-                                                                                    <small className="text-primary">Liked 1</small>
-                                                                                </button>
-                                                                            </div>
-
-                                                                            :
-
-                                                                            (like.isOwnerLike === false) && (like.userId === userId) ?
-                                                                                <div key={like.likeId}>
-                                                                                    <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => removeLike(post.id)}>
-                                                                                        <i className={"bi bi-hand-thumbs-up-fill text-primary me-md-2"}></i>
-                                                                                        <small className="text-primary">Liked 2</small>
-                                                                                    </button>
-                                                                                </div>
-
-
-                                                                                :
-
-                                                                                <div key={like.likeId}>
-
-                                                                                    <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => addLike(post.id)}>
-                                                                                        <i className={"bi bi-hand-thumbs-up-fill text-secondary me-md-2"}></i>
-                                                                                        <small className="text-secondary">Like 3</small>
-                                                                                    </button>
-
-
-                                                                                </div>
-
-                                                                        )} */}
-
-
-
-
-
 
 
 
@@ -934,11 +801,6 @@ function Post(props) {
                                                                     </ul>
 
                                                                 </div>
-
-
-
-
-
 
                                                             </div>
                                                         </div>

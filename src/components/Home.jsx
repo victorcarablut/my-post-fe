@@ -6,7 +6,7 @@ function Home() {
   return (
     <div>
       <small>HomePage</small>
-      <Post name="Tripp"/>
+      <Post filter="all"/>
     </div>
   )
 }
