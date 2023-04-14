@@ -713,83 +713,6 @@ function UserDetails() {
 
     }
 
-    const updateUserCoverImage = async () => {
-
-        //checkAllInputsValidity();
-
-        // if (handleInputEmailIsValid) {
-
-        //setButtonLoginUserIsDisabled(true);
-
-        //if (passwordType === "text") {
-        //setPasswordType("password");
-        // }
-
-        // if (passwordVisibleChecked) {
-        //setPasswordVisibleChecked(!passwordVisibleChecked);
-        //}
-
-        //setLoginUserStatus("loading");
-        const toastNotify = toast.loading("Loading");
-
-        const jwt_token = secureLocalStorage.getItem("token");
-
-        const config = {
-            headers: {
-                Authorization: "Bearer " + jwt_token
-            }
-        }
-
-        const formData = new FormData();
-        formData.append("email", user.email);
-        formData.append("userCoverImg", userCoverImgNew);
-
-        //const data = formData
-
-        await axios.put(`${url}/user/cover-image/update`, formData, config).then((res) => {
-
-            if (res.status === 200) {
-
-                if (res.data.status_code === 1) {
-                    toast.dismiss(toastNotify);
-                    toast.error("Error");
-                } else if (res.data.status_code === 2) {
-                    toast.dismiss(toastNotify);
-                    toast.error("Invalid email format");
-                    //setButtonLoginUserIsDisabled(false);
-                } else if (res.data.status_code === 4) {
-                    toast.dismiss(toastNotify);
-                    toast.error("User with that email not found");
-                    //setLoginUserStatus("user_email_not_found");
-                    //setButtonLoginUserIsDisabled(false);
-                } else {
-                    //secureLocalStorage.setItem("token", res.data.token);
-
-                    toast.dismiss(toastNotify);
-
-                    //getUserDetails();
-
-                    //setLoginUserStatus("success");
-
-                    //window.location.reload(); // to update the value in header
-                    //clearInputs();
-                }
-            }
-
-        }).catch(err => {
-            console.log(err);
-            //setButtonLoginUserIsDisabled(false);
-            toast.dismiss(toastNotify);
-            toast.error("Error");
-            //setLoginUserStatus("error");
-            return;
-        })
-
-        //} else {
-        //    return;
-        //}
-
-    }
 
     const deleteUserImage = async (filter) => {
 
@@ -869,62 +792,7 @@ function UserDetails() {
 
     }
 
-    const deleteUserCoverImage = async () => {
-
-        const toastNotify = toast.loading("Loading");
-
-        const jwt_token = secureLocalStorage.getItem("token");
-
-        const config = {
-            headers: {
-                Authorization: "Bearer " + jwt_token
-            }
-        }
-
-        const data = {
-            email: user.email
-        }
-
-        await axios.post(`${url}/user/cover-image/delete`, data, config).then((res) => {
-
-            if (res.status === 200) {
-
-                if (res.data.status_code === 1) {
-                    toast.dismiss(toastNotify);
-                    toast.error("Error");
-                } else if (res.data.status_code === 2) {
-                    toast.dismiss(toastNotify);
-                    toast.error("Invalid email format");
-                    //setButtonLoginUserIsDisabled(false);
-                } else if (res.data.status_code === 4) {
-                    toast.dismiss(toastNotify);
-                    toast.error("User with that email not found");
-                    //setLoginUserStatus("user_email_not_found");
-                    //setButtonLoginUserIsDisabled(false);
-                } else {
-                    //secureLocalStorage.setItem("token", res.data.token);
-
-                    toast.dismiss(toastNotify);
-
-                    //window.location.reload(); // to update the value in header
-                    //clearInputs();
-                }
-            }
-
-        }).catch(err => {
-            console.log(err);
-            //setButtonLoginUserIsDisabled(false);
-            toast.dismiss(toastNotify);
-            toast.error("Error");
-            //setLoginUserStatus("error");
-            return;
-        })
-
-        //} else {
-        //    return;
-        //}
-
-    }
+  
 
 
     const sendEmailNewCodeNoReply = async () => {
@@ -1039,7 +907,7 @@ function UserDetails() {
                                                                 }
 
                                                                 <form onSubmit={handleSubmit}>
-                                                                    <li className="container-fluid mb-3">
+                                                                    <li className="container-fluid mb-2">
 
                                                                         {(!userCoverImgNew && !userCoverImgPreviewNew) &&
 
@@ -1097,7 +965,7 @@ function UserDetails() {
                                                                 }
 
                                                                 <form onSubmit={handleSubmit}>
-                                                                    <li className="container-fluid mb-3">
+                                                                    <li className="container-fluid mb-2">
 
                                                                         {(!userProfileImgNew && !userProfileImgPreviewNew) &&
 
