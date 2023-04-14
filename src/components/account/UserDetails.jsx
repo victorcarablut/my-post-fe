@@ -92,7 +92,9 @@ function UserDetails() {
         setPasswordNew(null);
         setPasswordRepeatNew(null);
         setUserProfileImgNew(null);
+        setUserCoverImgNew(null);
         setUserProfileImgPreviewNew(null);
+        setUserCoverImgPreviewNew(null);
         setCode(null);
         setEmailNewCodeStatus("");
         setResponseStatusGetUserDetails("");
@@ -625,7 +627,7 @@ function UserDetails() {
 
     }
 
-    const updateUserProfileImage = async () => {
+    const updateUserImage = async (filter) => {
 
         //checkAllInputsValidity();
 
@@ -654,11 +656,19 @@ function UserDetails() {
 
         const formData = new FormData();
         formData.append("email", user.email);
-        formData.append("userProfileImg", userProfileImgNew);
+
+        if (filter === "profile") {
+            formData.append("filter", "profile");
+            formData.append("userImg", userProfileImgNew);
+        } else {
+            formData.append("filter", "cover");
+            formData.append("userImg", userCoverImgNew);
+        }
+
 
         //const data = formData
 
-        await axios.put(`${url}/user/profile-image/update`, formData, config).then((res) => {
+        await axios.put(`${url}/user/image/update`, formData, config).then((res) => {
 
             if (res.status === 200) {
 
@@ -781,7 +791,7 @@ function UserDetails() {
 
     }
 
-    const deleteUserProfileImage = async () => {
+    const deleteUserImage = async (filter) => {
 
         //checkAllInputsValidity();
 
@@ -808,11 +818,13 @@ function UserDetails() {
             }
         }
 
+
         const data = {
+            filter: filter === "profile" ? "profile" : "cover",
             email: user.email
         }
 
-        await axios.post(`${url}/user/profile-image/delete`, data, config).then((res) => {
+        await axios.post(`${url}/user/image/delete`, data, config).then((res) => {
 
             if (res.status === 200) {
 
@@ -1008,16 +1020,21 @@ function UserDetails() {
 
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                                                         <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i>
+                                                                {userCoverImgPreviewNew &&
+                                                                    <span className="position-absolute top-0 start-100 translate-middle p-2 bg-primary border border-light rounded-circle animate__animated animate__flash animate__infinite"></span>
+                                                                }
+                                                            </button>
+
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
                                                                     <i className="bi bi-x-lg"></i>
                                                                 </span>
                                                                 {userCoverImgPreviewNew &&
-                                                                    <>
+                                                                    <div className="container-fluid">
                                                                         <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => { setUserCoverImgPreviewNew(null); setUserCoverImgNew(null) }}></button>
-                                                                        <img src={userCoverImgPreviewNew} width="90" height="90" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-primary border-3 mb-3" />
-                                                                    </>
+                                                                        <img src={userCoverImgPreviewNew} width="350" height="150" style={{ objectFit: "cover" }} alt="user-cover-img" className="rounded border border-primary border-3 mb-3" />
+                                                                    </div>
 
                                                                 }
 
@@ -1036,7 +1053,7 @@ function UserDetails() {
 
 
                                                                     </li>
-                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserCoverImage} disabled={!userCoverImgNew}>Update</button></li>
+                                                                    <li><button className={"btn " + (userCoverImgPreviewNew ? "btn-primary" : "btn-secondary") + " btn-sm rounded-pill fw-semibold"} style={{ paddingLeft: 15, paddingRight: 15 }} onClick={() => updateUserImage("cover")} disabled={!userCoverImgNew}>Update</button></li>
                                                                 </form>
                                                             </ul>
                                                         </div>
@@ -1045,7 +1062,7 @@ function UserDetails() {
                                                                 <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-x-circle-fill text-danger"></i></button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Delete Imgae?</small></p>
-                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={deleteUserCoverImage}>Yes</button>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deleteUserImage("cover")}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                 </ul>
                                                             </div>
@@ -1053,7 +1070,7 @@ function UserDetails() {
 
                                                     </div>
 
-                                                    <hr/>
+                                                    <hr />
 
 
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
@@ -1061,7 +1078,12 @@ function UserDetails() {
                                                     </div>
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                                                         <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i>
+                                                                {userProfileImgPreviewNew &&
+                                                                    <span className="position-absolute top-0 start-100 translate-middle p-2 bg-primary border border-light rounded-circle animate__animated animate__flash animate__infinite"></span>
+                                                                }
+                                                            </button>
+
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
                                                                     <i className="bi bi-x-lg"></i>
@@ -1089,7 +1111,7 @@ function UserDetails() {
 
 
                                                                     </li>
-                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserProfileImage} disabled={!userProfileImgNew}>Update</button></li>
+                                                                    <li><button className={"btn " + (userProfileImgPreviewNew ? "btn-primary" : "btn-secondary") + " btn-sm rounded-pill fw-semibold"} style={{ paddingLeft: 15, paddingRight: 15 }} onClick={() => updateUserImage("profile")} disabled={!userProfileImgNew}>Update</button></li>
                                                                 </form>
                                                             </ul>
                                                         </div>
@@ -1098,7 +1120,7 @@ function UserDetails() {
                                                                 <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-x-circle-fill text-danger"></i></button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Delete Imgae?</small></p>
-                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={deleteUserProfileImage}>Yes</button>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deleteUserImage("profile")}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                 </ul>
                                                             </div>
