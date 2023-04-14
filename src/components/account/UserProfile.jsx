@@ -38,7 +38,12 @@ function UserProfile() {
     )
 
     useEffect(() => {
-        console.log(username);
+        //console.log(username);
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
 
         getUserDetails();
     }, [username]);
