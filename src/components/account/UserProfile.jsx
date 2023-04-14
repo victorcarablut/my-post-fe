@@ -67,12 +67,12 @@ function UserProfile() {
 
         await axios.get(`${url}/user/details`, config).then((res) => {
             if (res.status === 200) {
-              setUsernameAccount(res.data.username);
-      
-            } 
-          }).catch(err => {
+                setUsernameAccount(res.data.username);
+
+            }
+        }).catch(err => {
             return;
-          })
+        })
 
         await axios.get(`${url}/user/` + username, config).then((res) => {
 
@@ -118,15 +118,20 @@ function UserProfile() {
 
                             <div className="d-grid gap-2 d-md-flex justify-content-md-left">
                                 <img src={user?.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="120" height="120" style={{ objectFit: "cover", marginTop: -75 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
-                                <h5 className="me-md-2">{user?.fullName}</h5>
 
-                                {usernameAccount + " " + user?.username}
-                                {usernameAccount === user?.username &&
-                                <>
-                                    <button type="button" className="btn btn-secondary btn-sm">Small button</button>
-                                    
-                                    </>
-                                }
+                                <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <h5 className="me-md-2">{user?.fullName}</h5>
+                                    {usernameAccount === user?.username &&
+
+                                        <NavLink to="/account" type="button" className="btn btn-light rounded-pill btn-sm" style={{ maxHeight: 30 }}><i className="bi bi-pencil-square me-md-2"></i>Edit Profile</NavLink>
+
+
+                                    }
+                                </div>
+
+
+                                {/* {usernameAccount + " " + user?.username} */}
+
 
                             </div>
 
