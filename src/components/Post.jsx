@@ -10,7 +10,7 @@ import axios from "axios";
 import { url } from "../config.js";
 
 // Link 
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 //import { VerifyToken } from './security/VerifyToken.js';
 import { Logout } from './account/Logout.js';
@@ -96,7 +96,7 @@ function Post(props) {
             stopInterval();
         };
 
-    }, [])
+    }, [props.filter])
 
     // auto refresh
     const stopInterval = () => {
@@ -807,7 +807,7 @@ function Post(props) {
                                                                         {
                                                                             post.likes?.map(like =>
                                                                                 <ul className="list-group list-group-flush" key={like.likeId}>
-                                                                                    <li className="list-group-item list-group-item-action" style={{ cursor: 'pointer' }}>{like.userId === userId ? <small className="text-primary">{like.userFullName}</small> : <small>{like.userFullName}</small>}</li>
+                                                                                    <li className="list-group-item list-group-item-action" style={{ cursor: 'pointer' }} onClick={() => navigate("/user/" + like.username)}>{like.userId === userId ? <small className="text-primary">{like.userFullName}</small> : <small>{like.userFullName}</small>}</li>
                                                                                 </ul>
                                                                             )
                                                                         }
