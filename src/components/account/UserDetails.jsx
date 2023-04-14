@@ -914,7 +914,7 @@ function UserDetails() {
                                                                 </span>
                                                                 <form onSubmit={handleSubmit}>
                                                                     <li className="container-fluid mb-3">
-                                                                        <input type="text" className="form-control form-control-sm" id="inputFullNameNew" placeholder="New: Full Name" value={fullNameNew} onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
+                                                                        <input type="text" className="form-control form-control-sm" id="inputFullNameNew" placeholder="New: Full Name" maxLength="100" value={fullNameNew} onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
                                                                         {fullNameNew?.length > 0 &&
                                                                             <small className="text-secondary">{fullNameNew?.length}/100</small>
                                                                         }
@@ -947,10 +947,10 @@ function UserDetails() {
                                                                             </>
                                                                         }
 
-                                                                        <input type="email" className="form-control form-control-sm mb-3" id="inputEmailNew" placeholder="New: Email" name="emailNew" onChange={(e) => handleInputEmail(e)} autoComplete="off" required noValidate />
+                                                                        <input type="email" className="form-control form-control-sm mb-3" id="inputEmailNew" placeholder="New: Email" name="emailNew" maxLength="100" onChange={(e) => handleInputEmail(e)} autoComplete="off" required noValidate />
 
                                                                         {emailNewCodeStatus === "success" &&
-                                                                            <input type="text" className="form-control form-control-sm mb-3" id="inputCode" placeholder="Code from new Email" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
+                                                                            <input type="text" className="form-control form-control-sm mb-3" id="inputCode" placeholder="Code from new Email" maxLength="6" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
                                                                         }
 
                                                                         {emailNew && !code && user.email !== emailNew &&
@@ -981,9 +981,9 @@ function UserDetails() {
                                                                 </span>
                                                                 <form onSubmit={handleSubmit} className="container-fluid">
                                                                     <li className="mb-3">
-                                                                        <input type="text" className="form-control form-control-sm" id="inputUsernameNew" placeholder="New: Username" value={usernameNew} onChange={(e) => handleInputUsername(e)} autoComplete="off" required />
+                                                                        <input type="text" className="form-control form-control-sm" id="inputUsernameNew" placeholder="New: Username" maxLength="20" value={usernameNew} onChange={(e) => handleInputUsername(e)} autoComplete="off" required />
                                                                         {usernameNew?.length > 0 &&
-                                                                            <small className="text-secondary">{usernameNew?.length}/20</small>
+                                                                            <small className="text-secondary">{usernameNew?.length}/20 | a-z 0-9 - _ .</small>
                                                                         }
 
                                                                     </li>
@@ -1006,9 +1006,9 @@ function UserDetails() {
                                                                     <i className="bi bi-x-lg"></i>
                                                                 </span>
                                                                 <form onSubmit={handleSubmit} className="container-fluid">
-                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordOld" placeholder="Old: Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
-                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordNew" placeholder="New: Password" onChange={(e) => handleInputPasswordNew(e)} autoComplete="off" required /></li>
-                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordRepeatNew" placeholder="New: Password Repeat" onChange={(e) => handleInputPasswordRepeatNew(e)} autoComplete="off" required /></li>
+                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordOld" placeholder="Old: Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
+                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordNew" placeholder="New: Password" maxLength="100" onChange={(e) => handleInputPasswordNew(e)} autoComplete="off" required /></li>
+                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordRepeatNew" placeholder="New: Password Repeat" maxLength="100" onChange={(e) => handleInputPasswordRepeatNew(e)} autoComplete="off" required /></li>
                                                                     {passwordNew !== passwordRepeatNew &&
                                                                         <small>Warning: new passwords must match!</small>
                                                                     }

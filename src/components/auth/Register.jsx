@@ -382,28 +382,28 @@ function Register() {
 
                                                 <form onSubmit={handleSubmit}>
                                                     <div className="form-floating mb-3">
-                                                        <input type="text" className={"form-control " + handleInputFullNameClassName} id="floatingInputFullName" placeholder="Full Name" onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
+                                                        <input type="text" className={"form-control " + handleInputFullNameClassName} id="floatingInputFullName" placeholder="Full Name" maxLength="100" onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
                                                         <label htmlFor="floatingInputFullName">Full Name *</label>
                                                         <div className="invalid-feedback">
                                                             <small>Name must contain only letters</small>
                                                         </div>
                                                     </div>
                                                     <div className="form-floating mb-3">
-                                                        <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
+                                                        <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" maxLength="100" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
                                                         <label htmlFor="floatingInputEmail">Email *</label>
                                                         <div className="invalid-feedback">
                                                             <small>Email must contain @ and .</small>
                                                         </div>
                                                     </div>
                                                     <div className="form-floating mb-3">
-                                                        <input type={passwordType} className={"form-control " + handleInputPasswordClassName} id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                                        <input type={passwordType} className={"form-control " + handleInputPasswordClassName} id="floatingInputPassword" placeholder="Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
                                                         <label htmlFor="floatingInputPassword">Password *</label>
                                                         <div className="invalid-feedback">
                                                             <small>Password must contain at least 6 characters</small>
                                                         </div>
                                                     </div>
                                                     <div className="form-floating mb-3">
-                                                        <input type={passwordType} className={"form-control " + handleInputPasswordRepeatClassName} id="floatingInputPasswordRepeat" placeholder="Password Repeat" onChange={(e) => handleInputPasswordRepeat(e)} autoComplete="off" required />
+                                                        <input type={passwordType} className={"form-control " + handleInputPasswordRepeatClassName} id="floatingInputPasswordRepeat" placeholder="Password Repeat" maxLength="100" onChange={(e) => handleInputPasswordRepeat(e)} autoComplete="off" required />
                                                         <label htmlFor="floatingInputPasswordRepeat">Password Repeat *</label>
                                                         <div className="invalid-feedback">
                                                             <small>Passwords must match</small>

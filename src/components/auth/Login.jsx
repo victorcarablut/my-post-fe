@@ -334,14 +334,14 @@ function Register() {
                                     <form onSubmit={handleSubmit}>
 
                                         <div className="form-floating mb-3">
-                                            <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
+                                            <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" maxLength="100" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputEmail">Email *</label>
                                             <div className="invalid-feedback">
                                                 <small>Email must contain @ and .</small>
                                             </div>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type={passwordType} className="form-control" id="floatingInputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                            <input type={passwordType} className="form-control" id="floatingInputPassword" placeholder="Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
                                             <label htmlFor="floatingInputPassword">Password *</label>
                                         </div>
                                         <div className="mb-3">
