@@ -28,6 +28,7 @@ import { moment_locale, moment_format_date_time_long } from '../_resources/date-
 //import UserPasswordRecover from './UserPasswordRecover.jsx';
 
 import default_user_profile_img from '../../assets/images/user.jpg';
+import default_user_cover_img from '../../assets/images/cover.jpg';
 
 
 // Notifications
@@ -42,7 +43,8 @@ function UserDetails() {
             username: null,
             role: null,
             registeredDate: null,
-            userProfileImg: null
+            userProfileImg: null,
+            coverProfileImg: null
         }
     )
 
@@ -849,10 +851,11 @@ function UserDetails() {
                                         <>
                                             <ul className="list-group list-group-flush">
                                                 <li className="list-group-item">
+                                                <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                                                            <img src={user?.coverProfileImg ? `data:image/jpg;base64,${user.coverProfileImg}` : default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top mb-3" style={{ objectFit: "cover" }} />
+                                                        </div>
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-
                                                         <img src={user?.userProfileImg ? `data:image/png;base64,${user.userProfileImg}` : default_user_profile_img} width="90" height="90" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
-
                                                     </div>
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                                                         <div className="dropdown">
@@ -976,7 +979,7 @@ function UserDetails() {
                                                         <div className="dropdown">
                                                             <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{cursor: 'pointer'}}>
+                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
                                                                     <i className="bi bi-x-lg"></i>
                                                                 </span>
                                                                 <form onSubmit={handleSubmit} className="container-fluid">
@@ -1002,7 +1005,7 @@ function UserDetails() {
                                                         <div className="dropdown">
                                                             <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{cursor: 'pointer'}}>
+                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
                                                                     <i className="bi bi-x-lg"></i>
                                                                 </span>
                                                                 <form onSubmit={handleSubmit} className="container-fluid">
