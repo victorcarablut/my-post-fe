@@ -25,6 +25,8 @@ function UserProfile() {
 
     const { username } = useParams();
 
+    const [usernameAccount, setUsernameAccount] = useState(null);
+
     const [user, setUser] = useState(
         {
             fullName: null,
@@ -36,6 +38,8 @@ function UserProfile() {
             coverProfileImg: null
         }
     )
+
+
 
     useEffect(() => {
         //console.log(username);
@@ -60,6 +64,15 @@ function UserProfile() {
                 Authorization: "Bearer " + jwt_token
             }
         }
+
+        await axios.get(`${url}/user/details`, config).then((res) => {
+            if (res.status === 200) {
+              setUsernameAccount(res.data.username);
+      
+            } 
+          }).catch(err => {
+            return;
+          })
 
         await axios.get(`${url}/user/` + username, config).then((res) => {
 
@@ -99,19 +112,27 @@ function UserProfile() {
 
                     <div className="card shadow">
 
-                        <img src={user?.coverProfileImg ? `data:image/jpg;base64,${user.coverProfileImg}` : default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top" style={{objectFit: "cover"}} />
+                        <img src={user?.coverProfileImg ? `data:image/jpg;base64,${user.coverProfileImg}` : default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top" style={{ objectFit: "cover" }} />
 
                         <div className="card-body">
 
                             <div className="d-grid gap-2 d-md-flex justify-content-md-left">
                                 <img src={user?.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="120" height="120" style={{ objectFit: "cover", marginTop: -75 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
                                 <h5 className="me-md-2">{user?.fullName}</h5>
-                                <button type="button" className="btn btn-secondary btn-sm">Small button</button>
+
+                                {usernameAccount + " " + user?.username}
+                                {usernameAccount === user?.username &&
+                                <>
+                                    <button type="button" className="btn btn-secondary btn-sm">Small button</button>
+                                    
+                                    </>
+                                }
+
                             </div>
 
                             <hr />
                             <small className="text-secondary">Username: @{user?.username}</small>
-                            
+
 
 
 
@@ -120,7 +141,7 @@ function UserProfile() {
 
                         </div>
                         <div className="card-footer">
-                        <small className="text-secondary">Account created on {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_long)}</small>
+                            <small className="text-secondary">Account created on {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_long)}</small>
                         </div>
                     </div>
 

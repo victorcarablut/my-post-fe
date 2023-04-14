@@ -463,6 +463,11 @@ function UserDetails() {
                     toast.error("Wrong email or password");
                     //setButtonLoginUserIsDisabled(false);
                     //setEmailNewCodeStatus("error");
+                } else if (res.data.status_code === 10) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Account with that username already exists");
+                    //setButtonLoginUserIsDisabled(false);
+                    //setEmailNewCodeStatus("error");
                 } else {
                     //secureLocalStorage.setItem("token", res.data.token);
 
