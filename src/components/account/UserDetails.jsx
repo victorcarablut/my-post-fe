@@ -44,7 +44,7 @@ function UserDetails() {
             role: null,
             registeredDate: null,
             userProfileImg: null,
-            coverProfileImg: null
+            userCoverImg: null
         }
     )
 
@@ -59,6 +59,8 @@ function UserDetails() {
     const [passwordRepeatNew, setPasswordRepeatNew] = useState(null);
     const [userProfileImgNew, setUserProfileImgNew] = useState(null);
     const [userProfileImgPreviewNew, setUserProfileImgPreviewNew] = useState(null);
+    const [userCoverImgNew, setUserCoverImgNew] = useState(null);
+    const [userCoverImgPreviewNew, setUserCoverImgPreviewNew] = useState(null);
 
     // http response status
     const [responseStatusGeUserDetails, setResponseStatusGetUserDetails] = useState("");
@@ -183,6 +185,19 @@ function UserDetails() {
         }
     }
 
+    const handleInputUserCoverImageNew = (e) => {
+
+        if (e.target.files) {
+            setUserCoverImgNew(e.target.files[0]);
+            setUserCoverImgPreviewNew(URL.createObjectURL(e.target.files[0]));
+            //setPostImagePreviewNew(URL.createObjectURL(e.target.files[0]));
+
+            // important: reset the value...
+            e.target.value = null
+
+        }
+    }
+
     const getUserDetails = async () => {
 
         setResponseStatusGetUserDetails("loading");
@@ -205,7 +220,8 @@ function UserDetails() {
                     username: res.data.username,
                     role: res.data.role,
                     registeredDate: res.data.registeredDate,
-                    userProfileImg: res.data.userProfileImg
+                    userProfileImg: res.data.userProfileImg,
+                    userCoverImg: res.data.userCoverImg
                 })
 
                 setFullNameNew(res.data.fullName);
@@ -687,6 +703,84 @@ function UserDetails() {
 
     }
 
+    const updateUserCoverImage = async () => {
+
+        //checkAllInputsValidity();
+
+        // if (handleInputEmailIsValid) {
+
+        //setButtonLoginUserIsDisabled(true);
+
+        //if (passwordType === "text") {
+        //setPasswordType("password");
+        // }
+
+        // if (passwordVisibleChecked) {
+        //setPasswordVisibleChecked(!passwordVisibleChecked);
+        //}
+
+        //setLoginUserStatus("loading");
+        const toastNotify = toast.loading("Loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const formData = new FormData();
+        formData.append("email", user.email);
+        formData.append("userCoverImg", userCoverImgNew);
+
+        //const data = formData
+
+        await axios.put(`${url}/user/cover-image/update`, formData, config).then((res) => {
+
+            if (res.status === 200) {
+
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error");
+                } else if (res.data.status_code === 2) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Invalid email format");
+                    //setButtonLoginUserIsDisabled(false);
+                } else if (res.data.status_code === 4) {
+                    toast.dismiss(toastNotify);
+                    toast.error("User with that email not found");
+                    //setLoginUserStatus("user_email_not_found");
+                    //setButtonLoginUserIsDisabled(false);
+                } else {
+                    //secureLocalStorage.setItem("token", res.data.token);
+
+                    toast.dismiss(toastNotify);
+
+                    //getUserDetails();
+
+                    //setLoginUserStatus("success");
+
+                    //window.location.reload(); // to update the value in header
+                    //clearInputs();
+                }
+            }
+
+        }).catch(err => {
+            console.log(err);
+            //setButtonLoginUserIsDisabled(false);
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            //setLoginUserStatus("error");
+            return;
+        })
+
+        //} else {
+        //    return;
+        //}
+
+    }
+
     const deleteUserProfileImage = async () => {
 
         //checkAllInputsValidity();
@@ -744,6 +838,63 @@ function UserDetails() {
                     //setLoginUserStatus("success");
 
                     window.location.reload(); // to update the value in header
+                    //clearInputs();
+                }
+            }
+
+        }).catch(err => {
+            console.log(err);
+            //setButtonLoginUserIsDisabled(false);
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            //setLoginUserStatus("error");
+            return;
+        })
+
+        //} else {
+        //    return;
+        //}
+
+    }
+
+    const deleteUserCoverImage = async () => {
+
+        const toastNotify = toast.loading("Loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            email: user.email
+        }
+
+        await axios.post(`${url}/user/cover-image/delete`, data, config).then((res) => {
+
+            if (res.status === 200) {
+
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error");
+                } else if (res.data.status_code === 2) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Invalid email format");
+                    //setButtonLoginUserIsDisabled(false);
+                } else if (res.data.status_code === 4) {
+                    toast.dismiss(toastNotify);
+                    toast.error("User with that email not found");
+                    //setLoginUserStatus("user_email_not_found");
+                    //setButtonLoginUserIsDisabled(false);
+                } else {
+                    //secureLocalStorage.setItem("token", res.data.token);
+
+                    toast.dismiss(toastNotify);
+
+                    //window.location.reload(); // to update the value in header
                     //clearInputs();
                 }
             }
@@ -851,9 +1002,60 @@ function UserDetails() {
                                         <>
                                             <ul className="list-group list-group-flush">
                                                 <li className="list-group-item">
-                                                <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                                                            <img src={user?.coverProfileImg ? `data:image/jpg;base64,${user.coverProfileImg}` : default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top mb-3" style={{ objectFit: "cover" }} />
+                                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                                                        <img src={user?.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top mb-3" style={{ objectFit: "cover" }} />
+                                                    </div>
+
+                                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                                                        <div className="dropdown">
+                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                                                    <i className="bi bi-x-lg"></i>
+                                                                </span>
+                                                                {userCoverImgPreviewNew &&
+                                                                    <>
+                                                                        <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => { setUserCoverImgPreviewNew(null); setUserCoverImgNew(null) }}></button>
+                                                                        <img src={userCoverImgPreviewNew} width="90" height="90" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-primary border-3 mb-3" />
+                                                                    </>
+
+                                                                }
+
+                                                                <form onSubmit={handleSubmit}>
+                                                                    <li className="container-fluid mb-3">
+
+                                                                        {(!userCoverImgNew && !userCoverImgPreviewNew) &&
+
+                                                                            <>
+                                                                                <input type="file" className="form-control form-control-sm" name="userCoverImageNew" id="userCoverImageNew" accept="image/jpeg" style={{ display: 'none' }} onChange={(e) => handleInputUserCoverImageNew(e)} required />
+                                                                                <label htmlFor="userCoverImageNew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
+                                                                                <small className="text-secondary">max: 10mb / .jpg</small>
+                                                                            </>
+                                                                        }
+
+
+
+                                                                    </li>
+                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserCoverImage} disabled={!userCoverImgNew}>Update</button></li>
+                                                                </form>
+                                                            </ul>
                                                         </div>
+                                                        {user?.userCoverImg &&
+                                                            <div className="dropdown">
+                                                                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-x-circle-fill text-danger"></i></button>
+                                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                    <p><small className="text-secondary">Delete Imgae?</small></p>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={deleteUserCoverImage}>Yes</button>
+                                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
+                                                                </ul>
+                                                            </div>
+                                                        }
+
+                                                    </div>
+
+                                                    <hr/>
+
+
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                                                         <img src={user?.userProfileImg ? `data:image/png;base64,${user.userProfileImg}` : default_user_profile_img} width="90" height="90" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
                                                     </div>

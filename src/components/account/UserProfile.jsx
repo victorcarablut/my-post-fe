@@ -35,7 +35,7 @@ function UserProfile() {
             //role: null,
             registeredDate: null,
             userProfileImg: null,
-            coverProfileImg: null
+            userCoverImg: null
         }
     )
 
@@ -87,7 +87,7 @@ function UserProfile() {
                     //role: res.data.role,
                     registeredDate: res.data.registeredDate,
                     userProfileImg: res.data.userProfileImg,
-                    coverProfileImg: res.data.coverProfileImg
+                    userCoverImg: res.data.userCoverImg
                 })
 
 
@@ -112,7 +112,7 @@ function UserProfile() {
 
                     <div className="card shadow">
 
-                        <img src={user?.coverProfileImg ? `data:image/jpg;base64,${user.coverProfileImg}` : default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top" style={{ objectFit: "cover" }} />
+                        <img src={user?.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top" style={{ objectFit: "cover" }} />
 
                         <div className="card-body">
 
