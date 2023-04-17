@@ -41,6 +41,7 @@ function Post(props) {
     const [userId, setUserId] = useState(null);
     const [postId, setPostId] = useState(null);
     const [username, setUsername] = useState(null);
+    const [userEmail, setUserEmail] = useState(null);
 
     const [postTitle, setPostTitle] = useState(null);
     const [postDescription, setPostDescription] = useState(null);
@@ -195,6 +196,7 @@ function Post(props) {
             if (res.status === 200) {
                 setUserId(res.data.id);
                 setUsername(res.data.username);
+                setUserEmail(res.data.email);
 
                 getAllPosts();
             }
@@ -346,7 +348,8 @@ function Post(props) {
             //formData.append("data", data, {type: "application/json"});
             formData.append('data', new Blob([JSON.stringify({
                 user: {
-                    id: userId
+                    id: userId,
+                    email: userEmail
                 },
                 title: postTitle,
                 description: postDescription
@@ -358,16 +361,37 @@ function Post(props) {
 
             await axios.post(`${url}/post/add`, formData, config).then((res) => {
                 if (res.status === 200) {
-                    setButtonCreatePostIsDisabled(false);
 
-                    toast.dismiss(toastNotify);
-                    toast.success("Published");
+                    if (res.data.status_code === 1) {
+                        toast.dismiss(toastNotify);
+                        toast.error("Error"); // Error save data to DB
+                        //setEmailNewCodeStatus("error");
+                        //setButtonSendEmailCodeIsDisabled(false);
+                    }  else if (res.data.status_code === 4) {
+                        toast.dismiss(toastNotify);
+                        toast.error("Account with that email doesn't exist");
+                        //setButtonSendEmailCodeIsDisabled(false);
+                        //setEmailNewCodeStatus("error");
+                    }  else if (res.data.status_code === 11) {
+                        toast.dismiss(toastNotify);
+                        toast.error("You've reached maximum number of Posts");
+                        //setButtonSendEmailCodeIsDisabled(false);
+                        //setEmailNewCodeStatus("error");
+                    } else {
+                        setButtonCreatePostIsDisabled(false);
 
-                    clearInputs();
+                        toast.dismiss(toastNotify);
+                        toast.success("Published");
+    
+                        clearInputs();
+    
+                        getAllPosts();
+    
+                        //uploadImage();
+                    }
 
-                    getAllPosts();
 
-                    //uploadImage();
+                    
                 }
 
             }).catch(err => {
