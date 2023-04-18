@@ -656,7 +656,7 @@ function Post(props) {
     return (
 
         <>
-            <div>
+            <div className="container-fluid">
 
                 <div className="row">
 
