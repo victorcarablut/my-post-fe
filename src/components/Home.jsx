@@ -4,7 +4,7 @@ import Post from './Post';
 function Home() {
 
   return (
-    <div>
+    <div className="container-fluid">
       <small>HomePage</small>
       <Post filter="all"/>
     </div>

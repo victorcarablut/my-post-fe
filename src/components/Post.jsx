@@ -97,7 +97,7 @@ function Post(props) {
             stopInterval();
         };
 
-    }, [props.filter])
+    }, [props.filter, userId])
 
     // auto refresh
     const stopInterval = () => {
@@ -207,6 +207,8 @@ function Post(props) {
 
     }
 
+
+
     const getAllPosts = async () => {
 
         //console.log("load 1 time");
@@ -223,6 +225,7 @@ function Post(props) {
 
         console.log(props.filter);
 
+
         //await axios.get(`${url}/post/all/${props.filter}`, config).then((res) => {
 
         await axios.get(`${url}/post/all/${props.filter}`, config).then((res) => {
@@ -231,7 +234,49 @@ function Post(props) {
                 setResponseStatusGetAllPosts("success");
                 //console.log(res.data);
 
-                setPosts(res.data);
+                //setPosts(res.data);
+                
+                if (props.filter === "admin" || props.filter === "all") {
+                    // 1) ADMIN can see all active & non active in: > Dahsboard
+                    // 2) USER & ADMIN can see only active Posts in: > Home
+
+                    setPosts(res.data);
+    
+                }  else {
+                    // only the Owner of Posts can see active & non active in: > UserProfile
+
+                    // condition to prevent other user to see "Pending" message on owners Post's in: > UserProfile
+
+                    //getUserDetails();
+
+            
+                   
+                    setPosts([]);
+                    
+
+                    let newArr = [];
+
+                    console.log(userId);
+
+                    res.data.forEach((post) => {
+                        //console.log(res.user.id);
+                        if (post.user.id === userId) {
+                            //console.log(res.id);
+                            newArr.push(post);
+                        } else if (post.user.id !== userId && post.isActive === true){
+                            newArr.push(post);
+                        } else {
+                            //return;
+                        }
+                    })
+
+                    setPosts(newArr);
+
+                    console.log(newArr);
+                    //setPosts(res.data);
+                } 
+
+
 
             }
 
@@ -240,6 +285,10 @@ function Post(props) {
             //Logout();
             return;
         })
+
+    }
+
+    const filtergetAllPosts = () => {
 
     }
 
@@ -367,12 +416,12 @@ function Post(props) {
                         toast.error("Error"); // Error save data to DB
                         //setEmailNewCodeStatus("error");
                         //setButtonSendEmailCodeIsDisabled(false);
-                    }  else if (res.data.status_code === 4) {
+                    } else if (res.data.status_code === 4) {
                         toast.dismiss(toastNotify);
                         toast.error("Account with that email doesn't exist");
                         //setButtonSendEmailCodeIsDisabled(false);
                         //setEmailNewCodeStatus("error");
-                    }  else if (res.data.status_code === 11) {
+                    } else if (res.data.status_code === 11) {
                         toast.dismiss(toastNotify);
                         toast.error("You've reached maximum number of Posts");
                         //setButtonSendEmailCodeIsDisabled(false);
@@ -382,16 +431,16 @@ function Post(props) {
 
                         toast.dismiss(toastNotify);
                         toast.success("Published");
-    
+
                         clearInputs();
-    
+
                         getAllPosts();
-    
+
                         //uploadImage();
                     }
 
 
-                    
+
                 }
 
             }).catch(err => {
@@ -607,15 +656,15 @@ function Post(props) {
     return (
 
         <>
-            <div className="container-fluid">
+            <div>
 
                 <div className="row">
 
                     <div className="col-xl-6" style={{ paddingBottom: 20 }}>
 
                         {props.filter}
-                        <br/>
-                        {username} 
+                        <br />
+                        {username}
 
                         {(username === props.filter || props.filter === "all") &&
 
@@ -742,6 +791,16 @@ function Post(props) {
                                                     <td>
 
                                                         <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
+
+                                                            {!post.isActive &&
+                                                                <div className="position-relative">
+                                                                    <div className="position-absolute top-0 start-50 translate-middle">
+                                                                        <span className="badge rounded-pill bg-warning border border-secondary">Pending</span>
+                                                                    </div>
+                                                                </div>
+                                                            }
+
+
                                                             <div className="card-header bg-transparent">
                                                                 <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post?.user.username)} />
                                                                 <h6>{post?.user?.fullName}</h6>
@@ -842,6 +901,11 @@ function Post(props) {
 
                                                             </div>
                                                         </div>
+
+
+
+
+
 
                                                     </td>
                                                 </tr>

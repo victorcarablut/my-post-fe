@@ -34,7 +34,8 @@ function Header() {
     {
       fullName: null,
       userProfileImg: null,
-      username: null
+      username: null,
+      role: null
     }
   )
 
@@ -100,8 +101,11 @@ function Header() {
         setUser({
           username: res.data.username,
           fullName: res.data.fullName,
-          userProfileImg: res.data.userProfileImg
+          userProfileImg: res.data.userProfileImg,
+          role: res.data.role
         })
+
+        console.log(res.data);
 
       } else {
         logout();
@@ -149,7 +153,7 @@ function Header() {
 
               {isAuthenticated ?
 
-                <Link to={"/user/" + user?.username} type="button" className={"btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}><img src={user?.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="25" height="25" style={{objectFit: "cover"}} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />{user.fullName?.length >= 20 ? user.fullName.substring(0, 25) + "..." : user.fullName}</Link>
+                <Link to={"/user/" + user?.username} type="button" className={"btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}><img src={user?.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="25" height="25" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />{user.fullName?.length >= 20 ? user.fullName.substring(0, 25) + "..." : user.fullName}</Link>
                 :
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                   <NavLink to="/login" type="button" className={"navbar-nav-link btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}>Login</NavLink>
@@ -165,6 +169,11 @@ function Header() {
                   <li><NavLink to="/" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Posts</NavLink></li>
                   <li><NavLink to="/about" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>About</NavLink></li>
                   <li><NavLink to="/contact" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Contact</NavLink></li>
+
+                  {user.role === "ADMIN" &&
+                    <li><NavLink to="/admin/dashboard" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Dashboard</NavLink></li>
+                  }
+
                   {isAuthenticated &&
                     <>
                       <li><hr className="dropdown-divider" /></li>

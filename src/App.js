@@ -22,6 +22,9 @@ import PrivacyPolicy from './components/other/PrivacyPolicy';
 import UserDetails from './components/account/UserDetails';
 import UserProfile from './components/account/UserProfile';
 
+// admin
+import Dashboard from './components/admin/Dashboard';
+
 import NotFound from './components/other/NotFound';
 
 // Notifications
@@ -49,6 +52,7 @@ function App() {
               <Route path="/private" element={<Private />} />
               <Route path="/account" element={<UserDetails />} />
               <Route path="/user/:username" element={<UserProfile />} />
+              <Route path="/admin/dashboard" element={<Dashboard />} />
             </Route>
 
             {/* public */}
