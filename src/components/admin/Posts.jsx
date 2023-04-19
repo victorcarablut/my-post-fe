@@ -28,6 +28,8 @@ function Posts(props) {
     // list
     const [posts, setPosts] = useState([]);
 
+    const [filterPostStatus, setFilterPostStatus] = useState("pending")
+
     // http response status
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
 
@@ -37,7 +39,7 @@ function Posts(props) {
 
         getAllPosts();
 
-    }, [props.userId]);
+    }, [props.userId, filterPostStatus]);
 
     const getAllPosts = async () => {
 
@@ -64,7 +66,62 @@ function Posts(props) {
                 setResponseStatusGetAllPosts("success");
                 //console.log(res.data);
 
-                setPosts(res.data);
+                //setPosts(res.data);
+
+                if (filterPostStatus === "active") {
+
+                    // clear Array
+                    setPosts([]);
+
+                    let newArr = [];
+
+                    res.data.forEach((post) => {
+                        if (post.status === "active") {
+                            newArr.push(post);
+                        } else {
+                            return;
+                        }
+                    })
+
+                    setPosts(newArr);
+
+                } else if (filterPostStatus === "pending") {
+
+                    // clear Array
+                    setPosts([]);
+
+                    let newArr = [];
+
+                    res.data.forEach((post) => {
+                        if (post.status === "pending") {
+                            newArr.push(post);
+                        } else {
+                            return;
+                        }
+                    })
+
+                    setPosts(newArr);
+                } else if (filterPostStatus === "blocked") {
+                    // clear Array
+                    setPosts([]);
+
+                    let newArr = [];
+
+                    res.data.forEach((post) => {
+                        if (post.status === "blocked") {
+                            newArr.push(post);
+                        } else {
+                            return;
+                        }
+                    })
+
+                    setPosts(newArr);
+                } else {
+                    // all
+                    setPosts(res.data);
+                }
+
+
 
             }
 
@@ -73,6 +130,23 @@ function Posts(props) {
             //Logout();
             return;
         })
+
+    }
+
+    const handleFilterPostStatus = async (status) => {
+
+        if(status === "active") {
+            setFilterPostStatus(status);
+        } else if(status === "pending") {
+            setFilterPostStatus(status);
+    
+        } else if(status === "blocked") {
+            setFilterPostStatus(status);
+        } else {
+            // all
+            setFilterPostStatus(status);
+        }
+        await getAllPosts();
 
     }
 
@@ -118,6 +192,22 @@ function Posts(props) {
 
     return (
         <div>
+
+            <div className="d-flex justify-content-center">
+                <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
+                    <div className="card-body">
+                        <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <small>Filter by: </small>
+                            <button type="button" className={"btn " + (filterPostStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterPostStatus === "all"} onClick={() => handleFilterPostStatus("all")}>All</button>
+                            <button type="button" className={"btn " + (filterPostStatus === "active" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterPostStatus === "active"} onClick={() => handleFilterPostStatus("active")}>Active</button>
+                            <button type="button" className={"btn " + (filterPostStatus === "pending" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterPostStatus === "pending"} onClick={() => handleFilterPostStatus("pending")}>Pending</button>
+                            <button type="button" className={"btn " + (filterPostStatus === "blocked" ? "btn-danger" : "btn-outline-danger") + " btn-sm"} disabled={filterPostStatus === "blocked"} onClick={() => handleFilterPostStatus("blocked")}>Blocked</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
             {(posts?.length === 0 && responseStatusGetAllPosts !== "error") ? <small>Empty Data</small>
                 :
 
@@ -152,13 +242,13 @@ function Posts(props) {
                                                         </div>
                                                         :
                                                         post.status === "blocked" ?
-                                                        <div className="position-absolute top-0 start-50 translate-middle">
-                                                            <span className="badge rounded-pill bg-danger border border-secondary">Blocked</span>
-                                                        </div>
-                                                        :
-                                                        <div className="position-absolute top-0 start-50 translate-middle">
-                                                            <span className="badge rounded-pill bg-secondary border border-secondary">not defined</span>
-                                                        </div>
+                                                            <div className="position-absolute top-0 start-50 translate-middle">
+                                                                <span className="badge rounded-pill bg-danger border border-secondary">Blocked</span>
+                                                            </div>
+                                                            :
+                                                            <div className="position-absolute top-0 start-50 translate-middle">
+                                                                <span className="badge rounded-pill bg-secondary border border-secondary">not defined</span>
+                                                            </div>
                                                 }
                                             </div>
 

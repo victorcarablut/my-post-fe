@@ -249,7 +249,7 @@ function Posts(props) {
                     //getUserDetails();
 
 
-
+                    // clear Array
                     setPosts([]);
 
 
@@ -265,7 +265,7 @@ function Posts(props) {
                         } else if (post.user.id !== userId && post.status === "active") {
                             newArr.push(post);
                         } else {
-                            //return;
+                            return;
                         }
                     })
 
@@ -420,13 +420,14 @@ function Posts(props) {
                     } else if (res.data.status_code === 11) {
                         toast.dismiss(toastNotify);
                         toast.error("You've reached maximum number of Posts");
+                        setButtonCreatePostIsDisabled(false);
                         //setButtonSendEmailCodeIsDisabled(false);
                         //setEmailNewCodeStatus("error");
                     } else {
                         setButtonCreatePostIsDisabled(false);
 
                         toast.dismiss(toastNotify);
-                        toast.success("Published");
+                        toast.success("Created");
 
                         clearInputs();
 
