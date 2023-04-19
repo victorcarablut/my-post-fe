@@ -65,6 +65,7 @@ function Dashboard() {
             if (res.status === 200) {
                 setResponseStatusGetUserDetails("success");
                 setUser({
+                    userId: res.data.id,
                     fullName: res.data.fullName,
                     email: res.data.email,
                     username: res.data.username,
@@ -176,7 +177,7 @@ function Dashboard() {
 
                     <div className="card">
                         <div className="card-body">
-                            <Posts />
+                            <Posts userId={user?.userId} />
                         </div>
 
                     </div>

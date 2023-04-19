@@ -235,23 +235,23 @@ function Posts(props) {
                 //console.log(res.data);
 
                 //setPosts(res.data);
-                
+
                 if (props.filter === "all") {
                     // USER & ADMIN can see only active Posts in: > Home
 
                     setPosts(res.data);
-    
-                }  else {
+
+                } else {
                     // only the Owner of Posts can see active & non active in: > UserProfile
 
                     // condition to prevent other user to see "Pending" message on owners Post's in: > UserProfile
 
                     //getUserDetails();
 
-            
-                   
+
+
                     setPosts([]);
-                    
+
 
                     let newArr = [];
 
@@ -262,7 +262,7 @@ function Posts(props) {
                         if (post.user.id === userId) {
                             //console.log(res.id);
                             newArr.push(post);
-                        } else if (post.user.id !== userId && post.status === "active"){
+                        } else if (post.user.id !== userId && post.status === "active") {
                             newArr.push(post);
                         } else {
                             //return;
@@ -273,7 +273,7 @@ function Posts(props) {
 
                     console.log(newArr);
                     //setPosts(res.data);
-                } 
+                }
 
 
 
@@ -788,12 +788,31 @@ function Posts(props) {
 
                                                         <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
 
-                                                            {post.status !== "active" &&
+
+                                                            {props.filter !== "all" &&
+
                                                                 <div className="position-relative">
-                                                                    <div className="position-absolute top-0 start-50 translate-middle">
-                                                                        <span className="badge rounded-pill bg-warning text-dark border border-secondary">Pending</span>
-                                                                    </div>
+                                                                    {post.status === "active" ?
+                                                                        <div className="position-absolute top-0 start-50 translate-middle">
+                                                                            <span className="badge rounded-pill bg-success border border-secondary">Active</span>
+                                                                        </div>
+                                                                        :
+                                                                        post.status === "pending" ?
+                                                                            <div className="position-absolute top-0 start-50 translate-middle">
+                                                                                <span className="badge rounded-pill bg-warning text-dark border border-secondary">Pending</span>
+                                                                            </div>
+                                                                            :
+                                                                            post.status === "blocked" ?
+                                                                                <div className="position-absolute top-0 start-50 translate-middle">
+                                                                                    <span className="badge rounded-pill bg-danger border border-secondary">Blocked</span>
+                                                                                </div>
+                                                                                :
+                                                                                <div className="position-absolute top-0 start-50 translate-middle">
+                                                                                    <span className="badge rounded-pill bg-secondary border border-secondary">not defined</span>
+                                                                                </div>
+                                                                    }
                                                                 </div>
+
                                                             }
 
 

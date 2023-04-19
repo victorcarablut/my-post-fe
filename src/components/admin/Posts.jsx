@@ -17,7 +17,11 @@ import { moment_locale, moment_format_date_time_long } from '../_resources/date-
 
 import default_user_profile_img from '../../assets/images/user.jpg';
 
-function Posts() {
+
+// Notifications
+import toast from 'react-hot-toast';
+
+function Posts(props) {
 
     const navigate = useNavigate();
 
@@ -33,7 +37,7 @@ function Posts() {
 
         getAllPosts();
 
-    }, []);
+    }, [props.userId]);
 
     const getAllPosts = async () => {
 
@@ -67,6 +71,46 @@ function Posts() {
         }).catch(err => {
             setResponseStatusGetAllPosts("error");
             //Logout();
+            return;
+        })
+
+    }
+
+    const statusPost = async (postId, postStatus) => {
+
+        const toastNotify = toast.loading("Waiting...");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        //console.log("user_id: " + userId);
+        //console.log("post_id: " + postId);
+
+        const data = {
+            userId: props.userId,
+            postId: postId,
+            status: postStatus
+        }
+
+        await axios.post(`${url}/post/status`, data, config).then((res) => {
+            if (res.status === 200) {
+                //setButtonCreatePostIsDisabled(false);
+
+                toast.dismiss(toastNotify);
+                toast.success("Executed");
+
+                getAllPosts();
+            }
+
+        }).catch(err => {
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            //setButtonCreatePostIsDisabled(false);
             return;
         })
 
@@ -107,8 +151,13 @@ function Posts() {
                                                             <span className="badge rounded-pill bg-warning text-dark border border-secondary">Pending</span>
                                                         </div>
                                                         :
+                                                        post.status === "blocked" ?
                                                         <div className="position-absolute top-0 start-50 translate-middle">
-                                                            <span className="badge rounded-pill bg-danger  border border-secondary">Blocked</span>
+                                                            <span className="badge rounded-pill bg-danger border border-secondary">Blocked</span>
+                                                        </div>
+                                                        :
+                                                        <div className="position-absolute top-0 start-50 translate-middle">
+                                                            <span className="badge rounded-pill bg-secondary border border-secondary">not defined</span>
                                                         </div>
                                                 }
                                             </div>
@@ -124,13 +173,13 @@ function Posts() {
                                                 <div className="position-absolute top-0 end-0">
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-end">
 
-                                                        {post.status !== "active" &&
+                                                        {(post.status === "pending" || post.status === "blocked") &&
 
                                                             <div className="dropdown">
-                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-check-circle text-success"></i></button>
+                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-check-circle text-success"></i> Approve</button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                    <p><small className="text-secondary">Enable?</small></p>
-                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button">Yes</button>
+                                                                    <p><small className="text-secondary">Are you sure?</small></p>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusPost(post.id, "active")}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                 </ul>
                                                             </div>
@@ -139,14 +188,18 @@ function Posts() {
 
                                                         }
 
-                                                        <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg text-danger"></i></button>
-                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                <p><small className="text-secondary">Delete Post?</small></p>
-                                                                <button className="btn btn-secondary btn-sm me-md-2" type="button">Yes</button>
-                                                                <button className="btn btn-secondary btn-sm" type="button">No</button>
-                                                            </ul>
-                                                        </div>
+                                                        {(post.status === "pending" || post.status === "active") &&
+                                                            <div className="dropdown">
+                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg text-danger"></i> Block</button>
+                                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                    <p><small className="text-secondary">Are you sure?</small></p>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusPost(post.id, "blocked")}>Yes</button>
+                                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
+                                                                </ul>
+                                                            </div>
+                                                        }
+
+
                                                     </div>
 
                                                 </div>
