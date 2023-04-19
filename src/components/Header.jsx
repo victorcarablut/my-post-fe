@@ -151,8 +151,14 @@ function Header() {
 
             <div className="d-grid gap-2 d-md-flex justify-content-md-end animate__animated animate__fadeInRight">
 
-              {isAuthenticated ?
+              {(isAuthenticated && user.role === "ADMIN") &&
+                <span className="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-warning text-dark border border-secondary">
+                  admin
+                </span>
 
+}
+
+              {isAuthenticated ?
                 <Link to={"/user/" + user?.username} type="button" className={"btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")} style={{ paddingLeft: 10, paddingRight: 10 }}><img src={user?.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="25" height="25" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />{user.fullName?.length >= 20 ? user.fullName.substring(0, 25) + "..." : user.fullName}</Link>
                 :
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -171,7 +177,7 @@ function Header() {
                   <li><NavLink to="/contact" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Contact</NavLink></li>
 
                   {user.role === "ADMIN" &&
-                    <li><NavLink to="/admin/dashboard" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Dashboard</NavLink></li>
+                    <li><NavLink to="/admin/dashboard" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}><i className="bi bi-circle-fill text-warning me-md-2"></i>Dashboard</NavLink></li>
                   }
 
                   {isAuthenticated &&
@@ -193,11 +199,11 @@ function Header() {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="deleteEmployeeModalLabel">Delete Employee</h1>
+              <h1 className="modal-title fs-5" id="deleteEmployeeModalLabel">Exit</h1>
               <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-              <p>Are you sure you want to delete?</p>
+              <p>Are you sure you want to exit from the app?</p>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-danger btn-sm rounded-pill shadow" onClick={logout}>Logout</button>

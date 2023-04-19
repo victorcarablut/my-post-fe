@@ -236,7 +236,7 @@ function Post(props) {
 
                 //setPosts(res.data);
                 
-                if (props.filter === "admin" || props.filter === "all") {
+                if (props.filter === "all") {
                     // 1) ADMIN can see all active & non active in: > Dahsboard
                     // 2) USER & ADMIN can see only active Posts in: > Home
 
@@ -288,9 +288,6 @@ function Post(props) {
 
     }
 
-    const filtergetAllPosts = () => {
-
-    }
 
 
     const handleInputPostTitle = async (e) => {
@@ -795,7 +792,7 @@ function Post(props) {
                                                             {!post.isActive &&
                                                                 <div className="position-relative">
                                                                     <div className="position-absolute top-0 start-50 translate-middle">
-                                                                        <span className="badge rounded-pill bg-warning border border-secondary">Pending</span>
+                                                                        <span className="badge rounded-pill bg-warning text-dark border border-secondary">Pending</span>
                                                                     </div>
                                                                 </div>
                                                             }
@@ -849,15 +846,7 @@ function Post(props) {
 
 
 
-
-
-
-
                                                                 <div className="btn-group dropup">
-
-
-
-
 
 
                                                                     <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => postLike(post.id)}>
@@ -878,6 +867,8 @@ function Post(props) {
                                                                         <small>{post.likes.length}</small>
 
                                                                     </button>
+
+
 
 
 
