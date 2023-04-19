@@ -1,12 +1,12 @@
 import React from 'react';
-import Post from './Post';
+import Posts from './Posts';
 
 function Home() {
 
   return (
     <div className="container-fluid">
       <small>HomePage</small>
-      <Post filter="all"/>
+      <Posts filter="all"/>
     </div>
   )
 }

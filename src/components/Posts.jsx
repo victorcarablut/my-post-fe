@@ -19,7 +19,7 @@ import { Logout } from './account/Logout.js';
 //import logo from '../assets/images/logo.png';
 //import user_pic_profile from '../assets/images/user.jpg';
 
-import { LoadingFullScreen, LoadingSmall } from '../components/_resources/ui/Loadings';
+import { LoadingFullScreen, LoadingSmall } from './_resources/ui/Loadings.jsx';
 import { Error } from './_resources/ui/Alerts.jsx';
 
 // Date Time Format (moment.js)
@@ -34,7 +34,7 @@ import default_user_profile_img from '../assets/images/user.jpg';
 import toast from 'react-hot-toast';
 
 
-function Post(props) {
+function Posts(props) {
 
     const navigate = useNavigate();
 
@@ -237,8 +237,7 @@ function Post(props) {
                 //setPosts(res.data);
                 
                 if (props.filter === "all") {
-                    // 1) ADMIN can see all active & non active in: > Dahsboard
-                    // 2) USER & ADMIN can see only active Posts in: > Home
+                    // USER & ADMIN can see only active Posts in: > Home
 
                     setPosts(res.data);
     
@@ -263,7 +262,7 @@ function Post(props) {
                         if (post.user.id === userId) {
                             //console.log(res.id);
                             newArr.push(post);
-                        } else if (post.user.id !== userId && post.isActive === true){
+                        } else if (post.user.id !== userId && post.status === "active"){
                             newArr.push(post);
                         } else {
                             //return;
@@ -789,7 +788,7 @@ function Post(props) {
 
                                                         <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
 
-                                                            {!post.isActive &&
+                                                            {post.status !== "active" &&
                                                                 <div className="position-relative">
                                                                     <div className="position-absolute top-0 start-50 translate-middle">
                                                                         <span className="badge rounded-pill bg-warning text-dark border border-secondary">Pending</span>
@@ -1008,4 +1007,4 @@ function Post(props) {
     )
 }
 
-export default Post;
+export default Posts;

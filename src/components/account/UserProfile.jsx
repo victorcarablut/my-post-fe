@@ -18,7 +18,7 @@ import { moment_locale, moment_format_date_long } from '../_resources/date-time/
 import default_user_profile_img from '../../assets/images/user.jpg';
 import default_user_cover_img from '../../assets/images/cover.jpg';
 
-import Post from "../Post.jsx";
+import Posts from "../Posts.jsx";
 
 
 function UserProfile() {
@@ -158,7 +158,7 @@ function UserProfile() {
 
 
 
-            <Post filter={username} />
+            <Posts filter={username} />
 
         </>
     )
