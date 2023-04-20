@@ -259,7 +259,7 @@ function Posts(props) {
 
                                             <div className="card-header bg-transparent">
                                                 <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post?.user.username)} />
-                                                <h6>{post?.user?.fullName}</h6>
+                                                <h6>{post?.user?.fullName} <span className="badge bg-secondary">{post?.user.role}</span></h6>
 
 
 

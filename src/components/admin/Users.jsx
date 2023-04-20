@@ -259,6 +259,11 @@ function Users(props) {
                                                     <h6>{user.fullName} <span className="badge bg-secondary">{user.role}</span></h6>
                                                 </div>
 
+                                                {(user?.role === "ADMIN") &&
+                                                    <span className="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary border border-secondary">
+                                                        admin
+                                                    </span>}
+
 
                                                 <div className="position-absolute top-0 end-0">
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-end">

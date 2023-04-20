@@ -152,7 +152,7 @@ function Header() {
             <div className="d-grid gap-2 d-md-flex justify-content-md-end animate__animated animate__fadeInRight">
 
               {(isAuthenticated && user.role === "ADMIN") &&
-                <span className="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-warning text-dark border border-secondary">
+                <span className="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary border border-secondary">
                   admin
                 </span>
 
