@@ -142,7 +142,7 @@ function Dashboard() {
 
                     <div className="card">
                         <div className="card-body">
-                            <Users />
+                            <Users userId={user?.userId} />
                         </div>
 
                     </div>

@@ -29,7 +29,7 @@ function Users(props) {
     // list
     const [users, setUsers] = useState([]);
 
-    const [filterPostStatus, setFilterPostStatus] = useState("pending")
+    const [filterUserStatus, setFilterUserStatus] = useState("all");
 
     // http response status
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
@@ -41,7 +41,7 @@ function Users(props) {
 
         getAllUsers();
 
-    }, [props.userId, filterPostStatus]);
+    }, [props.userId, filterUserStatus]);
 
 
     const getAllUsers = async () => {
@@ -61,7 +61,64 @@ function Users(props) {
             if (res.status === 200) {
                 setResponseStatusGetAllUsers("success");
                 //console.log(res.data);
-                setUsers(res.data);
+                //setUsers(res.data);
+
+                if (filterUserStatus === "regular") {
+
+                    // clear Array
+                    setUsers([]);
+
+                    let newArr = [];
+
+                    res.data.forEach((user) => {
+                        if (user.status === "regular") {
+                            newArr.push(user);
+                        } else {
+                            return;
+                        }
+                    })
+
+                    setUsers(newArr);
+
+                } else if (filterUserStatus === "warning") {
+
+                    // clear Array
+                    setUsers([]);
+
+                    let newArr = [];
+
+                    res.data.forEach((user) => {
+                        if (user.status === "warning") {
+                            newArr.push(user);
+                        } else {
+                            return;
+                        }
+                    })
+
+                    // reverse order to see on the top from old posts to new
+                    //newArr.reverse();
+
+                    setUsers(newArr);
+
+                } else if (filterUserStatus === "blocked") {
+                    // clear Array
+                    setUsers([]);
+
+                    let newArr = [];
+
+                    res.data.forEach((user) => {
+                        if (user.status === "blocked") {
+                            newArr.push(user);
+                        } else {
+                            return;
+                        }
+                    })
+
+                    setUsers(newArr);
+                } else {
+                    // all
+                    setUsers(res.data);
+                }
             }
 
         }).catch(err => {
@@ -71,24 +128,24 @@ function Users(props) {
         })
     }
 
-    const handleFilterPostStatus = async (status) => {
+    const handleFilterUserStatus = async (status) => {
 
-        if (status === "active") {
-            setFilterPostStatus(status);
-        } else if (status === "pending") {
-            setFilterPostStatus(status);
+        if (status === "regular") {
+            setFilterUserStatus(status);
+        } else if (status === "warning") {
+            setFilterUserStatus(status);
 
         } else if (status === "blocked") {
-            setFilterPostStatus(status);
+            setFilterUserStatus(status);
         } else {
             // all
-            setFilterPostStatus(status);
+            setFilterUserStatus(status);
         }
-        //await getAllPosts();
+        await getAllUsers();
 
     }
 
-    const statusPost = async (postId, postStatus) => {
+    const statusUser = async (userUsername, userStatus) => {
 
         const toastNotify = toast.loading("Waiting...");
 
@@ -100,23 +157,23 @@ function Users(props) {
             }
         }
 
-        //console.log("user_id: " + userId);
+        //console.log("user_id: " + props.userId);
         //console.log("post_id: " + postId);
 
         const data = {
-            userId: props.userId,
-            postId: postId,
-            status: postStatus
+            userId: props.userId, // actual user id (admin)
+            username: userUsername, // (of all users)
+            status: userStatus
         }
 
-        await axios.post(`${url}/post/status`, data, config).then((res) => {
+        await axios.post(`${url}/user/status`, data, config).then((res) => {
             if (res.status === 200) {
                 //setButtonCreatePostIsDisabled(false);
 
                 toast.dismiss(toastNotify);
                 toast.success("Executed");
 
-                //getAllPosts();
+                getAllUsers();
             }
 
         }).catch(err => {
@@ -136,10 +193,10 @@ function Users(props) {
                     <div className="card-body">
                         <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                             <small className="me-md-2">Users - Filter by:</small>
-                            <button type="button" className={"btn " + (filterPostStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterPostStatus === "all"} onClick={() => handleFilterPostStatus("all")}>All</button>
-                            <button type="button" className={"btn " + (filterPostStatus === "active" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterPostStatus === "active"} onClick={() => handleFilterPostStatus("active")}>Active</button>
-                            <button type="button" className={"btn " + (filterPostStatus === "pending" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterPostStatus === "pending"} onClick={() => handleFilterPostStatus("pending")}>Pending</button>
-                            <button type="button" className={"btn " + (filterPostStatus === "blocked" ? "btn-danger" : "btn-outline-danger") + " btn-sm"} disabled={filterPostStatus === "blocked"} onClick={() => handleFilterPostStatus("blocked")}>Blocked</button>
+                            <button type="button" className={"btn " + (filterUserStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterUserStatus === "all"} onClick={() => handleFilterUserStatus("all")}>All</button>
+                            <button type="button" className={"btn " + (filterUserStatus === "regular" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterUserStatus === "regular"} onClick={() => handleFilterUserStatus("regular")}>Regular</button>
+                            <button type="button" className={"btn " + (filterUserStatus === "warning" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterUserStatus === "warning"} onClick={() => handleFilterUserStatus("warning")}>Warning</button>
+                            <button type="button" className={"btn " + (filterUserStatus === "blocked" ? "btn-danger" : "btn-outline-danger") + " btn-sm"} disabled={filterUserStatus === "blocked"} onClick={() => handleFilterUserStatus("blocked")}>Blocked</button>
                         </div>
 
                     </div>
@@ -169,14 +226,14 @@ function Users(props) {
 
 
                                             <div className="position-relative">
-                                                {user.status === "active" ?
+                                                {user.status === "regular" ?
                                                     <div className="position-absolute top-0 start-50 translate-middle">
-                                                        <span className="badge rounded-pill bg-success border border-secondary">Active</span>
+                                                        <span className="badge rounded-pill bg-success border border-secondary">Regular</span>
                                                     </div>
                                                     :
-                                                    user.status === "pending" ?
+                                                    user.status === "warning" ?
                                                         <div className="position-absolute top-0 start-50 translate-middle">
-                                                            <span className="badge rounded-pill bg-warning text-dark border border-secondary">Pending</span>
+                                                            <span className="badge rounded-pill bg-warning text-dark border border-secondary">Warning</span>
                                                         </div>
                                                         :
                                                         user.status === "blocked" ?
@@ -190,7 +247,7 @@ function Users(props) {
                                                 }
                                             </div>
 
-                                            <br />
+                                            <br /><br />
 
                                             <img src={user.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} height="100" style={{ objectFit: "cover" }} className="card-img-top rounded" alt="image" />
 
@@ -206,27 +263,37 @@ function Users(props) {
                                                 <div className="position-absolute top-0 end-0">
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-end">
 
-                                                        {(user.status === "pending" || user.status === "blocked") &&
+                                                        {(user.status === "warning" || user.status === "blocked") &&
 
                                                             <div className="dropdown">
-                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-check-circle text-success"></i> Approve</button>
+                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={user.role === "ADMIN"}><i className="bi bi-check-circle text-success"></i> Regular</button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Are you sure?</small></p>
-                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusPost(user.id, "active")}>Yes</button>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusUser(user.username, "regular")}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                 </ul>
                                                             </div>
-
-
-
                                                         }
 
-                                                        {(user.status === "pending" || user.status === "active") &&
+
+
+                                                        {(user.status === "regular" || user.status === "blocked") &&
                                                             <div className="dropdown">
-                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg text-danger"></i> Block</button>
+                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={user.role === "ADMIN"}><i className="bi bi-exclamation-triangle text-warning"></i> Warning</button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Are you sure?</small></p>
-                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusPost(user.id, "blocked")}>Yes</button>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusUser(user.username, "warning")}>Yes</button>
+                                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
+                                                                </ul>
+                                                            </div>
+                                                        }
+
+                                                        {(user.status === "warning" || user.status === "regular") &&
+                                                            <div className="dropdown">
+                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={user.role === "ADMIN"}><i className="bi bi-x-lg text-danger"></i> Block</button>
+                                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                    <p><small className="text-secondary">Are you sure?</small></p>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusUser(user.username, "blocked")}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                 </ul>
                                                             </div>
@@ -258,7 +325,7 @@ function Users(props) {
                                                 </div>
                                             </div>
                                             <div className="card-footer bg-transparent text-muted">
-                                            <button type="button" className="btn btn-light btn-sm rounded-pill" onClick={() => navigate("/user/" + user.username)}><i className="bi bi-person-fill"></i> Profile <i className="bi bi-arrow-right-short"></i></button>
+                                                <button type="button" className="btn btn-light btn-sm rounded-pill" onClick={() => navigate("/user/" + user.username)}><i className="bi bi-person-fill"></i> Profile <i className="bi bi-arrow-right-short"></i></button>
                                             </div>
                                         </div>
                                     </td>

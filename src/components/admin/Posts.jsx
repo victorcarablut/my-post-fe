@@ -28,7 +28,7 @@ function Posts(props) {
     // list
     const [posts, setPosts] = useState([]);
 
-    const [filterPostStatus, setFilterPostStatus] = useState("pending")
+    const [filterPostStatus, setFilterPostStatus] = useState("pending");
 
     // http response status
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
@@ -99,6 +99,9 @@ function Posts(props) {
                             return;
                         }
                     })
+
+                    // reverse order to see on the top from old posts to new
+                    newArr.reverse();
 
                     setPosts(newArr);
                 } else if (filterPostStatus === "blocked") {
