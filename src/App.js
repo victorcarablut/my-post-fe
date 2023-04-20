@@ -32,6 +32,7 @@ import { Toaster } from 'react-hot-toast';
 
 
 
+
 function App() {
   return (
     <div>
@@ -42,13 +43,13 @@ function App() {
           <Routes>
 
             {/* public */}
-            <Route path="/" exact element={<Home />} />
             <Route path="/login" exact element={<Login />} />
             <Route path="/register" exact element={<Register />} />
             <Route path="/code/verify" exact element={<VerifyCode />} />
 
             {/* private */}
             <Route element={<PrivateRoute />}>
+              <Route path="/" exact element={<Home />} />
               <Route path="/private" element={<Private />} />
               <Route path="/account" element={<UserDetails />} />
               <Route path="/user/:username" element={<UserProfile />} />
