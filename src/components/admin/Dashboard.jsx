@@ -34,12 +34,9 @@ function Dashboard() {
         }
     )
 
-    // all users
-    const [users, setUsers] = useState([]);
 
     // http response status
     const [responseStatusGeUserDetails, setResponseStatusGetUserDetails] = useState("");
-    const [responseStatusGetAllUsers, setResponseStatusGetAllUsers] = useState("");
 
 
 
