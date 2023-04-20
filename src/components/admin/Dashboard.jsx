@@ -140,7 +140,7 @@ function Dashboard() {
 
                 <div className="col-xl-6 mb-3">
 
-                    <div className="card">
+                    <div className="card bg-transparent border-0">
                         <div className="card-body">
                             <Users userId={user?.userId} />
                         </div>
@@ -151,7 +151,7 @@ function Dashboard() {
 
                 <div className="col-xl-6 mb-3">
 
-                    <div className="card">
+                    <div className="card bg-transparent border-0">
                         <div className="card-body">
                             <Posts userId={user?.userId} />
                         </div>

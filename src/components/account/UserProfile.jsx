@@ -32,7 +32,8 @@ function UserProfile() {
             fullName: null,
             email: null,
             username: null,
-            //role: null,
+            role: null,
+            status: null,
             registeredDate: null,
             userProfileImg: null,
             userCoverImg: null
@@ -84,7 +85,8 @@ function UserProfile() {
                     fullName: res.data.fullName,
                     email: res.data.email,
                     username: res.data.username,
-                    //role: res.data.role,
+                    role: res.data.role,
+                    status: res.data.status,
                     registeredDate: res.data.registeredDate,
                     userProfileImg: res.data.userProfileImg,
                     userCoverImg: res.data.userCoverImg
@@ -122,12 +124,10 @@ function UserProfile() {
                                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                                     <h5 className="me-md-2">{user?.fullName}</h5>
                                     {usernameAccount === user?.username &&
-
                                         <NavLink to="/account" type="button" className="btn btn-light rounded-pill btn-sm" style={{ maxHeight: 30 }}><i className="bi bi-pencil-square me-md-2"></i>Edit Profile</NavLink>
-
-
                                     }
                                 </div>
+
 
 
                                 {/* {usernameAccount + " " + user?.username} */}
@@ -137,6 +137,20 @@ function UserProfile() {
 
                             <hr />
                             <small className="text-secondary">Username: @{user?.username}</small>
+                            <br />
+
+
+
+                            <small className="text-secondary me-md-2">User profile status:</small>
+
+                            {user.status === "warning" ?
+                                <span className="badge rounded-pill text-bg-warning">{user.status}</span>
+                                :
+                                user.status === "blocked" ?
+                                <span className="badge rounded-pill text-bg-danger">{user.status}</span>
+                                    :
+                                    <span className="badge rounded-pill text-bg-success">{user.status}</span>
+                            }
 
 
 
