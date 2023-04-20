@@ -97,7 +97,7 @@ function Dashboard() {
                         <div className="row g-0">
                             <div className="col-md-8">
                                 <div className="card-body">
-                                    <h5 className="card-title">{user?.fullName}</h5>
+                                    <h5 className="card-title"><i className="bi bi-person-fill me-md-2"></i>{user?.fullName}</h5>
                                     <p className="card-text"><small>@{user?.username}</small></p>
                                     <p className="card-text"><small>{user?.email}</small></p>
                                     <p className="card-text"><small className="text-body-secondary">{user?.role}</small></p>

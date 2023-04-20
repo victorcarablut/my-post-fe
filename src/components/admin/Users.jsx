@@ -217,7 +217,7 @@ function Users(props) {
                 <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
                     <div className="card-body">
                         <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                            <small className="me-md-2">Users - Filter by:</small>
+                            <small className="me-md-2">{users.length} - Users - Filter by:</small>
                             <button type="button" className={"btn " + (filterUserStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterUserStatus === "all"} onClick={() => handleFilterUserStatus("all")}>All</button>
                             <button type="button" className={"btn " + (filterUserStatus === "regular" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterUserStatus === "regular"} onClick={() => handleFilterUserStatus("regular")}>Regular</button>
                             <button type="button" className={"btn " + (filterUserStatus === "warning" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterUserStatus === "warning"} onClick={() => handleFilterUserStatus("warning")}>Warning</button>
