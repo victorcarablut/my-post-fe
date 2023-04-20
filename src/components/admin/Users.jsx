@@ -16,36 +16,37 @@ import { moment_locale, moment_format_date_time_long } from '../_resources/date-
 //import UserPasswordRecover from './UserPasswordRecover.jsx';
 
 import default_user_profile_img from '../../assets/images/user.jpg';
+import default_user_cover_img from '../../assets/images/cover.jpg';
 
 
 // Notifications
 import toast from 'react-hot-toast';
 
-function Posts(props) {
+function Users(props) {
 
     const navigate = useNavigate();
 
     // list
-    const [posts, setPosts] = useState([]);
+    const [users, setUsers] = useState([]);
 
     const [filterPostStatus, setFilterPostStatus] = useState("pending")
 
     // http response status
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
+    const [responseStatusGetAllUsers, setResponseStatusGetAllUsers] = useState("");
 
     useEffect(() => {
 
         //checkAuth();
 
-        getAllPosts();
+        getAllUsers();
 
     }, [props.userId, filterPostStatus]);
 
-    const getAllPosts = async () => {
 
-        //console.log("load 1 time");
+    const getAllUsers = async () => {
 
-        setResponseStatusGetAllPosts("loading");
+        setResponseStatusGetAllUsers("loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
 
@@ -55,98 +56,35 @@ function Posts(props) {
             }
         }
 
-        const role = "admin";
-
-
-        //await axios.get(`${url}/post/all/${props.filter}`, config).then((res) => {
-
-        await axios.get(`${url}/post/all/${role}`, config).then((res) => {
+        await axios.get(`${url}/user/all`, config).then((res) => {
 
             if (res.status === 200) {
-                setResponseStatusGetAllPosts("success");
+                setResponseStatusGetAllUsers("success");
                 //console.log(res.data);
-
-                //setPosts(res.data);
-
-                if (filterPostStatus === "active") {
-
-                    // clear Array
-                    setPosts([]);
-
-                    let newArr = [];
-
-                    res.data.forEach((post) => {
-                        if (post.status === "active") {
-                            newArr.push(post);
-                        } else {
-                            return;
-                        }
-                    })
-
-                    setPosts(newArr);
-
-                } else if (filterPostStatus === "pending") {
-
-                    // clear Array
-                    setPosts([]);
-
-                    let newArr = [];
-
-                    res.data.forEach((post) => {
-                        if (post.status === "pending") {
-                            newArr.push(post);
-                        } else {
-                            return;
-                        }
-                    })
-
-                    setPosts(newArr);
-                } else if (filterPostStatus === "blocked") {
-                    // clear Array
-                    setPosts([]);
-
-                    let newArr = [];
-
-                    res.data.forEach((post) => {
-                        if (post.status === "blocked") {
-                            newArr.push(post);
-                        } else {
-                            return;
-                        }
-                    })
-
-                    setPosts(newArr);
-                } else {
-                    // all
-                    setPosts(res.data);
-                }
-
-
-
+                setUsers(res.data);
             }
 
         }).catch(err => {
-            setResponseStatusGetAllPosts("error");
+            setResponseStatusGetAllUsers("error");
             //Logout();
             return;
         })
-
     }
 
     const handleFilterPostStatus = async (status) => {
 
-        if(status === "active") {
+        if (status === "active") {
             setFilterPostStatus(status);
-        } else if(status === "pending") {
+        } else if (status === "pending") {
             setFilterPostStatus(status);
-    
-        } else if(status === "blocked") {
+
+        } else if (status === "blocked") {
             setFilterPostStatus(status);
         } else {
             // all
             setFilterPostStatus(status);
         }
-        await getAllPosts();
+        //await getAllPosts();
 
     }
 
@@ -178,7 +116,7 @@ function Posts(props) {
                 toast.dismiss(toastNotify);
                 toast.success("Executed");
 
-                getAllPosts();
+                //getAllPosts();
             }
 
         }).catch(err => {
@@ -197,7 +135,7 @@ function Posts(props) {
                 <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
                     <div className="card-body">
                         <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                            <small className="me-md-2">Posts - Filter by:</small>
+                            <small className="me-md-2">Users - Filter by:</small>
                             <button type="button" className={"btn " + (filterPostStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterPostStatus === "all"} onClick={() => handleFilterPostStatus("all")}>All</button>
                             <button type="button" className={"btn " + (filterPostStatus === "active" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterPostStatus === "active"} onClick={() => handleFilterPostStatus("active")}>Active</button>
                             <button type="button" className={"btn " + (filterPostStatus === "pending" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterPostStatus === "pending"} onClick={() => handleFilterPostStatus("pending")}>Pending</button>
@@ -208,7 +146,7 @@ function Posts(props) {
                 </div>
             </div>
 
-            {(posts?.length === 0 && responseStatusGetAllPosts !== "error") ? <small>Empty Data</small>
+            {(users?.length === 0 && responseStatusGetAllUsers !== "error") ? <small>Empty Data</small>
                 :
 
                 <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "900px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
@@ -219,11 +157,11 @@ function Posts(props) {
 
                         <tbody>
 
-                            {posts?.map(post =>
+                            {users?.map(user =>
 
 
 
-                                <tr key={post.id}>
+                                <tr key={user.id}>
                                     <td>
 
                                         <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
@@ -231,17 +169,17 @@ function Posts(props) {
 
 
                                             <div className="position-relative">
-                                                {post.status === "active" ?
+                                                {user.status === "active" ?
                                                     <div className="position-absolute top-0 start-50 translate-middle">
                                                         <span className="badge rounded-pill bg-success border border-secondary">Active</span>
                                                     </div>
                                                     :
-                                                    post.status === "pending" ?
+                                                    user.status === "pending" ?
                                                         <div className="position-absolute top-0 start-50 translate-middle">
                                                             <span className="badge rounded-pill bg-warning text-dark border border-secondary">Pending</span>
                                                         </div>
                                                         :
-                                                        post.status === "blocked" ?
+                                                        user.status === "blocked" ?
                                                             <div className="position-absolute top-0 start-50 translate-middle">
                                                                 <span className="badge rounded-pill bg-danger border border-secondary">Blocked</span>
                                                             </div>
@@ -252,24 +190,29 @@ function Posts(props) {
                                                 }
                                             </div>
 
+                                            <br />
+
+                                            <img src={user.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} height="100" style={{ objectFit: "cover" }} className="card-img-top rounded" alt="image" />
+
 
 
                                             <div className="card-header bg-transparent">
-                                                <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post?.user.username)} />
-                                                <h6>{post?.user?.fullName}</h6>
-
+                                                <div className="d-grid gap-2 d-md-flex justify-content-md-start">
+                                                    <img src={user.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="60" height="60" style={{ objectFit: "cover", cursor: 'pointer', marginTop: -30 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + user.username)} />
+                                                    <h6>{user.fullName} <span className="badge bg-secondary">{user.role}</span></h6>
+                                                </div>
 
 
                                                 <div className="position-absolute top-0 end-0">
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-end">
 
-                                                        {(post.status === "pending" || post.status === "blocked") &&
+                                                        {(user.status === "pending" || user.status === "blocked") &&
 
                                                             <div className="dropdown">
                                                                 <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-check-circle text-success"></i> Approve</button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Are you sure?</small></p>
-                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusPost(post.id, "active")}>Yes</button>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusPost(user.id, "active")}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                 </ul>
                                                             </div>
@@ -278,12 +221,12 @@ function Posts(props) {
 
                                                         }
 
-                                                        {(post.status === "pending" || post.status === "active") &&
+                                                        {(user.status === "pending" || user.status === "active") &&
                                                             <div className="dropdown">
                                                                 <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg text-danger"></i> Block</button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Are you sure?</small></p>
-                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusPost(post.id, "blocked")}>Yes</button>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusPost(user.id, "blocked")}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                 </ul>
                                                             </div>
@@ -298,25 +241,24 @@ function Posts(props) {
                                             </div>
                                             <div className="card-body">
 
-                                                <p>{post.title}</p>
-                                                {post.image &&
-                                                    <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
-                                                }
-
-                                                <small style={{ fontSize: 12 }}>{post.description}</small>
+                                                <ul className="list-group list-group-flush">
+                                                    <li className="list-group-item"><small style={{ fontSize: 12 }}>id: {user.id}</small> / <small style={{ fontSize: 12 }}>{user.enabled ? "enabled" : "disabled"}</small></li>
+                                                    <li className="list-group-item"><small style={{ fontSize: 12 }}>@{user.username}</small></li>
+                                                    <li className="list-group-item"><small style={{ fontSize: 12 }}>{user.email}</small></li>
+                                                </ul>
 
                                                 <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
 
-                                                    {post?.updatedDate ?
+                                                    {user?.updatedDate ?
 
-                                                        <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                        <small>updated: {moment(user.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
                                                         :
-                                                        <small>{moment(post.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                        <small>{moment(user.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
                                                     }
                                                 </div>
                                             </div>
                                             <div className="card-footer bg-transparent text-muted">
-                                                <small>Likes: {post.likes.length}</small>
+                                            <button type="button" className="btn btn-light btn-sm rounded-pill" onClick={() => navigate("/user/" + user.username)}><i className="bi bi-person-fill"></i> Profile <i className="bi bi-arrow-right-short"></i></button>
                                             </div>
                                         </div>
                                     </td>
@@ -335,4 +277,4 @@ function Posts(props) {
     )
 }
 
-export default Posts;
+export default Users;

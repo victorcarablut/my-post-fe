@@ -15,6 +15,7 @@ import moment from 'moment/min/moment-with-locales';
 import { moment_locale, moment_format_date_long } from '../_resources/date-time/DateTime.js';
 
 // Admin View
+import Users from "./Users.jsx";
 import Posts from "./Posts.jsx";
 
 //import UserPasswordRecover from './UserPasswordRecover.jsx';
@@ -83,32 +84,7 @@ function Dashboard() {
     }
 
 
-    const getAllUsers = async () => {
-
-        setResponseStatusGetAllUsers("loading");
-
-        const jwt_token = secureLocalStorage.getItem("token");
-
-        const config = {
-            headers: {
-                Authorization: "Bearer " + jwt_token
-            }
-        }
-
-        await axios.get(`${url}/user/all`, config).then((res) => {
-
-            if (res.status === 200) {
-                setResponseStatusGetAllUsers("success");
-                //console.log(res.data);
-                setUsers(res.data);
-            }
-
-        }).catch(err => {
-            setResponseStatusGetAllUsers("error");
-            //Logout();
-            return;
-        })
-    }
+    
 
 
     return (
@@ -166,7 +142,7 @@ function Dashboard() {
 
                     <div className="card">
                         <div className="card-body">
-                            card 1
+                            <Users />
                         </div>
 
                     </div>
