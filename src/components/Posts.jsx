@@ -199,6 +199,9 @@ function Posts(props) {
                 setUserEmail(res.data.email);
 
                 getAllPosts();
+
+
+                // TODO: if 403 logout
             }
 
         }).catch(err => {
@@ -818,7 +821,7 @@ function Posts(props) {
 
 
                                                             <div className="card-header bg-transparent">
-                                                                <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post?.user.username)} />
+                                                                <img src={post?.user?.userProfileImg ? `data:image/jpg;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post?.user.username)} />
                                                                 <h6>{post?.user?.fullName}</h6>
 
 
@@ -899,8 +902,11 @@ function Posts(props) {
 
                                                                         {
                                                                             post.likes?.map(like =>
-                                                                                <ul className="list-group list-group-flush" key={like.likeId}>
-                                                                                    <li className="list-group-item list-group-item-action" style={{ cursor: 'pointer' }} onClick={() => navigate("/user/" + like.username)}>{like.userId === userId ? <small className="text-primary">{like.userFullName}</small> : <small>{like.userFullName}</small>}</li>
+                                                                                <ul className="list-group list-group-flush" key={like.likeId} style={{minWidth: 250}}>
+                                                                                    <li className="list-group-item list-group-item-action" style={{ cursor: 'pointer' }} onClick={() => navigate("/user/" + like.username)}>
+                                                                                        <img src={like.userProfileImg ? `data:image/jpg;base64,${like.userProfileImg}` : default_user_profile_img} width="30" height="30" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
+                                                                                        <small className={ (like.userId === userId && "text-primary")}>{like.userFullName.length >= 20 ? like.userFullName.substring(0, 25) + "..." : like.userFullName}</small>
+                                                                                    </li>
                                                                                 </ul>
                                                                             )
                                                                         }
@@ -969,7 +975,7 @@ function Posts(props) {
                                 {postImagePreviewNewTemporary &&
                                     <>
                                         <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImagePreviewNewTemporary(null)}></button>
-                                        <img src={`data:image/png;base64,${postImagePreviewNewTemporary}`} className="img-fluid rounded mb-3" alt="image" />
+                                        <img src={`data:image/jpg;base64,${postImagePreviewNewTemporary}`} className="img-fluid rounded mb-3" alt="image" />
                                     </>
                                 }
 
