@@ -251,26 +251,36 @@ function Posts(props) {
             <div className="d-flex justify-content-center">
                 <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
                     <div className="card-body">
-                        <div className="d-grid gap-2 d-md-flex justify-content-md-center mb-3">
-                            <small className="me-md-2">{posts?.length} - Posts - Filter by:</small>
-                            <button type="button" className={"btn " + (filterPostStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterPostStatus === "all"} onClick={() => handleFilterPostStatus("all")}>All</button>
-                            <button type="button" className={"btn " + (filterPostStatus === "active" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterPostStatus === "active"} onClick={() => handleFilterPostStatus("active")}>Active</button>
-                            <button type="button" className={"btn " + (filterPostStatus === "pending" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterPostStatus === "pending"} onClick={() => handleFilterPostStatus("pending")}>Pending</button>
-                            <button type="button" className={"btn " + (filterPostStatus === "blocked" ? "btn-danger" : "btn-outline-danger") + " btn-sm"} disabled={filterPostStatus === "blocked"} onClick={() => handleFilterPostStatus("blocked")}>Blocked</button>
-                        </div>
-                        
-                            <input type="text" id="search-post-input" className="form-control search-post-input" onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
-                       
+
+                        {(posts?.length !== 0 && responseStatusGetAllPosts !== "error") &&
+                            <>
+                                <div className="d-grid gap-2 d-md-flex justify-content-md-center mb-3">
+                                    <small className="me-md-2">{posts?.length} - Posts - Filter by:</small>
+                                    <button type="button" className={"btn " + (filterPostStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterPostStatus === "all"} onClick={() => handleFilterPostStatus("all")}>All</button>
+                                    <button type="button" className={"btn " + (filterPostStatus === "active" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterPostStatus === "active"} onClick={() => handleFilterPostStatus("active")}>Active</button>
+                                    <button type="button" className={"btn " + (filterPostStatus === "pending" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterPostStatus === "pending"} onClick={() => handleFilterPostStatus("pending")}>Pending</button>
+                                    <button type="button" className={"btn " + (filterPostStatus === "blocked" ? "btn-danger" : "btn-outline-danger") + " btn-sm"} disabled={filterPostStatus === "blocked"} onClick={() => handleFilterPostStatus("blocked")}>Blocked</button>
+                                </div>
+                                <input type="text" id="search-post-input" className="form-control search-post-input" onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
+                            </>
+                        }
+
 
                     </div>
                 </div>
             </div>
 
-            {(posts?.length === 0 && responseStatusGetAllPosts !== "error") ? <small>Empty Data</small>
-                :
+            <div className="d-flex justify-content-center">
+
+                {responseStatusGetAllPosts === "error" && <small className="text-danger animate__animated animate__flash">Error</small>}
+                {(posts?.length === 0 && responseStatusGetAllPosts === "success") && <small className="text-secondary">Empty</small>}
+
+            </div>
+
+            {posts?.length !== 0 &&
+
 
                 <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "1000px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
-
 
 
                     <table id="table-posts" className="container-fluid">
@@ -313,8 +323,8 @@ function Posts(props) {
 
 
                                             <div className="card-header bg-transparent">
-                                                <img src={post?.user?.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post?.user.username)} />
-                                                <h6>{post?.user?.fullName} <span className="badge bg-secondary">{post?.user.role}</span></h6>
+                                                <img src={post.user.userProfileImg ? `data:image/png;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post.user.username)} />
+                                                <h6>{post.user.fullName} <span className="badge bg-secondary">{post.user.role}</span></h6>
 
 
 
@@ -362,12 +372,12 @@ function Posts(props) {
                                                 }
 
                                                 <small style={{ fontSize: 12 }}>{post.description}</small>
-                                                <hr/>
+                                                <hr />
                                                 <small className="text-secondary" style={{ fontSize: 12 }}>username: @{post.user.username}</small>
 
                                                 <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
 
-                                                    {post?.updatedDate ?
+                                                    {post.updatedDate ?
 
                                                         <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
                                                         :
@@ -376,7 +386,7 @@ function Posts(props) {
                                                 </div>
                                             </div>
                                             <div className="card-footer bg-transparent text-muted">
-                                                <small>Likes: {post.likes.length}</small>
+                                                <small>Likes: {post.likes?.length}</small>
                                             </div>
                                         </div>
                                     </td>

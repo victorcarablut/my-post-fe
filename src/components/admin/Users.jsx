@@ -32,7 +32,6 @@ function Users(props) {
     const [filterUserStatus, setFilterUserStatus] = useState("all");
 
     // http response status
-    const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
     const [responseStatusGetAllUsers, setResponseStatusGetAllUsers] = useState("");
 
     // auto refresh
@@ -242,22 +241,34 @@ function Users(props) {
             <div className="d-flex justify-content-center">
                 <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
                     <div className="card-body">
-                        <div className="d-grid gap-2 d-md-flex justify-content-md-center mb-3">
-                            <small className="me-md-2">{users.length} - Users - Filter by:</small>
-                            <button type="button" className={"btn " + (filterUserStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterUserStatus === "all"} onClick={() => handleFilterUserStatus("all")}>All</button>
-                            <button type="button" className={"btn " + (filterUserStatus === "regular" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterUserStatus === "regular"} onClick={() => handleFilterUserStatus("regular")}>Regular</button>
-                            <button type="button" className={"btn " + (filterUserStatus === "warning" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterUserStatus === "warning"} onClick={() => handleFilterUserStatus("warning")}>Warning</button>
-                            <button type="button" className={"btn " + (filterUserStatus === "blocked" ? "btn-danger" : "btn-outline-danger") + " btn-sm"} disabled={filterUserStatus === "blocked"} onClick={() => handleFilterUserStatus("blocked")}>Blocked</button>
-                        </div>
 
-                        <input type="text" id="search-user-input" className="form-control search-user-input" onKeyUp={searchUsers} placeholder="Search..." autoComplete="off" />
+                        {(users?.length !== 0 && responseStatusGetAllUsers !== "error") &&
+                            <>
+                                <div className="d-grid gap-2 d-md-flex justify-content-md-center mb-3">
+                                    <small className="me-md-2">{users?.length} - Users - Filter by:</small>
+                                    <button type="button" className={"btn " + (filterUserStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterUserStatus === "all"} onClick={() => handleFilterUserStatus("all")}>All</button>
+                                    <button type="button" className={"btn " + (filterUserStatus === "regular" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterUserStatus === "regular"} onClick={() => handleFilterUserStatus("regular")}>Regular</button>
+                                    <button type="button" className={"btn " + (filterUserStatus === "warning" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterUserStatus === "warning"} onClick={() => handleFilterUserStatus("warning")}>Warning</button>
+                                    <button type="button" className={"btn " + (filterUserStatus === "blocked" ? "btn-danger" : "btn-outline-danger") + " btn-sm"} disabled={filterUserStatus === "blocked"} onClick={() => handleFilterUserStatus("blocked")}>Blocked</button>
+                                </div>
+
+                                <input type="text" id="search-user-input" className="form-control search-user-input" onKeyUp={searchUsers} placeholder="Search..." autoComplete="off" />
+                            </>
+                        }
 
                     </div>
                 </div>
             </div>
 
-            {(users?.length === 0 && responseStatusGetAllUsers !== "error") ? <small>Empty Data</small>
-                :
+            <div className="d-flex justify-content-center">
+
+                {responseStatusGetAllUsers === "error" && <small className="text-danger animate__animated animate__flash">Error</small>}
+                {(users?.length === 0 && responseStatusGetAllUsers === "success") && <small className="text-secondary">Empty</small>}
+
+            </div>
+
+            {users?.length !== 0 && 
+                
 
                 <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "1000px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
 
@@ -299,7 +310,7 @@ function Users(props) {
                                                             </div>
                                                 }
                                             </div>
-                                            
+
 
                                             <br /><br />
 
@@ -313,7 +324,7 @@ function Users(props) {
                                                     <h6>{user.fullName} <span className="badge bg-secondary">{user.role}</span></h6>
                                                 </div>
 
-                                                {(user?.role === "ADMIN") &&
+                                                {(user.role === "ADMIN") &&
                                                     <span className="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary border border-secondary">
                                                         admin
                                                     </span>}
@@ -375,7 +386,7 @@ function Users(props) {
 
                                                 <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
 
-                                                    {user?.updatedDate ?
+                                                    {user.updatedDate ?
 
                                                         <small>updated: {moment(user.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
                                                         :

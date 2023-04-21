@@ -71,8 +71,6 @@ function Posts(props) {
     // http response status
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
 
-    const [likeButtonClassName, setLikeButtonClassName] = useState("text-primary");
-
     // auto refresh
     let interval = null;
 
@@ -749,7 +747,7 @@ function Posts(props) {
                         <div className="d-flex justify-content-center">
                             <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
                                 <div className="card-body">
-                                    This is some text within a card body.
+                                    
 
                                 </div>
                             </div>
@@ -769,28 +767,26 @@ function Posts(props) {
                             <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
                                 <div className="card-body">
                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                                        <input type="text" id="search-post-input" className="form-control search-post-input" onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
+                                        {(posts?.length !== 0 && responseStatusGetAllPosts !== "error") &&
+                                            <input type="text" id="search-post-input" className="form-control search-post-input" onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
+                                        }
+
                                     </div>
 
-
-
-
-                                    {/* {
-                                            responseStatusGetAllPosts === "loading" ? <small>Loading...</small>
-                                                :
-                                                responseStatusGetAllPosts === "error" ? <small>Error</small>
-                                                    :
-                                                    responseStatusGetAllPosts === "success" ? <small>OK</small>
-                                                        :
-                                                        <></>
-                                        } */}
                                 </div>
                             </div>
+
                         </div>
 
+                        <div className="d-flex justify-content-center">
 
-                        {(posts?.length === 0 && responseStatusGetAllPosts !== "error") ? <small>Empty Data</small>
-                            :
+                            {responseStatusGetAllPosts === "error" && <small className="text-danger animate__animated animate__flash">Error</small>}
+                            {(posts?.length === 0 && responseStatusGetAllPosts === "success") && <small className="text-secondary">Empty</small>}
+
+                        </div>
+
+                        {posts?.length !== 0 &&
+
 
                             <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "1000px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
 
@@ -838,12 +834,12 @@ function Posts(props) {
 
 
                                                         <div className="card-header bg-transparent">
-                                                            <img src={post?.user?.userProfileImg ? `data:image/jpg;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post?.user.username)} />
-                                                            <h6>{post?.user?.fullName}</h6>
+                                                            <img src={post.user.userProfileImg ? `data:image/jpg;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post.user.username)} />
+                                                            <h6>{post.user.fullName}</h6>
 
 
                                                             {
-                                                                userId === post?.user?.id &&
+                                                                userId === post.user.id &&
                                                                 <div className="position-absolute top-0 end-0">
                                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                                                                         <button type="button" className="btn btn-light btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" aria-label="Edit" data-balloon-pos="left" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)}><i className="bi bi-pencil-square"></i></button>
@@ -872,7 +868,7 @@ function Posts(props) {
 
                                                             <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
 
-                                                                {post?.updatedDate ?
+                                                                {post.updatedDate ?
 
                                                                     <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
                                                                     :
@@ -903,7 +899,7 @@ function Posts(props) {
                                                                     )
                                                                     }
 
-                                                                    <small>{post.likes.length}</small>
+                                                                    <small>{post.likes?.length}</small>
 
                                                                 </button>
 
@@ -911,7 +907,7 @@ function Posts(props) {
 
 
 
-                                                                {post?.likes.length !== 0 && <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" />}
+                                                                {post.likes?.length !== 0 && <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" />}
 
 
                                                                 <ul className="dropdown-menu">
