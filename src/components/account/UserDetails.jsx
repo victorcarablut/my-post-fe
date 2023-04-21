@@ -883,7 +883,7 @@ function UserDetails() {
                                             <ul className="list-group list-group-flush">
                                                 <li className="list-group-item">
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                                                        <img src={user?.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top mb-3" style={{ objectFit: "cover" }} />
+                                                        <img src={user?.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} width="100%" height="100" alt="cover-img" className="card-img-top mb-3" style={{ objectFit: "cover" }} />
                                                     </div>
 
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">

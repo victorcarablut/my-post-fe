@@ -203,7 +203,7 @@ function Header() {
               <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-              <p>Are you sure you want to exit from the app?</p>
+              <p>Are you sure you want to log out?</p>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-danger btn-sm rounded-pill shadow" onClick={logout}>Logout</button>

@@ -761,21 +761,21 @@ function Posts(props) {
 
                     <div className="col-xl-6 me-mb-3">
 
-                   
-
-
-
-                            <div className="d-flex justify-content-center">
-                                <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
-                                    <div className="card-body">
-                                        <div className="d-grid gap-2 d-md-flex justify-content-md-center">    
-                                            <input type="text" id="search-post-input" className="form-control search-post-input"  onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
-                                        </div>
 
 
 
 
-                                        {/* {
+                        <div className="d-flex justify-content-center">
+                            <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
+                                <div className="card-body">
+                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                                        <input type="text" id="search-post-input" className="form-control search-post-input" onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
+                                    </div>
+
+
+
+
+                                    {/* {
                                             responseStatusGetAllPosts === "loading" ? <small>Loading...</small>
                                                 :
                                                 responseStatusGetAllPosts === "error" ? <small>Error</small>
@@ -784,183 +784,184 @@ function Posts(props) {
                                                         :
                                                         <></>
                                         } */}
-                                    </div>
                                 </div>
                             </div>
+                        </div>
 
 
-                            {(posts?.length === 0 && responseStatusGetAllPosts !== "error") ? <small>Empty Data</small>
-                                :
+                        {(posts?.length === 0 && responseStatusGetAllPosts !== "error") ? <small>Empty Data</small>
+                            :
 
-                                <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "1000px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
-
-
-
-                                    <table id="table-posts" className="container-fluid">
-
-                                        <tbody>
-
-                                            {posts?.map(post =>
+                            <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "1000px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
 
 
 
-                                                <tr key={post.id}>
-                                                    <td>
+                                <table id="table-posts" className="container-fluid">
 
-                                                        <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
+                                    <tbody>
+
+                                        {posts?.map(post =>
 
 
-                                                            {props.filter !== "all" &&
 
-                                                                <div className="position-relative">
-                                                                    {post.status === "active" ?
+                                            <tr key={post.id}>
+                                                <td>
+
+                                                    <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
+
+
+                                                        {props.filter !== "all" &&
+
+                                                            <div className="position-relative">
+                                                                {post.status === "active" ?
+                                                                    <div className="position-absolute top-0 start-50 translate-middle">
+                                                                        <span className="badge rounded-pill bg-success border border-secondary">Active</span>
+                                                                    </div>
+                                                                    :
+                                                                    post.status === "pending" ?
                                                                         <div className="position-absolute top-0 start-50 translate-middle">
-                                                                            <span className="badge rounded-pill bg-success border border-secondary">Active</span>
+                                                                            <span className="badge rounded-pill bg-warning text-dark border border-secondary">Pending</span>
                                                                         </div>
                                                                         :
-                                                                        post.status === "pending" ?
+                                                                        post.status === "blocked" ?
                                                                             <div className="position-absolute top-0 start-50 translate-middle">
-                                                                                <span className="badge rounded-pill bg-warning text-dark border border-secondary">Pending</span>
+                                                                                <span className="badge rounded-pill bg-danger border border-secondary">Blocked</span>
                                                                             </div>
                                                                             :
-                                                                            post.status === "blocked" ?
-                                                                                <div className="position-absolute top-0 start-50 translate-middle">
-                                                                                    <span className="badge rounded-pill bg-danger border border-secondary">Blocked</span>
-                                                                                </div>
-                                                                                :
-                                                                                <div className="position-absolute top-0 start-50 translate-middle">
-                                                                                    <span className="badge rounded-pill bg-secondary border border-secondary">not defined</span>
-                                                                                </div>
-                                                                    }
-                                                                </div>
+                                                                            <div className="position-absolute top-0 start-50 translate-middle">
+                                                                                <span className="badge rounded-pill bg-secondary border border-secondary">not defined</span>
+                                                                            </div>
+                                                                }
+                                                            </div>
 
+                                                        }
+
+
+                                                        <div className="card-header bg-transparent">
+                                                            <img src={post?.user?.userProfileImg ? `data:image/jpg;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post?.user.username)} />
+                                                            <h6>{post?.user?.fullName}</h6>
+
+
+                                                            {
+                                                                userId === post?.user?.id &&
+                                                                <div className="position-absolute top-0 end-0">
+                                                                    <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                                        <button type="button" className="btn btn-light btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" aria-label="Edit" data-balloon-pos="left" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)}><i className="bi bi-pencil-square"></i></button>
+                                                                        <div className="dropdown" aria-label="Delete" data-balloon-pos="up">
+                                                                            <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg text-danger"></i></button>
+                                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                                <p><small className="text-secondary">Delete Post?</small></p>
+                                                                                <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deletePost(post.id)}>Yes</button>
+                                                                                <button className="btn btn-secondary btn-sm" type="button">No</button>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
                                                             }
 
+                                                        </div>
+                                                        <div className="card-body">
 
-                                                            <div className="card-header bg-transparent">
-                                                                <img src={post?.user?.userProfileImg ? `data:image/jpg;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post?.user.username)} />
-                                                                <h6>{post?.user?.fullName}</h6>
+                                                            <p>{post.title}</p>
+                                                            {post.image &&
+                                                                <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
+                                                            }
 
+                                                            <small style={{ fontSize: 12 }}>{post.description}</small>
 
-                                                                {
-                                                                    userId === post?.user?.id &&
-                                                                    <div className="position-absolute top-0 end-0">
-                                                                        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                                            <button type="button" className="btn btn-light btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)} ><i className="bi bi-pencil-square"></i></button>
-                                                                            <div className="dropdown">
-                                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg text-danger"></i></button>
-                                                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                                    <p><small className="text-secondary">Delete Post?</small></p>
-                                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deletePost(post.id)}>Yes</button>
-                                                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
-                                                                                </ul>
-                                                                            </div>
-                                                                        </div>
+                                                            <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
 
-                                                                    </div>
+                                                                {post?.updatedDate ?
+
+                                                                    <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                    :
+                                                                    <small>{moment(post.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
                                                                 }
-
                                                             </div>
-                                                            <div className="card-body">
-
-                                                                <p>{post.title}</p>
-                                                                {post.image &&
-                                                                    <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
-                                                                }
-
-                                                                <small style={{ fontSize: 12 }}>{post.description}</small>
-
-                                                                <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
-
-                                                                    {post?.updatedDate ?
-
-                                                                        <small>updated: {moment(post.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
-                                                                        :
-                                                                        <small>{moment(post.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                            <div className="card-footer bg-transparent text-muted">
+                                                        </div>
+                                                        <div className="card-footer bg-transparent text-muted">
 
 
 
 
-                                                                <div className="btn-group dropup">
+                                                            <div className="btn-group dropup">
 
 
-                                                                    <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => postLike(post.id)}>
+                                                                <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => postLike(post.id)}>
 
-                                                                        <i className="bi bi-hand-thumbs-up me-md-2"></i>
+                                                                    <i className="bi bi-hand-thumbs-up me-md-2"></i>
 
 
 
-                                                                        {/* {post.likes?.map(like => like.userId === userId &&
+                                                                    {/* {post.likes?.map(like => like.userId === userId &&
                                                                                 <i className="bi bi-hand-thumbs-up-fill text-primary me-md-2"></i>)
                                                                             } */}
-                                                                        {post.likes?.map(like => like.userId === userId &&
+                                                                    {post.likes?.map(like => like.userId === userId &&
 
-                                                                            <small className="text-primary me-md-2" key={like.likeId}>Liked</small>
-                                                                        )
-                                                                        }
+                                                                        <small className="text-primary me-md-2" key={like.likeId}>Liked</small>
+                                                                    )
+                                                                    }
 
-                                                                        <small>{post.likes.length}</small>
+                                                                    <small>{post.likes.length}</small>
 
-                                                                    </button>
-
-
+                                                                </button>
 
 
 
-                                                                    {post?.likes.length !== 0 &&
-                                                                        <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" />}
 
 
-                                                                    <ul className="dropdown-menu">
+                                                                {post?.likes.length !== 0 && <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" />}
 
+
+                                                                <ul className="dropdown-menu">
+                                                                    <div id="scrollbar-small" style={{ overflow: "scroll", maxHeight: 500, width: 300, maxWidth: "auto", overflowX: "auto" }}>
                                                                         {
                                                                             post.likes?.map(like =>
+
                                                                                 <ul className="list-group list-group-flush" key={like.likeId} style={{ minWidth: 250 }}>
                                                                                     <li className="list-group-item list-group-item-action" style={{ cursor: 'pointer' }} onClick={() => navigate("/user/" + like.username)}>
                                                                                         <img src={like.userProfileImg ? `data:image/jpg;base64,${like.userProfileImg}` : default_user_profile_img} width="30" height="30" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
                                                                                         <small className={(like.userId === userId && "text-primary")}>{like.userFullName.length >= 20 ? like.userFullName.substring(0, 25) + "..." : like.userFullName}</small>
                                                                                     </li>
                                                                                 </ul>
+
                                                                             )
                                                                         }
-
-                                                                    </ul>
-
-                                                                </div>
+                                                                    </div>
+                                                                </ul>
 
                                                             </div>
+
                                                         </div>
+                                                    </div>
 
 
 
 
 
 
-                                                    </td>
-                                                </tr>
+                                                </td>
+                                            </tr>
 
 
 
-                                            )}
+                                        )}
 
 
 
-                                        </tbody>
+                                    </tbody>
 
-                                    </table>
-                                </div>
-
-
-                            }
+                                </table>
+                            </div>
 
 
+                        }
 
 
-                        
+
+
+
 
                     </div>
 
