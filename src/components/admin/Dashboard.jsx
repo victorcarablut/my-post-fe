@@ -93,7 +93,7 @@ function Dashboard() {
 
                 <div className="col-xl-4 mb-3">
 
-                    <div className="card mb-3">
+                    <div className="card mb-3" style={{height: 200}}> 
                         <div className="row g-0">
                             <div className="col-md-8">
                                 <div className="card-body">
@@ -101,6 +101,7 @@ function Dashboard() {
                                     <p className="card-text"><small>@{user?.username}</small></p>
                                     <p className="card-text"><small>{user?.email}</small></p>
                                     <p className="card-text"><small className="text-body-secondary">{user?.role}</small></p>
+                                    <small className="text-secondary">Full control over users and posts.</small>
                                 </div>
                             </div>
                         </div>
@@ -110,9 +111,9 @@ function Dashboard() {
 
                 <div className="col-xl-4 mb-3">
 
-                    <div className="card">
+                    <div className="card" style={{height: 200}}>
                         <div className="card-body">
-                            card 2
+                            
                         </div>
 
                     </div>
@@ -120,15 +121,13 @@ function Dashboard() {
                 </div>
 
                 <div className="col-xl-4 mb-3">
-
-                    <div className="card">
+                    <div className="card" style={{height: 200}}>
                         <div className="card-body">
-                            card 3
+                            
                         </div>
-
                     </div>
-
                 </div>
+             
 
             </div>
 

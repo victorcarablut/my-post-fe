@@ -218,19 +218,49 @@ function Posts(props) {
 
     }
 
+
+    // Custom  method for filter/search
+    const searchMethod = () => {
+
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search-post-input");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table-posts");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    // call the search method
+    const searchPosts = () => {
+        document.querySelector('#search-post-input').addEventListener('keyup', searchMethod, false);
+    }
+
     return (
         <div>
 
             <div className="d-flex justify-content-center">
                 <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
                     <div className="card-body">
-                        <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <div className="d-grid gap-2 d-md-flex justify-content-md-center mb-3">
                             <small className="me-md-2">{posts?.length} - Posts - Filter by:</small>
                             <button type="button" className={"btn " + (filterPostStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterPostStatus === "all"} onClick={() => handleFilterPostStatus("all")}>All</button>
                             <button type="button" className={"btn " + (filterPostStatus === "active" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterPostStatus === "active"} onClick={() => handleFilterPostStatus("active")}>Active</button>
                             <button type="button" className={"btn " + (filterPostStatus === "pending" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterPostStatus === "pending"} onClick={() => handleFilterPostStatus("pending")}>Pending</button>
                             <button type="button" className={"btn " + (filterPostStatus === "blocked" ? "btn-danger" : "btn-outline-danger") + " btn-sm"} disabled={filterPostStatus === "blocked"} onClick={() => handleFilterPostStatus("blocked")}>Blocked</button>
                         </div>
+                        
+                            <input type="text" id="search-post-input" className="form-control search-post-input" onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
+                       
 
                     </div>
                 </div>
@@ -243,7 +273,7 @@ function Posts(props) {
 
 
 
-                    <table id="table" className="container-fluid">
+                    <table id="table-posts" className="container-fluid">
 
                         <tbody>
 
@@ -332,6 +362,8 @@ function Posts(props) {
                                                 }
 
                                                 <small style={{ fontSize: 12 }}>{post.description}</small>
+                                                <hr/>
+                                                <small className="text-secondary" style={{ fontSize: 12 }}>username: @{post.user.username}</small>
 
                                                 <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
 

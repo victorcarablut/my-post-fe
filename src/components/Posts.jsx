@@ -653,6 +653,33 @@ function Posts(props) {
     }
 
 
+    // Custom  method for filter/search
+    const searchMethod = () => {
+
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search-post-input");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table-posts");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    // call the search method
+    const searchPosts = () => {
+        document.querySelector('#search-post-input').addEventListener('keyup', searchMethod, false);
+    }
+
+
     return (
 
         <>
@@ -661,10 +688,6 @@ function Posts(props) {
                 <div className="row">
 
                     <div className="col-xl-6" style={{ paddingBottom: 20 }}>
-
-                        {props.filter}
-                        <br />
-                        {username}
 
                         {(username === props.filter || props.filter === "all") &&
 
@@ -736,23 +759,17 @@ function Posts(props) {
 
 
 
-                    <div className="col-xl-6" style={{ paddingBottom: 20 }}>
+                    <div className="col-xl-6 me-mb-3">
 
-                        <div>
+                   
 
 
 
                             <div className="d-flex justify-content-center">
                                 <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
                                     <div className="card-body">
-                                        <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                                            <span className="badge text-bg-primary">Primary</span>
-                                            <span className="badge text-bg-success">Success</span>
-                                            <span className="badge text-bg-danger">Danger</span>
-                                            <span className="badge text-bg-warning">Warning</span>
-                                            <span className="badge text-bg-info">Info</span>
-                                            <span className="badge text-bg-light">Light</span>
-                                            <span className="badge text-bg-dark">Dar</span>
+                                        <div className="d-grid gap-2 d-md-flex justify-content-md-center">    
+                                            <input type="text" id="search-post-input" className="form-control search-post-input"  onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
                                         </div>
 
 
@@ -779,7 +796,7 @@ function Posts(props) {
 
 
 
-                                    <table id="table" className="container-fluid">
+                                    <table id="table-posts" className="container-fluid">
 
                                         <tbody>
 
@@ -902,10 +919,10 @@ function Posts(props) {
 
                                                                         {
                                                                             post.likes?.map(like =>
-                                                                                <ul className="list-group list-group-flush" key={like.likeId} style={{minWidth: 250}}>
+                                                                                <ul className="list-group list-group-flush" key={like.likeId} style={{ minWidth: 250 }}>
                                                                                     <li className="list-group-item list-group-item-action" style={{ cursor: 'pointer' }} onClick={() => navigate("/user/" + like.username)}>
                                                                                         <img src={like.userProfileImg ? `data:image/jpg;base64,${like.userProfileImg}` : default_user_profile_img} width="30" height="30" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
-                                                                                        <small className={ (like.userId === userId && "text-primary")}>{like.userFullName.length >= 20 ? like.userFullName.substring(0, 25) + "..." : like.userFullName}</small>
+                                                                                        <small className={(like.userId === userId && "text-primary")}>{like.userFullName.length >= 20 ? like.userFullName.substring(0, 25) + "..." : like.userFullName}</small>
                                                                                     </li>
                                                                                 </ul>
                                                                             )
@@ -943,7 +960,7 @@ function Posts(props) {
 
 
 
-                        </div>
+                        
 
                     </div>
 

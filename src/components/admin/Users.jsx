@@ -210,19 +210,47 @@ function Users(props) {
 
     }
 
+    // Custom  method for filter/search
+    const searchMethod = () => {
+
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search-user-input");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table-users");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    // call the search method
+    const searchUsers = () => {
+        document.querySelector('#search-user-input').addEventListener('keyup', searchMethod, false);
+    }
+
     return (
         <div>
 
             <div className="d-flex justify-content-center">
                 <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
                     <div className="card-body">
-                        <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <div className="d-grid gap-2 d-md-flex justify-content-md-center mb-3">
                             <small className="me-md-2">{users.length} - Users - Filter by:</small>
                             <button type="button" className={"btn " + (filterUserStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterUserStatus === "all"} onClick={() => handleFilterUserStatus("all")}>All</button>
                             <button type="button" className={"btn " + (filterUserStatus === "regular" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterUserStatus === "regular"} onClick={() => handleFilterUserStatus("regular")}>Regular</button>
                             <button type="button" className={"btn " + (filterUserStatus === "warning" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterUserStatus === "warning"} onClick={() => handleFilterUserStatus("warning")}>Warning</button>
                             <button type="button" className={"btn " + (filterUserStatus === "blocked" ? "btn-danger" : "btn-outline-danger") + " btn-sm"} disabled={filterUserStatus === "blocked"} onClick={() => handleFilterUserStatus("blocked")}>Blocked</button>
                         </div>
+
+                        <input type="text" id="search-user-input" className="form-control search-user-input" onKeyUp={searchUsers} placeholder="Search..." autoComplete="off" />
 
                     </div>
                 </div>
@@ -235,7 +263,7 @@ function Users(props) {
 
 
 
-                    <table id="table" className="container-fluid">
+                    <table id="table-users" className="container-fluid">
 
                         <tbody>
 
@@ -271,6 +299,7 @@ function Users(props) {
                                                             </div>
                                                 }
                                             </div>
+                                            
 
                                             <br /><br />
 
@@ -339,7 +368,7 @@ function Users(props) {
                                             <div className="card-body">
 
                                                 <ul className="list-group list-group-flush">
-                                                    <li className="list-group-item"><small style={{ fontSize: 12 }}>id: {user.id}</small> / <small style={{ fontSize: 12 }}>{user.enabled ? "enabled" : "disabled"}</small></li>
+                                                    <li className="list-group-item"><small style={{ fontSize: 12 }}>id: #{user.id}</small> / <small style={{ fontSize: 12 }}>{user.enabled ? "enabled - (email verified)" : "disabled -  (email not verified yet)"}</small></li>
                                                     <li className="list-group-item"><small style={{ fontSize: 12 }}>@{user.username}</small></li>
                                                     <li className="list-group-item"><small style={{ fontSize: 12 }}>{user.email}</small></li>
                                                 </ul>
