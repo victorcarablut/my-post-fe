@@ -21,6 +21,7 @@ import default_user_cover_img from '../../assets/images/cover.jpg';
 
 // Notifications
 import toast from 'react-hot-toast';
+import { Empty, Error } from "../_resources/ui/Alerts.jsx";
 
 function Users(props) {
 
@@ -256,19 +257,17 @@ function Users(props) {
                             </>
                         }
 
+                        {responseStatusGetAllUsers === "error" && <Error />}
+                        {(users?.length === 0 && responseStatusGetAllUsers === "success") && <Empty />}
+
                     </div>
                 </div>
             </div>
 
-            <div className="d-flex justify-content-center">
 
-                {responseStatusGetAllUsers === "error" && <small className="text-danger animate__animated animate__flash">Error</small>}
-                {(users?.length === 0 && responseStatusGetAllUsers === "success") && <small className="text-secondary">Empty</small>}
 
-            </div>
+            {users?.length !== 0 &&
 
-            {users?.length !== 0 && 
-                
 
                 <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "1000px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
 

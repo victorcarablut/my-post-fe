@@ -20,7 +20,7 @@ import { Logout } from './account/Logout.js';
 //import user_pic_profile from '../assets/images/user.jpg';
 
 import { LoadingFullScreen, LoadingSmall } from './_resources/ui/Loadings.jsx';
-import { Error } from './_resources/ui/Alerts.jsx';
+import { Empty, Error } from './_resources/ui/Alerts.jsx';
 
 // Date Time Format (moment.js)
 import moment from 'moment/min/moment-with-locales';
@@ -747,7 +747,7 @@ function Posts(props) {
                         <div className="d-flex justify-content-center">
                             <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
                                 <div className="card-body">
-                                    
+
 
                                 </div>
                             </div>
@@ -773,17 +773,15 @@ function Posts(props) {
 
                                     </div>
 
+                                    {responseStatusGetAllPosts === "error" && <Error />}
+                                    {(posts?.length === 0 && responseStatusGetAllPosts === "success") && <Empty />}
+
                                 </div>
                             </div>
 
                         </div>
 
-                        <div className="d-flex justify-content-center">
 
-                            {responseStatusGetAllPosts === "error" && <small className="text-danger animate__animated animate__flash">Error</small>}
-                            {(posts?.length === 0 && responseStatusGetAllPosts === "success") && <small className="text-secondary">Empty</small>}
-
-                        </div>
 
                         {posts?.length !== 0 &&
 

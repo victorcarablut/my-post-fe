@@ -20,6 +20,7 @@ import default_user_profile_img from '../../assets/images/user.jpg';
 
 // Notifications
 import toast from 'react-hot-toast';
+import { Empty, Error } from "../_resources/ui/Alerts.jsx";
 
 function Posts(props) {
 
@@ -265,16 +266,12 @@ function Posts(props) {
                             </>
                         }
 
+                        {responseStatusGetAllPosts === "error" && <Error />}
+                        {(posts?.length === 0 && responseStatusGetAllPosts === "success") && <Empty />}
+
 
                     </div>
                 </div>
-            </div>
-
-            <div className="d-flex justify-content-center">
-
-                {responseStatusGetAllPosts === "error" && <small className="text-danger animate__animated animate__flash">Error</small>}
-                {(posts?.length === 0 && responseStatusGetAllPosts === "success") && <small className="text-secondary">Empty</small>}
-
             </div>
 
             {posts?.length !== 0 &&
