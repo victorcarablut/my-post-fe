@@ -259,7 +259,7 @@ function Users(props) {
             {(users?.length === 0 && responseStatusGetAllUsers !== "error") ? <small>Empty Data</small>
                 :
 
-                <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "900px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
+                <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "1000px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
 
 
 
