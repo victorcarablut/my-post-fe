@@ -19,6 +19,7 @@ import default_user_profile_img from '../../assets/images/user.jpg';
 import default_user_cover_img from '../../assets/images/cover.jpg';
 
 import Posts from "../Posts.jsx";
+import { Error } from "../_resources/ui/Alerts.jsx";
 
 
 function UserProfile() {
@@ -39,6 +40,9 @@ function UserProfile() {
             userCoverImg: null
         }
     )
+
+    // http response status
+    const [responseStatusGetUserDetails, setResponseStatusGetUserDetails] = useState("");
 
     // auto refresh
     let interval = null;
@@ -79,7 +83,7 @@ function UserProfile() {
 
     const getUserDetails = async () => {
 
-        //setResponseStatusGetUserDetails("loading");
+        setResponseStatusGetUserDetails("loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
 
@@ -91,10 +95,12 @@ function UserProfile() {
 
         await axios.get(`${url}/user/details`, config).then((res) => {
             if (res.status === 200) {
-                setUsernameAccount(res.data.username);
 
+                setResponseStatusGetUserDetails("success");
+                setUsernameAccount(res.data.username);
             }
         }).catch(err => {
+            setResponseStatusGetUserDetails("error");
             return;
         })
 
@@ -103,7 +109,8 @@ function UserProfile() {
             if (res.status === 200) {
 
                 //console.log(res.data.fullName);
-                //setResponseStatusGetUserDetails("success");
+                setResponseStatusGetUserDetails("success");
+
                 setUser({
                     fullName: res.data.fullName,
                     email: res.data.email,
@@ -120,7 +127,7 @@ function UserProfile() {
             }
 
         }).catch(err => {
-            //setResponseStatusGetUserDetails("error");
+            setResponseStatusGetUserDetails("error");
             //Logout();
             return;
         })
@@ -135,57 +142,67 @@ function UserProfile() {
             <div className="d-flex justify-content-center mb-3">
                 <div className="container-fluid" style={{ maxWidth: 1400 }}>
 
+
                     <div className="card shadow">
 
-                        <img src={user?.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top" style={{ objectFit: "cover" }} />
 
-                        <div className="card-body">
+                        {(user && responseStatusGetUserDetails !== "error") &&
+                            <>
+                                <img src={user?.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} width="100%" height="200" alt="cover-img" className="card-img-top" style={{ objectFit: "cover" }} />
 
-                            <div className="d-grid gap-2 d-md-flex justify-content-md-left">
-                                <img src={user?.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="120" height="120" style={{ objectFit: "cover", marginTop: -75 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
+                                <div className="card-body">
 
-                                <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <h5 className="me-md-2">{user?.fullName}</h5>
-                                    {usernameAccount === user?.username &&
-                                        <NavLink to="/account" type="button" className="btn btn-light rounded-pill btn-sm" style={{ maxHeight: 30 }}><i className="bi bi-pencil-square me-md-2"></i>Edit Profile</NavLink>
+                                    <div className="d-grid gap-2 d-md-flex justify-content-md-left">
+                                        <img src={user?.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="120" height="120" style={{ objectFit: "cover", marginTop: -75 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
+
+                                        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <h5 className="me-md-2">{user?.fullName}</h5>
+                                            {usernameAccount === user?.username &&
+                                                <NavLink to="/account" type="button" className="btn btn-light rounded-pill btn-sm" style={{ maxHeight: 30 }}><i className="bi bi-pencil-square me-md-2"></i>Edit Profile</NavLink>
+                                            }
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+                                    <hr />
+                                    <small className="text-secondary">Username: @{user?.username}</small>
+                                    <br />
+
+
+
+                                    <small className="text-secondary me-md-2">User profile status:</small>
+
+                                    {user.status === "warning" ?
+                                        <span className="badge rounded-pill text-bg-warning" aria-label="The user have violated some of our rules" data-balloon-pos="right">{user.status}</span>
+                                        :
+                                        user.status === "blocked" ?
+                                            <span className="badge rounded-pill text-bg-danger" aria-label="The user are not following our rules" data-balloon-pos="right">{user.status}</span>
+                                            :
+                                            <span className="badge rounded-pill text-bg-success" aria-label="No suspicious activity found" data-balloon-pos="right">{user.status}</span>
                                     }
+
+
+
+
+
+
+
+                                </div>
+                                <div className="card-footer">
+                                    <small className="text-secondary">Account created on {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_long)}</small>
                                 </div>
 
-
-
-                                {/* {usernameAccount + " " + user?.username} */}
-
-
-                            </div>
-
-                            <hr />
-                            <small className="text-secondary">Username: @{user?.username}</small>
-                            <br />
-
-
-
-                            <small className="text-secondary me-md-2">User profile status:</small>
-
-                            {user.status === "warning" ?
-                                <span className="badge rounded-pill text-bg-warning" aria-label="The user have violated some of our rules" data-balloon-pos="right">{user.status}</span>
-                                :
-                                user.status === "blocked" ?
-                                <span className="badge rounded-pill text-bg-danger" aria-label="The user are not following our rules" data-balloon-pos="right">{user.status}</span>
-                                    :
-                                    <span className="badge rounded-pill text-bg-success" aria-label="No suspicious activity found" data-balloon-pos="right">{user.status}</span>
-                            }
-
-
-
-
-                            {/* <NavLink to="/account" type="button" className="btn btn-light btn-sm">Edit User</NavLink> */}
-
-
-                        </div>
-                        <div className="card-footer">
-                            <small className="text-secondary">Account created on {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_long)}</small>
-                        </div>
+                            </>
+                        }
+                        {responseStatusGetUserDetails === "error" && <Error />}
                     </div>
+
+
+
 
                 </div>
 
@@ -193,9 +210,12 @@ function UserProfile() {
 
 
 
+            {responseStatusGetUserDetails !== "error" &&
+
+                <Posts filter={username} />
+            }
 
 
-            <Posts filter={username} />
 
         </>
     )
