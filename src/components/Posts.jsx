@@ -887,10 +887,6 @@ function Posts(props) {
                                                                     <i className="bi bi-hand-thumbs-up me-md-2"></i>
 
 
-
-                                                                    {/* {post.likes?.map(like => like.userId === userId &&
-                                                                                <i className="bi bi-hand-thumbs-up-fill text-primary me-md-2"></i>)
-                                                                            } */}
                                                                     {post.likes?.map(like => like.userId === userId &&
 
                                                                         <small className="text-primary me-md-2" key={like.likeId}>Liked</small>
@@ -916,7 +912,7 @@ function Posts(props) {
                                                                                 <ul className="list-group list-group-flush" key={like.likeId} style={{ minWidth: 250 }}>
                                                                                     <li className="list-group-item list-group-item-action" style={{ cursor: 'pointer' }} onClick={() => navigate("/user/" + like.username)}>
                                                                                         <img src={like.userProfileImg ? `data:image/jpg;base64,${like.userProfileImg}` : default_user_profile_img} width="30" height="30" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
-                                                                                        <small className={(like.userId === userId && "text-primary")}>{like.userFullName.length >= 20 ? like.userFullName.substring(0, 25) + "..." : like.userFullName}</small>
+                                                                                        <small className={(like.userId === userId ? "text-primary" : "text-dark")}>{like.userFullName.length >= 20 ? like.userFullName.substring(0, 25) + "..." : like.userFullName}</small>
                                                                                     </li>
                                                                                 </ul>
 

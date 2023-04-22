@@ -55,9 +55,9 @@ function Header() {
 
   const checkAuth = async () => {
 
-    /*  setInterval(() => {
+    setInterval(() => {
        checkAuthInfinite();
-     }, 5000); */
+     }, 10000);
 
     const verifyToken = await VerifyToken();
 
@@ -119,13 +119,6 @@ function Header() {
 
 
   const logout = async () => {
-    // const logout = await Logout();
-
-    //document.getElementById('button-modal-submit-update-employee-close').click();
-
-    //secureLocalStorage.removeItem("token");
-    //setUser({ fullName: null })
-    //window.location.reload();
 
     return await Logout();
   }
