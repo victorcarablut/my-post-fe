@@ -180,7 +180,7 @@ function UserProfile() {
                                         <span className="badge rounded-pill text-bg-warning" aria-label="The user have violated some of our rules" data-balloon-pos="right">{user.status}</span>
                                         :
                                         user.status === "blocked" ?
-                                            <span className="badge rounded-pill text-bg-danger" aria-label="The user are not following our rules" data-balloon-pos="right">{user.status}</span>
+                                            <span className="badge rounded-pill text-bg-danger" aria-label="The user have violated all of our rules" data-balloon-pos="right">{user.status}</span>
                                             :
                                             <span className="badge rounded-pill text-bg-success" aria-label="No suspicious activity found" data-balloon-pos="right">{user.status}</span>
                                     }

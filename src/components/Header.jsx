@@ -39,14 +39,6 @@ function Header() {
     }
   )
 
-  /* const [user, setUser] = useState(
-    {
-      fullName: null,
-      email: null
-    }
-  ) */
-
-
   useEffect(() => {
 
     checkAuth();
@@ -55,9 +47,9 @@ function Header() {
 
   const checkAuth = async () => {
 
-    setInterval(() => {
-       checkAuthInfinite();
-     }, 10000);
+    // setInterval(() => {
+    //    checkAuthInfinite();
+    //  }, 10000);
 
     const verifyToken = await VerifyToken();
 
@@ -81,6 +73,7 @@ function Header() {
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
+     
     }
 
   }
@@ -105,7 +98,7 @@ function Header() {
           role: res.data.role
         })
 
-        console.log(res.data);
+        // console.log(res.data);
 
       } else {
         logout();
