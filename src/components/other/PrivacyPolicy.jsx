@@ -16,6 +16,8 @@ function PrivacyPolicy() {
             <p className="card-text">Terms and Conditions:
             <br/>
             <small>We reserve the right to block and delete user's account, posts, etc. in case of inappropriate use.</small>
+            <br/>
+            <small>Don't write/publish any sensitive or inappropriate data, you may receive a warning or blocked.</small>
             </p>
 
             <p className="card-text">Any question?

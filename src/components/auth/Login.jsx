@@ -339,7 +339,7 @@ function Register() {
                                         <h5 className="card-title">myPost</h5>
                                         <p className="card-text">Web App developed for demonstration purposes only.</p>
                                         <p className="card-text"><small>Feel free to register and test the application, personal data such as email will not be shared externally. You can use: <a className="footer-url" href="https://temp-mail.org" target="_blank" rel="noreferrer"><small>temp-mail.org</small></a> as a temporary email.</small></p>
-                                        <a className="btn btn-light rounded-pill btn-sm shadow" href="https://code.victorcarablut.com" target="_blank" rel="noreferrer"><small>Read More</small></a>
+                                        <Link to="/about" type="button" className="btn btn-light rounded-pill btn-sm shadow">Read More</Link>
                                     </div>
                                 </div>
 
