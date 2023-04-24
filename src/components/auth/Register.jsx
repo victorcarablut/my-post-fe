@@ -239,7 +239,7 @@ function Register() {
                         setUserRegiteredStatus("email_already_exist");
                     } else {
                         toast.dismiss(toastNotify);
-                        toast.success("Registered successfully");
+                        toast.success("Step 1 - Registered successfully");
 
                         setUserRegiteredStatus("success");
 
@@ -310,7 +310,7 @@ function Register() {
                     //secureLocalStorage.setItem("token", res.data.token);
 
                     toast.dismiss(toastNotify);
-                    toast.success("Email sent successfully");
+                    toast.success("Step 2 - Email sent successfully");
                     setEmailCodeStatus("success");
 
                     navigate(

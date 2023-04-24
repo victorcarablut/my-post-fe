@@ -20,7 +20,7 @@ import { LoadingFullScreen } from '../_resources/ui/Loadings';
 import toast from 'react-hot-toast';
 
 import UserPasswordRecover from '../account/UserPasswordRecover.jsx';
-import SendEmailCodeNoReplay from '../account/SendEmailCodeNoReplay.jsx';
+//import SendEmailCodeNoReplay from '../account/SendEmailCodeNoReplay.jsx';
 
 
 function Register() {

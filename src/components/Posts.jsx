@@ -251,7 +251,7 @@ function Posts(props) {
 
 
                     // clear Array
-                    setPosts([]);
+                    //setPosts([]);
 
 
                     let newArr = [];
@@ -432,7 +432,9 @@ function Posts(props) {
 
                         clearInputs();
 
-                        getAllPosts();
+                        navigate("/user/" + username);
+
+                        //getAllPosts();
 
                         //uploadImage();
                     }
