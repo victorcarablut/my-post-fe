@@ -274,7 +274,10 @@ function Users(props) {
                 toast.dismiss(toastNotify);
                 toast.success("Executed");
 
+                clearInputs();
                 getAllUsers();
+
+                
             }
 
         }).catch(err => {
