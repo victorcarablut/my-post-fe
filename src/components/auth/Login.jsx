@@ -22,6 +22,8 @@ import toast from 'react-hot-toast';
 import UserPasswordRecover from '../account/UserPasswordRecover.jsx';
 //import SendEmailCodeNoReplay from '../account/SendEmailCodeNoReplay.jsx';
 
+import posts_preview_img from '../../assets/images/posts-preview-img.png';
+
 
 function Register() {
 
@@ -327,66 +329,80 @@ function Register() {
                     :
                     <div className="d-flex justify-content-center">
 
-                        <div className="container-fluid" style={{ maxWidth: 400 }}>
-                            <div className="card text-center shadow-lg animate__animated animate__fadeIn">
-                                <div className="card-header fw-semibold">
-                                    <i className="bi bi-person-fill me-2" />
-                                    User Login
+                        <div className="container-fluid">
+
+                            <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+
+                                <div className="card bg-transparent border-0 animate__animated animate__fadeIn animate__slower" style={{ maxWidth: 700 }}>
+                                <img src={posts_preview_img} width="100%" height="auto" alt="cover-img" className="card-img-top" style={{ objectFit: "cover" }} />
+                                        <div className="card-body">
+                                            <h5 className="card-title">Card title</h5>
+                                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                            <a href="#" className="btn btn-primary">Go somewhere</a>
+                                        </div>
                                 </div>
-                                <div className="card-body">
 
-                                    <form onSubmit={handleSubmit}>
-
-                                        <div className="form-floating mb-3">
-                                            <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" maxLength="100" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
-                                            <label htmlFor="floatingInputEmail">Email *</label>
-                                            <div className="invalid-feedback">
-                                                <small>Email must contain @ and .</small>
-                                            </div>
-                                        </div>
-                                        <div className="form-floating mb-3">
-                                            <input type={passwordType} className="form-control" id="floatingInputPassword" placeholder="Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
-                                            <label htmlFor="floatingInputPassword">Password *</label>
-                                        </div>
-                                        <div className="mb-3">
-                                            <input type="checkbox" className="form-check-input me-md-2" id="checkPasswordVisible" checked={passwordVisibleChecked} onChange={() => handleInputPasswordVisible()} />
-                                            <label className="form-check-label" htmlFor="checkPasswordVisible"><small>Show Password</small></label>
-                                        </div>
-
-                                        <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || !password || buttonLoginUserIsDisabled} onClick={loginUser}>Login</button>
-                                    </form>
-
-                                    <p><small className="text-muted">All fields marked with an asterisk (*) are required.</small></p>
-
-
-
-
-
-                                    {loginUserStatus === "email_not_verified" &&
-                                        <div className="alert alert-warning" role="alert">
-                                            <p><small>{email ? email : ""}</small></p>
-                                            <p><small className="text-secondary mb-3">Send verification code on email?</small></p>
-                                            <div>
-                                                <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || emailCodeStatus === "loading"} onClick={sendEmailCodeNoReply}>Send Code</button>
-                                            </div>
-                                        </div>
-
-                                    }
-
-                                    {loginUserStatus !== "user_email_not_found" && loginUserStatus !== "email_not_verified" && loginUserStatus !== "" &&
-                                        <button type="button" className="btn btn-outline btn-sm rounded-pill mb-3" data-bs-toggle="modal" data-bs-target="#passwordRecoverModal">Forgot Password?</button>
-                                    }
-
-                                    <div className="alert alert-secondary" role="alert">
-                                        <i className="bi bi-info-circle me-2"></i>
-                                        <small>By clicking Login you have read and agree to our<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy,</Link>including<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Cookie Use.</Link></small>
+                                <div className="card text-center shadow-lg animate__animated animate__fadeIn" style={{ maxWidth: 400, maxHeight: 500 }}>
+                                    <div className="card-header fw-semibold">
+                                        <i className="bi bi-person-fill me-2" />
+                                        User Login
                                     </div>
+                                    <div className="card-body">
 
+                                        <form onSubmit={handleSubmit}>
+
+                                            <div className="form-floating mb-3">
+                                                <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" maxLength="100" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
+                                                <label htmlFor="floatingInputEmail">Email *</label>
+                                                <div className="invalid-feedback">
+                                                    <small>Email must contain @ and .</small>
+                                                </div>
+                                            </div>
+                                            <div className="form-floating mb-3">
+                                                <input type={passwordType} className="form-control" id="floatingInputPassword" placeholder="Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                                <label htmlFor="floatingInputPassword">Password *</label>
+                                            </div>
+                                            <div className="mb-3">
+                                                <input type="checkbox" className="form-check-input me-md-2" id="checkPasswordVisible" checked={passwordVisibleChecked} onChange={() => handleInputPasswordVisible()} />
+                                                <label className="form-check-label" htmlFor="checkPasswordVisible"><small>Show Password</small></label>
+                                            </div>
+
+                                            <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || !password || buttonLoginUserIsDisabled} onClick={loginUser}>Login</button>
+                                        </form>
+
+                                        <p><small className="text-muted">All fields marked with an asterisk (*) are required.</small></p>
+
+
+
+
+
+                                        {loginUserStatus === "email_not_verified" &&
+                                            <div className="alert alert-warning" role="alert">
+                                                <p><small>{email ? email : ""}</small></p>
+                                                <p><small className="text-secondary mb-3">Send verification code on email?</small></p>
+                                                <div>
+                                                    <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!email || emailCodeStatus === "loading"} onClick={sendEmailCodeNoReply}>Send Code</button>
+                                                </div>
+                                            </div>
+
+                                        }
+
+                                        {loginUserStatus !== "user_email_not_found" && loginUserStatus !== "email_not_verified" && loginUserStatus !== "" &&
+                                            <button type="button" className="btn btn-outline btn-sm rounded-pill mb-3" data-bs-toggle="modal" data-bs-target="#passwordRecoverModal">Forgot Password?</button>
+                                        }
+
+                                        <div className="alert alert-secondary" role="alert">
+                                            <i className="bi bi-info-circle me-2"></i>
+                                            <small>By clicking Login you have read and agree to our<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy,</Link>including<Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Cookie Use.</Link></small>
+                                        </div>
+
+                                    </div>
+                                    <div className="card-footer text-muted">
+                                        <small className="me-2">Don't have an account?</small>
+                                        <Link to="/register" type="button" className="btn btn-light btn-sm me-md-2 rounded-pill border border-2">Register</Link>
+                                    </div>
                                 </div>
-                                <div className="card-footer text-muted">
-                                    <small className="me-2">Don't have an account?</small>
-                                    <Link to="/register" type="button" className="btn btn-light btn-sm me-md-2 rounded-pill border border-2">Register</Link>
-                                </div>
+
                             </div>
                         </div>
 

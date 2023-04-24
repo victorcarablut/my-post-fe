@@ -242,7 +242,6 @@ function UserDetails() {
 
         }).catch(err => {
             setResponseStatusGetUserDetails("error");
-            Logout();
             return;
         })
 
