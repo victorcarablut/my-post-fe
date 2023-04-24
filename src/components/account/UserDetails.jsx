@@ -12,7 +12,7 @@ import { url } from "../../config.js";
 // Link 
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 
-//import { VerifyToken } from './security/VerifyToken.js';
+import { VerifyToken } from '../security/VerifyToken.js';
 import { Logout } from './Logout.js';
 
 // Logo / User
@@ -33,6 +33,8 @@ import default_user_cover_img from '../../assets/images/cover.jpg';
 
 // Notifications
 import toast from 'react-hot-toast';
+
+
 
 function UserDetails() {
 
@@ -69,10 +71,17 @@ function UserDetails() {
 
     useEffect(() => {
 
-        //checkAuth();
+        checkAuth();
         clearInputs();
         getUserDetails();
     }, []);
+
+    const checkAuth = async () => {
+        const verifyToken = await VerifyToken();
+        if (!verifyToken) {
+          await Logout();
+        }
+      }
 
     // clear/reset inputs, other...
     const clearInputs = () => {

@@ -21,6 +21,11 @@ import default_user_cover_img from '../../assets/images/cover.jpg';
 import Posts from "../Posts.jsx";
 import { Error } from "../_resources/ui/Alerts.jsx";
 
+import { VerifyToken } from "../security/VerifyToken.js";
+import { Logout } from "./Logout.js";
+
+
+
 
 function UserProfile() {
 
@@ -50,6 +55,8 @@ function UserProfile() {
     useEffect(() => {
         //console.log(username);
 
+        checkAuth();
+
         window.scrollTo({
             top: 0,
             behavior: "smooth",
@@ -78,6 +85,13 @@ function UserProfile() {
     // auto refresh
     const stopInterval = () => {
         clearInterval(interval);
+    }
+
+    const checkAuth = async () => {
+        const verifyToken = await VerifyToken();
+        if (!verifyToken) {
+            await Logout();
+        }
     }
 
 
@@ -179,7 +193,7 @@ function UserProfile() {
                                     {user.status === "warning" ?
                                         <span className="badge rounded-pill text-bg-warning" aria-label="The user have violated some of our rules" data-balloon-pos="right">{user.status}</span>
                                         :
-                                            <span className="badge rounded-pill text-bg-success" aria-label="No suspicious activity found" data-balloon-pos="right">{user.status}</span>
+                                        <span className="badge rounded-pill text-bg-success" aria-label="No suspicious activity found" data-balloon-pos="right">{user.status}</span>
                                     }
 
 

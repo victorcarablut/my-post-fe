@@ -14,6 +14,9 @@ import Users from "./Users.jsx";
 import Posts from "./Posts.jsx";
 import { Empty, Error } from "../_resources/ui/Alerts.jsx";
 
+import { VerifyToken } from "../security/VerifyToken.js";
+import { Logout } from "../account/Logout.js";
+
 function Dashboard() {
 
     // actual User (admin only)
@@ -34,9 +37,17 @@ function Dashboard() {
 
     useEffect(() => {
 
-        //checkAuth();
+        checkAuth();
+
         getUserDetails();
     }, []);
+
+    const checkAuth = async () => {
+        const verifyToken = await VerifyToken();
+        if (!verifyToken) {
+          await Logout();
+        }
+      }
 
     const getUserDetails = async () => {
 
