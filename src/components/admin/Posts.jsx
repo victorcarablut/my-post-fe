@@ -97,7 +97,7 @@ function Posts(props) {
                 if (filterPostStatus === "active") {
 
                     // clear Array
-                    setPosts([]);
+                    //setPosts([]);
 
                     let newArr = [];
 
@@ -114,7 +114,7 @@ function Posts(props) {
                 } else if (filterPostStatus === "pending") {
 
                     // clear Array
-                    setPosts([]);
+                    //setPosts([]);
 
                     let newArr = [];
 
@@ -132,7 +132,7 @@ function Posts(props) {
                     setPosts(newArr);
                 } else if (filterPostStatus === "blocked") {
                     // clear Array
-                    setPosts([]);
+                    //setPosts([]);
 
                     let newArr = [];
 

@@ -229,6 +229,45 @@ function Users(props) {
 
     }
 
+    const changeUserRole = async (userUsername, userStatus) => {
+
+        const toastNotify = toast.loading("Waiting...");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        //console.log("user_id: " + props.userId);
+        //console.log("post_id: " + postId);
+
+        const data = {
+            userId: props.userId, // actual user id (admin)
+            username: userUsername, // (of all users)
+        }
+
+        await axios.post(`${url}/user/role`, data, config).then((res) => {
+            if (res.status === 200) {
+                //setButtonCreatePostIsDisabled(false);
+
+                toast.dismiss(toastNotify);
+                toast.success("Executed");
+
+                getAllUsers();
+            }
+
+        }).catch(err => {
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            //setButtonCreatePostIsDisabled(false);
+            return;
+        })
+
+    }
+
     // Custom  method for filter/search
     const searchMethod = () => {
 
@@ -389,6 +428,18 @@ function Users(props) {
                                                                     <p><small className="text-secondary">Are you sure?</small></p>
                                                                     <p><small className="text-secondary">All data will be deleted permanently</small></p>
                                                                     <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusUser(user.username, "blocked")}>Yes</button>
+                                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
+                                                                </ul>
+                                                            </div>
+                                                        }
+
+                                                        {(user.status === "regular") &&
+                                                            <div className="dropdown">
+                                                                <button className="btn btn-primary btn-sm dropdown-toggle position-absolute top-0 start-100 translate-middle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={user.role === "ADMIN" || user.enabled === false}><i className="bi bi-person-fill-gear"></i></button>
+                                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                    <p><small className="text-secondary">Are you sure?</small></p>
+                                                                    <p><small className="text-secondary">User role will be changed to ADMIN</small></p>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => changeUserRole(user.username)}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                 </ul>
                                                             </div>

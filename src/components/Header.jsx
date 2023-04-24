@@ -163,7 +163,7 @@ function Header() {
                   <li><NavLink to="/contact" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}>Contact</NavLink></li>
 
                   {user.role === "ADMIN" &&
-                    <li><NavLink to="/admin/dashboard" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}><i className="bi bi-circle-fill text-secondary me-md-2"></i>Dashboard</NavLink></li>
+                    <li><NavLink to="/admin/dashboard" className={"dropdown-item navbar-nav-link fw-semibold " + (({ isActive }) => isActive ? "nav-link active" : "nav-link")}><i className="bi bi-circle-fill text-primary me-md-2"></i>Dashboard</NavLink></li>
                   }
 
                   {isAuthenticated &&
