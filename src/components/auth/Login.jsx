@@ -336,9 +336,11 @@ function Register() {
                                 <div className="card bg-transparent border-0 animate__animated animate__fadeIn animate__slower" style={{ maxWidth: 700 }}>
                                 <img src={posts_preview_img} width="100%" height="auto" alt="cover-img" className="card-img-top" style={{ objectFit: "cover" }} />
                                         <div className="card-body">
-                                            <h5 className="card-title">Card title</h5>
-                                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                            <a href="#" className="btn btn-primary">Go somewhere</a>
+                                            <h5 className="card-title">myPost</h5>
+                                            <p className="card-text">Web App developed for demonstration purposes only.</p>
+                                            <p className="card-text"><small>Feel free to register and test the application, personal data such as email will not be shared externally. You can use: <a className="footer-url" href="https://temp-mail.org" target="_blank" rel="noreferrer"><small>temp-mail.org</small></a> as a temporary email.</small></p>
+                                            
+                                            <a className="btn btn-light rounded-pill btn-sm shadow" href="https://code.victorcarablut.com" target="_blank" rel="noreferrer"><small>Read More</small></a>
                                         </div>
                                 </div>
 
