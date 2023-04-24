@@ -30,6 +30,8 @@ function Users(props) {
     // list
     const [users, setUsers] = useState([]);
 
+    const [password, setPassword] = useState();
+
     const [filterUserStatus, setFilterUserStatus] = useState("all");
 
     // http response status
@@ -42,6 +44,8 @@ function Users(props) {
     useEffect(() => {
 
         //checkAuth();
+
+        clearInputs();
 
         getAllUsers();
 
@@ -66,6 +70,19 @@ function Users(props) {
     // auto refresh
     const stopInterval = () => {
         clearInterval(interval);
+    }
+
+    const clearInputs = () => {
+        setPassword(null);
+    }
+
+    const handleInputPassword = async (e) => {
+        const password = e.target.value;
+        setPassword(password);
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
     }
 
 
@@ -229,7 +246,7 @@ function Users(props) {
 
     }
 
-    const changeUserRole = async (userUsername, userStatus) => {
+    const updateUserRole = async (userUsername, userStatus) => {
 
         const toastNotify = toast.loading("Waiting...");
 
@@ -247,6 +264,7 @@ function Users(props) {
         const data = {
             userId: props.userId, // actual user id (admin)
             username: userUsername, // (of all users)
+            password: password, // for better security password is required
         }
 
         await axios.post(`${url}/user/role`, data, config).then((res) => {
@@ -439,7 +457,13 @@ function Users(props) {
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Are you sure?</small></p>
                                                                     <p><small className="text-secondary">User role will be changed to ADMIN</small></p>
-                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => changeUserRole(user.username)}>Yes</button>
+                                                                    <form onSubmit={handleSubmit} style={{ minWidth: 200 }}>
+                                                                        <li className="container-fluid mb-3">
+                                                                            <input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                                                        </li>
+
+                                                                    </form>
+                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" disabled={!password} onClick={() => updateUserRole(user.username)}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                 </ul>
                                                             </div>
