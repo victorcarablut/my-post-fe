@@ -343,7 +343,7 @@ function Users(props) {
                                                     :
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-start">
                                                         <img src={default_user_profile_img} width="60" height="60" style={{ objectFit: "cover", marginTop: -30 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
-                                                        <h6>{user.fullName}</h6>
+                                                        <h6>{user.fullName} <span className="badge bg-secondary">Deleted</span></h6>
                                                     </div>
                                                 }
 
@@ -375,6 +375,7 @@ function Users(props) {
                                                                 <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={user.role === "ADMIN" || user.enabled === false}><i className="bi bi-exclamation-triangle text-warning"></i> Warning</button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Are you sure?</small></p>
+                                                                    <p><small className="text-secondary">Only a warning status</small></p>
                                                                     <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusUser(user.username, "warning")}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                 </ul>
@@ -386,6 +387,7 @@ function Users(props) {
                                                                 <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={user.role === "ADMIN" || user.enabled === false}><i className="bi bi-x-lg text-danger"></i> Block</button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Are you sure?</small></p>
+                                                                    <p><small className="text-secondary">All data will be deleted permanently</small></p>
                                                                     <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusUser(user.username, "blocked")}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                 </ul>
