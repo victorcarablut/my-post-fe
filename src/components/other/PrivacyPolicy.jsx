@@ -17,7 +17,9 @@ function PrivacyPolicy() {
             <br/>
             <small>We reserve the right to block and delete user's account, posts, etc. in case of inappropriate use.</small>
             <br/>
-            <small>Don't write/publish any sensitive or inappropriate data, you may receive a warning or blocked.</small>
+            <small>Don't write/publish any sensitive or inappropriate data, you may receive a warning.</small>
+            <br/>
+            <small>All posts are reviewed by the admin. In case of violation of our rules, the account will be suspended.</small>
             </p>
 
             <p className="card-text">Any question?

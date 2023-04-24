@@ -749,8 +749,10 @@ function Posts(props) {
                         <div className="d-flex justify-content-center">
                             <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
                                 <div className="card-body">
-
-
+                                    <div className="alert alert-light" role="alert">
+                                    <i className="bi bi-info-circle me-md-2"></i>
+                                    <small>All posts are reviewed by the admin.</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>

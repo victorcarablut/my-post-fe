@@ -882,12 +882,11 @@ function UserDetails() {
                     </div>
                     <div className="card-body">
 
-                        {
-                            responseStatusGeUserDetails === "loading" ? <LoadingSmall /> :
-                                responseStatusGeUserDetails === "error" ? <Error /> :
-                                    responseStatusGeUserDetails === "success" ?
+                        {responseStatusGeUserDetails === "error" && <Error />}
 
-                                        <>
+                        { responseStatusGeUserDetails === "success" &&
+
+                                        
                                             <ul className="list-group list-group-flush">
                                                 <li className="list-group-item">
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
@@ -1015,7 +1014,7 @@ function UserDetails() {
                                                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
                                                                     <i className="bi bi-x-lg"></i>
                                                                 </span>
-                                                                <form onSubmit={handleSubmit}>
+                                                                <form onSubmit={handleSubmit} style={{minWidth: 200}}>
                                                                     <li className="container-fluid mb-3">
                                                                         <input type="text" className="form-control form-control-sm" id="inputFullNameNew" placeholder="New: Full Name" maxLength="100" value={fullNameNew} onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
                                                                         {fullNameNew?.length > 0 &&
@@ -1038,7 +1037,7 @@ function UserDetails() {
                                                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
                                                                     <i className="bi bi-x-lg"></i>
                                                                 </span>
-                                                                <form onSubmit={handleSubmit}>
+                                                                <form onSubmit={handleSubmit} style={{minWidth: 200}}>
                                                                     <li className="container-fluid mb-3">
                                                                         {emailNew && code ?
 
@@ -1082,7 +1081,7 @@ function UserDetails() {
                                                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
                                                                     <i className="bi bi-x-lg"></i>
                                                                 </span>
-                                                                <form onSubmit={handleSubmit} className="container-fluid">
+                                                                <form onSubmit={handleSubmit} className="container-fluid" style={{minWidth: 200}}>
                                                                     <li className="mb-3">
                                                                         <input type="text" className="form-control form-control-sm" id="inputUsernameNew" placeholder="New: Username" maxLength="20" value={usernameNew} onChange={(e) => handleInputUsername(e)} autoComplete="off" required />
                                                                         {usernameNew?.length > 0 &&
@@ -1108,12 +1107,12 @@ function UserDetails() {
                                                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
                                                                     <i className="bi bi-x-lg"></i>
                                                                 </span>
-                                                                <form onSubmit={handleSubmit} className="container-fluid">
+                                                                <form onSubmit={handleSubmit} className="container-fluid" style={{minWidth: 200}}>
                                                                     <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordOld" placeholder="Old: Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
                                                                     <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordNew" placeholder="New: Password" maxLength="100" onChange={(e) => handleInputPasswordNew(e)} autoComplete="off" required /></li>
                                                                     <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordRepeatNew" placeholder="New: Password Repeat" maxLength="100" onChange={(e) => handleInputPasswordRepeatNew(e)} autoComplete="off" required /></li>
                                                                     {passwordNew !== passwordRepeatNew &&
-                                                                        <small>Warning: new passwords must match!</small>
+                                                                        <small>New passwords must match!</small>
                                                                     }
                                                                     <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserPassword} disabled={!password || !passwordNew || passwordRepeatNew !== passwordNew || passwordNew.length > 100}>Update</button></li>
                                                                 </form>
@@ -1122,22 +1121,12 @@ function UserDetails() {
                                                     </div>
                                                 </li>
                                             </ul>
-
-                                            
-
-                                        </>
-
-
-                                        :
-                                        <></>
+         
                         }
 
 
                     </div>
-                    <div className="card-footer text-center text-muted">
-                        <small className="me-2">Don't have an account?</small>
-                        {/* <UserPasswordRecover /> */}
-                    </div>
+
                 </div>
             </div>
         </div>
