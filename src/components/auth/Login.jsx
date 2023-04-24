@@ -211,6 +211,10 @@ function Register() {
                         toast.dismiss(toastNotify);
                         toast.error("Wrong email or password");
                         setButtonLoginUserIsDisabled(false);
+                    } else if (res.data.status_code === 12) {
+                        toast.dismiss(toastNotify);
+                        toast.error("Account is blocked because rules were violated.");
+                        setButtonLoginUserIsDisabled(false);
                     } else {
                         secureLocalStorage.setItem("token", res.data.token);
 
