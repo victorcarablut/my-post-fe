@@ -91,7 +91,7 @@ function Users(props) {
                 if (filterUserStatus === "regular") {
 
                     // clear Array
-                    setUsers([]);
+                    //setUsers([]);
 
                     let newArr = [];
 
@@ -108,7 +108,7 @@ function Users(props) {
                 } else if (filterUserStatus === "warning") {
 
                     // clear Array
-                    setUsers([]);
+                    //setUsers([]);
 
                     let newArr = [];
 
@@ -127,23 +127,42 @@ function Users(props) {
 
                 } else if (filterUserStatus === "blocked") {
                     // clear Array
-                    setUsers([]);
+                    //setUsers([]);
 
-                    let newArr = [];
+                    getAllBlockedUsers();
 
-                    res.data.forEach((user) => {
-                        if (user.status === "blocked") {
-                            newArr.push(user);
-                        } else {
-                            return;
-                        }
-                    })
-
-                    setUsers(newArr);
                 } else {
                     // all
                     setUsers(res.data);
                 }
+            }
+
+        }).catch(err => {
+            setResponseStatusGetAllUsers("error");
+            //Logout();
+            return;
+        })
+    }
+
+    const getAllBlockedUsers = async () => {
+
+        setResponseStatusGetAllUsers("loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        await axios.get(`${url}/user/all/blocked`, config).then((res) => {
+
+            if (res.status === 200) {
+                setResponseStatusGetAllUsers("success");
+                console.log(res.data);
+                setUsers(res.data);
+
             }
 
         }).catch(err => {
@@ -243,18 +262,18 @@ function Users(props) {
                 <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
                     <div className="card-body">
 
-                        {(users?.length !== 0 && responseStatusGetAllUsers !== "error") &&
-                            <>
-                                <div className="d-grid gap-2 d-md-flex justify-content-md-center mb-3">
-                                    <small className="me-md-2">{users?.length} - Users - Filter by:</small>
-                                    <button type="button" className={"btn " + (filterUserStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterUserStatus === "all"} onClick={() => handleFilterUserStatus("all")}>All</button>
-                                    <button type="button" className={"btn " + (filterUserStatus === "regular" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterUserStatus === "regular"} onClick={() => handleFilterUserStatus("regular")}>Regular</button>
-                                    <button type="button" className={"btn " + (filterUserStatus === "warning" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterUserStatus === "warning"} onClick={() => handleFilterUserStatus("warning")}>Warning</button>
-                                    <button type="button" className={"btn " + (filterUserStatus === "blocked" ? "btn-danger" : "btn-outline-danger") + " btn-sm"} disabled={filterUserStatus === "blocked"} onClick={() => handleFilterUserStatus("blocked")}>Blocked</button>
-                                </div>
+                        {(responseStatusGetAllUsers !== "error") &&
+                            <div className="d-grid gap-2 d-md-flex justify-content-md-center mb-3">
+                                <small className="me-md-2">{users?.length} - Users - Filter by:</small>
+                                <button type="button" className={"btn " + (filterUserStatus === "all" ? "btn-secondary" : "btn-outline-secondary") + " btn-sm"} disabled={filterUserStatus === "all"} onClick={() => handleFilterUserStatus("all")}>All</button>
+                                <button type="button" className={"btn " + (filterUserStatus === "regular" ? "btn-success" : "btn-outline-success") + " btn-sm"} disabled={filterUserStatus === "regular"} onClick={() => handleFilterUserStatus("regular")}>Regular</button>
+                                <button type="button" className={"btn " + (filterUserStatus === "warning" ? "btn-warning" : "btn-outline-warning") + " btn-sm"} disabled={filterUserStatus === "warning"} onClick={() => handleFilterUserStatus("warning")}>Warning</button>
+                                <button type="button" className={"btn " + (filterUserStatus === "blocked" ? "btn-danger" : "btn-outline-danger") + " btn-sm"} disabled={filterUserStatus === "blocked"} onClick={() => handleFilterUserStatus("blocked")}>Blocked</button>
+                            </div>
+                        }
 
-                                <input type="text" id="search-user-input" className="form-control search-user-input" onKeyUp={searchUsers} placeholder="Search..." autoComplete="off" />
-                            </>
+                        {(users?.length !== 0 && responseStatusGetAllUsers !== "error") &&
+                            <input type="text" id="search-user-input" className="form-control search-user-input" onKeyUp={searchUsers} placeholder="Search..." autoComplete="off" />
                         }
 
                         {responseStatusGetAllUsers === "error" && <Error />}
@@ -299,29 +318,34 @@ function Users(props) {
                                                             <span className="badge rounded-pill bg-warning text-dark border border-secondary">Warning</span>
                                                         </div>
                                                         :
-                                                        user.status === "blocked" ?
-                                                            <div className="position-absolute top-0 start-50 translate-middle">
-                                                                <span className="badge rounded-pill bg-danger border border-secondary">Blocked</span>
-                                                            </div>
-                                                            :
-                                                            <div className="position-absolute top-0 start-50 translate-middle">
-                                                                <span className="badge rounded-pill bg-secondary border border-secondary">not defined</span>
-                                                            </div>
+                                                        <div className="position-absolute top-0 start-50 translate-middle">
+                                                            <span className="badge rounded-pill bg-danger border border-secondary">Blocked</span>
+                                                        </div>
+
                                                 }
                                             </div>
 
 
                                             <br /><br />
 
-                                            <img src={user.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} height="100" style={{ objectFit: "cover" }} className="card-img-top rounded" alt="image" />
-
+                                            {(user.status === "regular" || user.status === "warning") &&
+                                                <img src={user.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} height="100" style={{ objectFit: "cover" }} className="card-img-top rounded" alt="image" />
+                                            }
 
 
                                             <div className="card-header bg-transparent">
-                                                <div className="d-grid gap-2 d-md-flex justify-content-md-start">
-                                                    <img src={user.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="60" height="60" style={{ objectFit: "cover", cursor: 'pointer', marginTop: -30 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + user.username)} />
-                                                    <h6>{user.fullName} <span className="badge bg-secondary">{user.role}</span></h6>
-                                                </div>
+                                                {(user.status === "regular" || user.status === "warning") ?
+                                                    <div className="d-grid gap-2 d-md-flex justify-content-md-start">
+                                                        <img src={user.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="60" height="60" style={{ objectFit: "cover", cursor: 'pointer', marginTop: -30 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + user.username)} />
+                                                        <h6>{user.fullName} <span className="badge bg-secondary">{user.role}</span></h6>
+                                                    </div>
+
+                                                    :
+                                                    <div className="d-grid gap-2 d-md-flex justify-content-md-start">
+                                                        <img src={default_user_profile_img} width="60" height="60" style={{ objectFit: "cover", marginTop: -30 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
+                                                        <h6>{user.fullName}</h6>
+                                                    </div>
+                                                }
 
                                                 {(user.role === "ADMIN") &&
                                                     <span className="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-primary border border-secondary">
@@ -348,7 +372,7 @@ function Users(props) {
 
                                                         {(user.status === "regular" || user.status === "blocked") &&
                                                             <div className="dropdown">
-                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={user.role === "ADMIN"}><i className="bi bi-exclamation-triangle text-warning"></i> Warning</button>
+                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={user.role === "ADMIN" || user.enabled === false}><i className="bi bi-exclamation-triangle text-warning"></i> Warning</button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Are you sure?</small></p>
                                                                     <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusUser(user.username, "warning")}>Yes</button>
@@ -359,7 +383,7 @@ function Users(props) {
 
                                                         {(user.status === "warning" || user.status === "regular") &&
                                                             <div className="dropdown">
-                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={user.role === "ADMIN"}><i className="bi bi-x-lg text-danger"></i> Block</button>
+                                                                <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={user.role === "ADMIN" || user.enabled === false}><i className="bi bi-x-lg text-danger"></i> Block</button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Are you sure?</small></p>
                                                                     <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusUser(user.username, "blocked")}>Yes</button>
@@ -377,25 +401,45 @@ function Users(props) {
                                             </div>
                                             <div className="card-body">
 
-                                                <ul className="list-group list-group-flush">
-                                                    <li className="list-group-item"><small style={{ fontSize: 12 }}>id: #{user.id}</small> / <small style={{ fontSize: 12 }}>{user.enabled ? "enabled - (email verified)" : "disabled -  (email not verified yet)"}</small></li>
-                                                    <li className="list-group-item"><small style={{ fontSize: 12 }}>@{user.username}</small></li>
-                                                    <li className="list-group-item"><small style={{ fontSize: 12 }}>{user.email}</small></li>
-                                                </ul>
+                                                {(user.status === "regular" || user.status === "warning") ?
+                                                    <>
+                                                        <ul className="list-group list-group-flush">
+                                                            <li className="list-group-item"><small style={{ fontSize: 12 }}>id: #{user.id}</small> / <small style={{ fontSize: 12 }}>{user.enabled ? "enabled - (email verified)" : "disabled -  (email not verified yet)"}</small></li>
+                                                            <li className="list-group-item"><small style={{ fontSize: 12 }}>@{user.username}</small></li>
+                                                            <li className="list-group-item"><small style={{ fontSize: 12 }}>{user.email}</small></li>
+                                                        </ul>
 
-                                                <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
+                                                        <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
 
-                                                    {user.updatedDate ?
+                                                            {user.updatedDate ?
 
-                                                        <small>updated: {moment(user.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
-                                                        :
-                                                        <small>{moment(user.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
-                                                    }
+                                                                <small>updated: {moment(user.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                :
+                                                                <small>{moment(user.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                            }
+                                                        </div>
+
+                                                    </>
+
+                                                    :
+                                                    <ul className="list-group list-group-flush">
+                                                        <li className="list-group-item"><small style={{ fontSize: 12 }}>@{user.username}</small></li>
+                                                        <li className="list-group-item"><small style={{ fontSize: 12 }}>{user.email}</small></li>
+                                                        <li className="list-group-item"><small>registered: {moment(user.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
+                                                        <li className="list-group-item"><small>blocked: {moment(user.blockedDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
+                                                    </ul>
+
+                                                }
+
+
+                                            </div>
+
+                                            {(user.status === "regular" || user.status === "warning") &&
+                                                <div className="card-footer bg-transparent text-muted">
+                                                    <button type="button" className="btn btn-light btn-sm rounded-pill" onClick={() => navigate("/user/" + user.username)}><i className="bi bi-person-fill"></i> Profile <i className="bi bi-arrow-right-short"></i></button>
                                                 </div>
-                                            </div>
-                                            <div className="card-footer bg-transparent text-muted">
-                                                <button type="button" className="btn btn-light btn-sm rounded-pill" onClick={() => navigate("/user/" + user.username)}><i className="bi bi-person-fill"></i> Profile <i className="bi bi-arrow-right-short"></i></button>
-                                            </div>
+                                            }
+
                                         </div>
                                     </td>
                                 </tr>
