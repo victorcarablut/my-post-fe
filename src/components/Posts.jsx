@@ -612,6 +612,8 @@ function Posts(props) {
                                 <div className="card-body">
                                     <div className="alert alert-light" role="alert">
                                         <i className="bi bi-info-circle me-md-2"></i>
+                                        <small>Max. 3 Posts per User</small>
+                                        <br/>
                                         <small>All posts are reviewed by the admin. <Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy</Link></small>
                                     </div>
                                 </div>
