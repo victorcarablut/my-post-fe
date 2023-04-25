@@ -10,7 +10,7 @@ import axios from "axios";
 import { url } from "../config.js";
 
 // Link 
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Empty, Error } from './_resources/ui/Alerts.jsx';
 
@@ -612,7 +612,7 @@ function Posts(props) {
                                 <div className="card-body">
                                     <div className="alert alert-light" role="alert">
                                         <i className="bi bi-info-circle me-md-2"></i>
-                                        <small>All posts are reviewed by the admin.</small>
+                                        <small>All posts are reviewed by the admin. <Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy</Link></small>
                                     </div>
                                 </div>
                             </div>
@@ -720,7 +720,7 @@ function Posts(props) {
 
                                                             <p>{post.title}</p>
                                                             {post.image &&
-                                                                <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
+                                                                <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" style={{maxHeight: 400, width: "100%", objectFit: "cover"}} alt="image" />
                                                             }
 
                                                             <small style={{ fontSize: 12 }}>{post.description}</small>

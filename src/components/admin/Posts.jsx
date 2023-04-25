@@ -341,7 +341,7 @@ function Posts(props) {
 
                                                 <p>{post.title}</p>
                                                 {post.image &&
-                                                    <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" />
+                                                    <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" style={{maxHeight: 400, width: "100%", objectFit: "cover"}} />
                                                 }
 
                                                 <small style={{ fontSize: 12 }}>{post.description}</small>

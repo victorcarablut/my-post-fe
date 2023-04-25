@@ -235,7 +235,7 @@ function Users(props) {
         const data = {
             userId: props.userId, // actual user id (admin)
             username: userUsername, // (of all users)
-            password: password, // for better security password is required
+            password: password, // for security reasons password is required
         }
 
         await axios.post(`${url}/user/role`, data, config).then((res) => {
