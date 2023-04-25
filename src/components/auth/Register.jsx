@@ -236,7 +236,7 @@ function Register() {
                         setUserRegiteredStatus("email_already_exist");
                     } else {
                         toast.dismiss(toastNotify);
-                        toast.success("Step 1 - Registered successfully");
+                        toast.success("Step 1 - Registered");
 
                         setUserRegiteredStatus("success");
 
@@ -290,7 +290,7 @@ function Register() {
                     setEmailCodeStatus("error");
                 } else {
                     toast.dismiss(toastNotify);
-                    toast.success("Step 2 - Email sent successfully");
+                    toast.success("Step 2 - Verification Code sent");
                     setEmailCodeStatus("success");
 
                     navigate(

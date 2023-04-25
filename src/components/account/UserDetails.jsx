@@ -20,20 +20,18 @@ import { Error } from '../_resources/ui/Alerts.jsx';
 import moment from 'moment/min/moment-with-locales';
 import { moment_locale, moment_format_date_time_long } from '../_resources/date-time/DateTime.js';
 
-
 import default_user_profile_img from '../../assets/images/user.jpg';
 import default_user_cover_img from '../../assets/images/cover.jpg';
 
-
 // Notifications
 import toast from 'react-hot-toast';
-
 
 
 function UserDetails() {
 
     const [user, setUser] = useState(
         {
+            id: null,
             fullName: null,
             email: null,
             username: null,
@@ -171,6 +169,7 @@ function UserDetails() {
             if (res.status === 200) {
                 setResponseStatusGetUserDetails("success");
                 setUser({
+                    id: res.data.id,
                     fullName: res.data.fullName,
                     email: res.data.email,
                     username: res.data.username,
@@ -553,7 +552,7 @@ function UserDetails() {
                     toast.dismiss(toastNotify);
                     toast.error("Error while sending email, try again!");
                     setEmailNewCodeStatus("error");
-                    
+
                 } else {
                     toast.dismiss(toastNotify);
                     toast.success("Email sent successfully");
@@ -567,6 +566,58 @@ function UserDetails() {
             setEmailNewCodeStatus("error");
             return;
         })
+    }
+
+    const deleteAccount = async () => {
+
+        const toastNotify = toast.loading("Loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            userId: user.id,
+            password: password
+        }
+
+        await axios.post(`${url}/user/account/delete`, data, config).then((res) => {
+
+            if (res.status === 200) {
+
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error");
+
+                } else if(res.data.status_code === 9) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error Password");
+
+                } else {
+                    toast.dismiss(toastNotify);
+                    clearInputs();
+
+                    logout();
+
+                }
+            }
+
+        }).catch(err => {
+            toast.dismiss(toastNotify);
+            toast.error("Error");
+            return;
+        })
+
+    }
+
+    // external function to remove token from memory
+    const logout = async () => {
+
+        return await Logout();
     }
 
 
@@ -826,7 +877,24 @@ function UserDetails() {
 
                         }
 
-
+                    </div>
+                    <div className="card-footer text-center">
+                        <div className="dropdown">
+                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill text-danger" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false">Delete Account</button>
+                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                    <i className="bi bi-x-lg"></i>
+                                </span>
+                                <div className="container-fluid">
+                                    <p><small className="text-secondary">Your account and all your data will be deleted permanently.</small></p>
+                                    <p><small className="text-secondary">For security reasons password is required.</small></p>
+                                </div>
+                                <form onSubmit={handleSubmit} className="container-fluid" style={{ minWidth: 200 }}>
+                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordOld" placeholder="Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
+                                    <li><button className="btn btn-danger btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={deleteAccount} disabled={!password}>Delete</button></li>
+                                </form>
+                            </ul>
+                        </div>
                     </div>
 
                 </div>

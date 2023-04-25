@@ -240,11 +240,23 @@ function Users(props) {
 
         await axios.post(`${url}/user/role`, data, config).then((res) => {
             if (res.status === 200) {
-                toast.dismiss(toastNotify);
-                toast.success("Executed");
 
-                clearInputs();
-                getAllUsers();
+                if (res.data.status_code === 1) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error");
+
+                } else if (res.data.status_code === 9) {
+                    toast.dismiss(toastNotify);
+                    toast.error("Error Password");
+
+                } else {
+                    toast.dismiss(toastNotify);
+                    toast.success("Executed");
+
+                    clearInputs();
+                    getAllUsers();
+                }
+
             }
 
         }).catch(err => {
@@ -413,6 +425,7 @@ function Users(props) {
                                                                 <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled={user.role === "ADMIN" || user.enabled === false}><i className="bi bi-x-lg text-danger"></i> Block</button>
                                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                     <p><small className="text-secondary">Are you sure?</small></p>
+                                                                    <p><small className="text-danger">Block and Delete User</small></p>
                                                                     <p><small className="text-secondary">All data will be deleted permanently</small></p>
                                                                     <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => statusUser(user.username, "blocked")}>Yes</button>
                                                                     <button className="btn btn-secondary btn-sm" type="button">No</button>
