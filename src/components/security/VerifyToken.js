@@ -8,7 +8,6 @@ import axios from "axios";
 // config file (URL)
 import { url } from "../../config.js";
 
-//import { AuthContext } from "./AuthContext.js";
 
 export const VerifyToken = async () => {
 
@@ -16,11 +15,7 @@ export const VerifyToken = async () => {
 
   let isValid = false;
 
-  //console.log(secureLocalStorage.getItem("token"));
-
   const jwt_token = secureLocalStorage.getItem("token");
-
-  //console.log(jwt_token);
 
   const config = {
     headers: {
@@ -31,26 +26,13 @@ export const VerifyToken = async () => {
 
   await axios.get(`${url}/token/verify`, config).then((res) => {
     if (res.status === 200) {
-      //console.log("token OK");
       isValid = true;
-      //return true;
     }
 
   }).catch(err => {
-    //console.log(err);
     isValid = false;
     secureLocalStorage.removeItem("token");
-    //return false;
   })
 
   return isValid;
 }
-
-/* export const IsAuthenticatedContext = () => {
-  return useContext(AuthContext)
-}
-
-export const IsAuthenticatedLocalStorage = () => {
-  return secureLocalStorage.getItem("authenticated");;
-}
- */

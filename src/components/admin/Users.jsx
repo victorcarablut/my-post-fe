@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Secure Data (Local Storage)
 import secureLocalStorage from "react-secure-storage";
@@ -13,7 +13,6 @@ import { url } from "../../config.js";
 // Date Time Format (moment.js)
 import moment from 'moment/min/moment-with-locales';
 import { moment_locale, moment_format_date_time_long } from '../_resources/date-time/DateTime.js';
-//import UserPasswordRecover from './UserPasswordRecover.jsx';
 
 import default_user_profile_img from '../../assets/images/user.jpg';
 import default_user_cover_img from '../../assets/images/cover.jpg';
@@ -42,8 +41,6 @@ function Users(props) {
 
 
     useEffect(() => {
-
-        //checkAuth();
 
         clearInputs();
 
@@ -102,13 +99,8 @@ function Users(props) {
 
             if (res.status === 200) {
                 setResponseStatusGetAllUsers("success");
-                //console.log(res.data);
-                //setUsers(res.data);
 
                 if (filterUserStatus === "regular") {
-
-                    // clear Array
-                    //setUsers([]);
 
                     let newArr = [];
 
@@ -124,9 +116,6 @@ function Users(props) {
 
                 } else if (filterUserStatus === "warning") {
 
-                    // clear Array
-                    //setUsers([]);
-
                     let newArr = [];
 
                     res.data.forEach((user) => {
@@ -137,14 +126,9 @@ function Users(props) {
                         }
                     })
 
-                    // reverse order to see on the top from old posts to new
-                    //newArr.reverse();
-
                     setUsers(newArr);
 
                 } else if (filterUserStatus === "blocked") {
-                    // clear Array
-                    //setUsers([]);
 
                     getAllBlockedUsers();
 
@@ -156,7 +140,6 @@ function Users(props) {
 
         }).catch(err => {
             setResponseStatusGetAllUsers("error");
-            //Logout();
             return;
         })
     }
@@ -177,14 +160,11 @@ function Users(props) {
 
             if (res.status === 200) {
                 setResponseStatusGetAllUsers("success");
-                console.log(res.data);
                 setUsers(res.data);
-
             }
 
         }).catch(err => {
             setResponseStatusGetAllUsers("error");
-            //Logout();
             return;
         })
     }
@@ -208,7 +188,7 @@ function Users(props) {
 
     const statusUser = async (userUsername, userStatus) => {
 
-        const toastNotify = toast.loading("Waiting...");
+        const toastNotify = toast.loading("Loading...");
 
         const jwt_token = secureLocalStorage.getItem("token");
 
@@ -218,9 +198,6 @@ function Users(props) {
             }
         }
 
-        //console.log("user_id: " + props.userId);
-        //console.log("post_id: " + postId);
-
         const data = {
             userId: props.userId, // actual user id (admin)
             username: userUsername, // (of all users)
@@ -229,8 +206,6 @@ function Users(props) {
 
         await axios.post(`${url}/user/status`, data, config).then((res) => {
             if (res.status === 200) {
-                //setButtonCreatePostIsDisabled(false);
-
                 toast.dismiss(toastNotify);
                 toast.success("Executed");
 
@@ -240,7 +215,6 @@ function Users(props) {
         }).catch(err => {
             toast.dismiss(toastNotify);
             toast.error("Error");
-            //setButtonCreatePostIsDisabled(false);
             return;
         })
 
@@ -258,9 +232,6 @@ function Users(props) {
             }
         }
 
-        //console.log("user_id: " + props.userId);
-        //console.log("post_id: " + postId);
-
         const data = {
             userId: props.userId, // actual user id (admin)
             username: userUsername, // (of all users)
@@ -269,21 +240,16 @@ function Users(props) {
 
         await axios.post(`${url}/user/role`, data, config).then((res) => {
             if (res.status === 200) {
-                //setButtonCreatePostIsDisabled(false);
-
                 toast.dismiss(toastNotify);
                 toast.success("Executed");
 
                 clearInputs();
                 getAllUsers();
-
-                
             }
 
         }).catch(err => {
             toast.dismiss(toastNotify);
             toast.error("Error");
-            //setButtonCreatePostIsDisabled(false);
             return;
         })
 

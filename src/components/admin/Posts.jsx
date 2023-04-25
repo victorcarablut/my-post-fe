@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Secure Data (Local Storage)
 import secureLocalStorage from "react-secure-storage";
@@ -13,7 +13,6 @@ import { url } from "../../config.js";
 // Date Time Format (moment.js)
 import moment from 'moment/min/moment-with-locales';
 import { moment_locale, moment_format_date_time_long } from '../_resources/date-time/DateTime.js';
-//import UserPasswordRecover from './UserPasswordRecover.jsx';
 
 import default_user_profile_img from '../../assets/images/user.jpg';
 
@@ -39,8 +38,6 @@ function Posts(props) {
     let interval = null;
 
     useEffect(() => {
-
-        //checkAuth();
 
         getAllPosts();
 
@@ -69,8 +66,6 @@ function Posts(props) {
 
     const getAllPosts = async () => {
 
-        //console.log("load 1 time");
-
         setResponseStatusGetAllPosts("loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
@@ -83,21 +78,12 @@ function Posts(props) {
 
         const role = "admin";
 
-
-        //await axios.get(`${url}/post/all/${props.filter}`, config).then((res) => {
-
         await axios.get(`${url}/post/all/${role}`, config).then((res) => {
 
             if (res.status === 200) {
                 setResponseStatusGetAllPosts("success");
-                //console.log(res.data);
-
-                //setPosts(res.data);
 
                 if (filterPostStatus === "active") {
-
-                    // clear Array
-                    //setPosts([]);
 
                     let newArr = [];
 
@@ -112,9 +98,6 @@ function Posts(props) {
                     setPosts(newArr);
 
                 } else if (filterPostStatus === "pending") {
-
-                    // clear Array
-                    //setPosts([]);
 
                     let newArr = [];
 
@@ -131,8 +114,6 @@ function Posts(props) {
 
                     setPosts(newArr);
                 } else if (filterPostStatus === "blocked") {
-                    // clear Array
-                    //setPosts([]);
 
                     let newArr = [];
 
@@ -156,7 +137,6 @@ function Posts(props) {
 
         }).catch(err => {
             setResponseStatusGetAllPosts("error");
-            //Logout();
             return;
         })
 
@@ -191,9 +171,6 @@ function Posts(props) {
             }
         }
 
-        //console.log("user_id: " + userId);
-        //console.log("post_id: " + postId);
-
         const data = {
             userId: props.userId,
             postId: postId,
@@ -202,8 +179,6 @@ function Posts(props) {
 
         await axios.post(`${url}/post/status`, data, config).then((res) => {
             if (res.status === 200) {
-                //setButtonCreatePostIsDisabled(false);
-
                 toast.dismiss(toastNotify);
                 toast.success("Executed");
 
@@ -213,7 +188,6 @@ function Posts(props) {
         }).catch(err => {
             toast.dismiss(toastNotify);
             toast.error("Error");
-            //setButtonCreatePostIsDisabled(false);
             return;
         })
 

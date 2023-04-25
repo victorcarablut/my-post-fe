@@ -20,7 +20,6 @@ import { LoadingFullScreen } from '../_resources/ui/Loadings';
 import toast from 'react-hot-toast';
 
 import UserPasswordRecover from '../account/UserPasswordRecover.jsx';
-//import SendEmailCodeNoReplay from '../account/SendEmailCodeNoReplay.jsx';
 
 import posts_preview_img from '../../assets/images/posts-preview-img.png';
 
@@ -130,41 +129,6 @@ function Register() {
         e.preventDefault();
     }
 
-    const resendEmailCode = async () => {
-        setButtonLoginUserIsDisabled(true);
-        const toastNotify = toast.loading("Loading... resend code");
-
-        const data = {
-            email: email.toLocaleLowerCase()
-        }
-
-        await axios.post(`${url}/account/email/code/send`, data).then((res) => {
-
-            if (res.status === 200) {
-
-                toast.dismiss(toastNotify);
-                toast.success("Code sent successfully");
-
-                navigate(
-                    "/code/verify",
-                    {
-                        state: {
-                            email: email
-                        }
-                    }
-                )
-
-                clearInputs();
-            }
-
-        }).catch(err => {
-            console.log(err);
-            setButtonLoginUserIsDisabled(false);
-            toast.dismiss(toastNotify);
-            toast.error("Error resend code");
-            return;
-        })
-    }
 
     const loginUser = async () => {
 
@@ -198,25 +162,29 @@ function Register() {
                         toast.dismiss(toastNotify);
                         toast.error("Invalid email format");
                         setButtonLoginUserIsDisabled(false);
+
                     } else if (res.data.status_code === 4) {
                         toast.dismiss(toastNotify);
                         toast.error("User with that email not found");
                         setLoginUserStatus("user_email_not_found");
                         setButtonLoginUserIsDisabled(false);
+
                     } else if (res.data.status_code === 6) {
                         toast.dismiss(toastNotify);
                         toast.error("Email not verified yet");
                         setButtonLoginUserIsDisabled(false);
                         setLoginUserStatus("email_not_verified");
-                        //resendEmailCode();
+
                     } else if (res.data.status_code === 9) {
                         toast.dismiss(toastNotify);
                         toast.error("Wrong email or password");
                         setButtonLoginUserIsDisabled(false);
+
                     } else if (res.data.status_code === 12) {
                         toast.dismiss(toastNotify);
                         toast.error("Account is blocked because rules were violated.");
                         setButtonLoginUserIsDisabled(false);
+                        
                     } else {
                         secureLocalStorage.setItem("token", res.data.token);
 
@@ -265,30 +233,25 @@ function Register() {
                         toast.dismiss(toastNotify);
                         toast.error("Error"); // Error save data to DB
                         setEmailCodeStatus("error");
-                        //setButtonSendEmailCodeIsDisabled(false);
+
                     } else if (res.data.status_code === 2) {
                         toast.dismiss(toastNotify);
                         toast.error("Invalid email format");
                         setEmailCodeStatus("error");
-                        //setButtonSendEmailCodeIsDisabled(false);
+
                     } else if (res.data.status_code === 4) {
                         toast.dismiss(toastNotify);
                         toast.error("Account with that email doesn't exist");
-                        //setButtonSendEmailCodeIsDisabled(false);
                         setEmailCodeStatus("error");
+
                     } else if (res.data.status_code === 7) {
                         toast.dismiss(toastNotify);
                         toast.error("Error while sending email, try again!");
                         setEmailCodeStatus("error");
-                        //setEmailCodeStatus("error");
-                        //setButtonSendEmailCodeIsDisabled(false);
-                        //resendEmailCode();
-                    } else {
-                        //secureLocalStorage.setItem("token", res.data.token);
 
+                    } else {
                         toast.dismiss(toastNotify);
                         toast.success("Email sent successfully");
-                        //setEmailCodeStatus("success");
                         setEmailCodeStatus("success");
 
                         navigate(
@@ -299,20 +262,14 @@ function Register() {
                                 }
                             }
                         )
-
-                        // OK
-
-                        //window.location.reload();
                         clearInputs();
                     }
                 }
 
             }).catch(err => {
-                //setButtonSendEmailCodeIsDisabled(false);
                 toast.dismiss(toastNotify);
                 toast.error("Error Send Email");
                 setEmailCodeStatus("error");
-                //setEmailCodeStatus("error");
                 return;
             })
 
@@ -416,7 +373,6 @@ function Register() {
                                         <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div className="modal-body">
-                                        {/* <SendEmailCodeNoReplay email = {email}  /> */}
                                         <div>
                                             <UserPasswordRecover emailParent={email ? email : ""} />
                                         </div>

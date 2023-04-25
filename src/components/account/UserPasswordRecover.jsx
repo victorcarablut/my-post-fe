@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // Axios (API)
 import axios from 'axios';
-
-// Secure Data (Local Storage)
-import secureLocalStorage from "react-secure-storage";
 
 // config file (URL)
 import { url } from "../../config.js";
 
 // Link 
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // Notifications
 import toast from 'react-hot-toast';
@@ -43,13 +40,6 @@ function UserPasswordRecover({ emailParent }) {
   const [buttonRecoverPasswordIsDisabled, setButtonRecoverPasswordIsDisabled] = useState(false);
 
   const [emailCodeIsSended, setEmailCodeIsSended] = useState(false);
-
-  // http response status
-  //const [responseStatusSendEmailCodeNoReply, setResponseStatusSendEmailCodeNoReply] = useState("");
-
-  /*   useEffect(() => {
-      //setEmail(emailParent);
-    }, []) */
 
   // clear/reset inputs, other...
   const clearInputs = () => {
@@ -189,7 +179,7 @@ function UserPasswordRecover({ emailParent }) {
     if (emailParent.includes('@') && emailParent.includes('.') && emailParent.length > 3) {
       setHandleInpuEmailIsValid(true);
     } else if (emailParent.length === 0) {
-      setHandleInputEmailClassName(null)
+      setHandleInputEmailClassName(null);
     } else {
       setHandleInpuEmailIsValid(false);
     }
@@ -197,8 +187,6 @@ function UserPasswordRecover({ emailParent }) {
 
 
   const sendEmailCodeNoReply = async () => {
-
-    //checkAllInputsValidity();
 
     if (handleInputEmailIsValid) {
       setHandleInputEmailClassName("is-valid")
@@ -218,35 +206,30 @@ function UserPasswordRecover({ emailParent }) {
             toast.dismiss(toastNotify);
             toast.error("Error"); // Error save data to DB
             setButtonSendEmailCodeIsDisabled(false);
+
           } else if (res.data.status_code === 2) {
             toast.dismiss(toastNotify);
             toast.error("Invalid email format");
             setButtonSendEmailCodeIsDisabled(false);
+
           } else if (res.data.status_code === 4) {
             toast.dismiss(toastNotify);
             toast.error("Account with that email doesn't exist");
             setButtonSendEmailCodeIsDisabled(false);
+
           } else if (res.data.status_code === 7) {
             toast.dismiss(toastNotify);
             toast("Error while sending email, try again!");
             setButtonSendEmailCodeIsDisabled(false);
-            //resendEmailCode();
-          } else {
-            //secureLocalStorage.setItem("token", res.data.token);
 
+          } else {
             toast.dismiss(toastNotify);
             toast.success("Email sent successfully");
             setEmailCodeIsSended(true);
-
-            // OK
-
-            //window.location.reload();
-            //clearInputs();
           }
         }
 
       }).catch(err => {
-        console.log(err);
         setButtonSendEmailCodeIsDisabled(false);
         setEmailCodeIsSended(false);
         toast.dismiss(toastNotify);
@@ -268,7 +251,6 @@ function UserPasswordRecover({ emailParent }) {
 
     if (handleInputEmailIsValid && handleInputCodeIsValid && handleInputPasswordIsValid && handleInputPasswordRepeatIsValid) {
 
-
       if (passwordType === "text") {
         setPasswordType("password");
       }
@@ -280,7 +262,6 @@ function UserPasswordRecover({ emailParent }) {
       setButtonRecoverPasswordIsDisabled(true);
 
       const toastNotify = toast.loading("Loading");
-
 
       const data = {
         email: email.toLocaleLowerCase(),
@@ -296,28 +277,30 @@ function UserPasswordRecover({ emailParent }) {
             toast.dismiss(toastNotify);
             toast.error("Error"); // Error save data to DB
             setButtonRecoverPasswordIsDisabled(false);
+
           } else if (res.data.status_code === 2) {
             toast.dismiss(toastNotify);
             toast.error("Invalid email format");
             setButtonRecoverPasswordIsDisabled(false);
+
           } else if (res.data.status_code === 4) {
             toast.dismiss(toastNotify);
             toast.error("Account with that email doesn't exist");
             setButtonRecoverPasswordIsDisabled(false);
+
           } else if (res.data.status_code === 5) {
             toast.dismiss(toastNotify);
             toast.error("Wrong verification code");
             setHandleInputCodeClassName("is-invalid animate__animated animate__shakeX");
             setHandleInputCodeIsValid(false);
             setButtonRecoverPasswordIsDisabled(false);
+
           } else if (res.data.status_code === 6) {
             toast.dismiss(toastNotify);
             toast.error("Email not verified yet");
             setButtonRecoverPasswordIsDisabled(false);
-            //resendEmailCode();
-          } else {
-            //secureLocalStorage.setItem("token", res.data.token);
 
+          } else {
             toast.dismiss(toastNotify);
             toast.success("Password reset successfully");
 
@@ -326,16 +309,11 @@ function UserPasswordRecover({ emailParent }) {
             clearInputs();
 
             window.location.reload();
-
-            //console.log("password reset ok");
-
-            // OK
             
           }
         }
 
       }).catch(err => {
-        console.log(err);
         setButtonRecoverPasswordIsDisabled(false);
         toast.dismiss(toastNotify);
         toast.error("Error");

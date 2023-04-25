@@ -9,23 +9,17 @@ import axios from "axios";
 // config file (URL)
 import { url } from "../../config.js";
 
-// Link 
-import { NavLink, Link, useNavigate } from 'react-router-dom';
 
 import { VerifyToken } from '../security/VerifyToken.js';
 import { Logout } from './Logout.js';
 
-// Logo / User
-//import logo from '../assets/images/logo.png';
-//import user_pic_profile from '../assets/images/user.jpg';
 
-import { LoadingFullScreen, LoadingSmall } from '../../components/_resources/ui/Loadings';
 import { Error } from '../_resources/ui/Alerts.jsx';
 
 // Date Time Format (moment.js)
 import moment from 'moment/min/moment-with-locales';
 import { moment_locale, moment_format_date_time_long } from '../_resources/date-time/DateTime.js';
-//import UserPasswordRecover from './UserPasswordRecover.jsx';
+
 
 import default_user_profile_img from '../../assets/images/user.jpg';
 import default_user_cover_img from '../../assets/images/cover.jpg';
@@ -79,20 +73,12 @@ function UserDetails() {
     const checkAuth = async () => {
         const verifyToken = await VerifyToken();
         if (!verifyToken) {
-          await Logout();
+            await Logout();
         }
-      }
+    }
 
     // clear/reset inputs, other...
     const clearInputs = () => {
-        // setEmail(null);
-        // setPassword(null);
-        // setHandleInpuEmailIsValid(false);
-        // setHandleInputEmailClassName(null);
-        // setButtonLoginUserIsDisabled(false);
-        // setLoginUserStatus("");
-        // setEmailNewCodeStatus("");
-
         setUser(null);
         setFullNameNew(null);
         setEmailNew(null);
@@ -110,56 +96,18 @@ function UserDetails() {
     }
 
     const handleInputFullName = async (e) => {
-
         const fullName = e.target.value;
-
-        //setInputFullName(fullName);
-
-        //setUser({fullName: fullName})
-
-        //setUser({...user, fullName: fullName});
-
         setFullNameNew(fullName);
-
-
-
-        // if (fullName.length > 100) {
-        //     setHandleInpuFullNameIsValid(true);
-        // } else if (fullName.length === 0) {
-        //     setHandleInputFullNameClassName(null);
-        // } else {
-        //     setHandleInpuFullNameIsValid(false);
-        // }
     }
 
     const handleInputEmail = async (e) => {
-
         const email = e.target.value;
-
         setEmailNew(email);
-
-        /*  if (email.includes('@') && email.includes('.') && email.length > 3) {
-             setHandleInpuEmailNewIsValid(true);
-         } else if (email.length === 0) {
-             setHandleInputEmailNewClassName(null);
-         } else {
-             setHandleInpuEmailNewIsValid(false);
-         } */
     }
 
     const handleInputUsername = async (e) => {
-
         const username = e.target.value;
-
         setUsernameNew(username);
-
-        /*  if (email.includes('@') && email.includes('.') && email.length > 3) {
-             setHandleInpuEmailNewIsValid(true);
-         } else if (email.length === 0) {
-             setHandleInputEmailNewClassName(null);
-         } else {
-             setHandleInpuEmailNewIsValid(false);
-         } */
     }
 
     const handleInputPassword = async (e) => {
@@ -188,11 +136,9 @@ function UserDetails() {
         if (e.target.files) {
             setUserProfileImgNew(e.target.files[0]);
             setUserProfileImgPreviewNew(URL.createObjectURL(e.target.files[0]));
-            //setPostImagePreviewNew(URL.createObjectURL(e.target.files[0]));
 
             // important: reset the value...
             e.target.value = null
-
         }
     }
 
@@ -201,7 +147,6 @@ function UserDetails() {
         if (e.target.files) {
             setUserCoverImgNew(e.target.files[0]);
             setUserCoverImgPreviewNew(URL.createObjectURL(e.target.files[0]));
-            //setPostImagePreviewNew(URL.createObjectURL(e.target.files[0]));
 
             // important: reset the value...
             e.target.value = null
@@ -249,21 +194,6 @@ function UserDetails() {
 
     const updateUserDetails = async () => {
 
-        //checkAllInputsValidity();
-
-        // if (handleInputEmailIsValid) {
-
-        //setButtonLoginUserIsDisabled(true);
-
-        //if (passwordType === "text") {
-        //setPasswordType("password");
-        // }
-
-        // if (passwordVisibleChecked) {
-        //setPasswordVisibleChecked(!passwordVisibleChecked);
-        //}
-
-        //setLoginUserStatus("loading");
         const toastNotify = toast.loading("Loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
@@ -276,8 +206,6 @@ function UserDetails() {
 
         const data = {
             email: user.email,
-            //password: password
-
             fullName: fullNameNew
         }
 
@@ -288,61 +216,32 @@ function UserDetails() {
                 if (res.data.status_code === 1) {
                     toast.dismiss(toastNotify);
                     toast.error("Error");
+
                 } else if (res.data.status_code === 2) {
                     toast.dismiss(toastNotify);
                     toast.error("Invalid email format");
-                    //setButtonLoginUserIsDisabled(false);
+
                 } else if (res.data.status_code === 4) {
                     toast.dismiss(toastNotify);
                     toast.error("User with that email not found");
-                    //setLoginUserStatus("user_email_not_found");
-                    //setButtonLoginUserIsDisabled(false);
+
                 } else {
-                    //secureLocalStorage.setItem("token", res.data.token);
-
                     toast.dismiss(toastNotify);
-
-                    //getUserDetails();
-
-                    //setLoginUserStatus("success");
-
-                    window.location.reload(); // to update the value in header
-                    //clearInputs();
+                    window.location.reload(); // to update the value in header also
                 }
             }
 
         }).catch(err => {
-            console.log(err);
-            //setButtonLoginUserIsDisabled(false);
             toast.dismiss(toastNotify);
             toast.error("Error");
-            //setLoginUserStatus("error");
             return;
         })
 
-        //} else {
-        //    return;
-        //}
 
     }
 
     const updateUserEmail = async () => {
 
-        //checkAllInputsValidity();
-
-        // if (handleInputEmailIsValid) {
-
-        //setButtonLoginUserIsDisabled(true);
-
-        //if (passwordType === "text") {
-        //setPasswordType("password");
-        // }
-
-        // if (passwordVisibleChecked) {
-        //setPasswordVisibleChecked(!passwordVisibleChecked);
-        //}
-
-        //setLoginUserStatus("loading");
         const toastNotify = toast.loading("Loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
@@ -367,89 +266,46 @@ function UserDetails() {
                 if (res.data.status_code === 1) {
                     toast.dismiss(toastNotify);
                     toast.error("Error"); // Error save data to DB
-                    //setEmailNewCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
+
                 } else if (res.data.status_code === 2) {
                     toast.dismiss(toastNotify);
                     toast.error("Invalid email format");
-                    //setEmailNewCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
+
                 } else if (res.data.status_code === 4) {
                     toast.dismiss(toastNotify);
                     toast.error("Account with that email doesn't exist");
-                    //setButtonSendEmailCodeIsDisabled(false);
-                    //setEmailNewCodeStatus("error");
+
                 } else if (res.data.status_code === 5) {
                     toast.dismiss(toastNotify);
                     toast.error("Wrong verification code");
-                    //setEmailNewCodeStatus("error");
+
                 } else if (res.data.status_code === 7) {
                     toast.dismiss(toastNotify);
                     toast.error("Error while sending email, try again!");
-                    //setEmailNewCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
-                    //resendEmailCode();
+
                 } else if (res.data.status_code === 9) {
                     toast.dismiss(toastNotify);
                     toast.error("Wrong email or password");
-                    //setButtonLoginUserIsDisabled(false);
-                    //setEmailNewCodeStatus("error");
-                } else {
-                    //secureLocalStorage.setItem("token", res.data.token);
 
+                } else {
                     toast.dismiss(toastNotify);
                     toast.success("Email updated successfully");
-                    //setEmailNewCodeStatus("success");
-
-                    /*  navigate(
-                         "/code/verify",
-                         {
-                             state: {
-                                 email: email.toString().toLocaleLowerCase()
-                             }
-                         }
-                     ) */
-
-                    // OK
-
-                    //window.location.reload();
                     clearInputs();
                     getUserDetails();
                 }
             }
 
         }).catch(err => {
-            console.log(err);
-            //setButtonLoginUserIsDisabled(false);
             toast.dismiss(toastNotify);
             toast.error("Error");
-            //setLoginUserStatus("error");
             return;
         })
 
-        //} else {
-        //    return;
-        //}
 
     }
 
     const updateUserUsername = async () => {
 
-        //checkAllInputsValidity();
-
-        // if (handleInputEmailIsValid) {
-
-        //setButtonLoginUserIsDisabled(true);
-
-        //if (passwordType === "text") {
-        //setPasswordType("password");
-        // }
-
-        // if (passwordVisibleChecked) {
-        //setPasswordVisibleChecked(!passwordVisibleChecked);
-        //}
-
-        //setLoginUserStatus("loading");
         const toastNotify = toast.loading("Loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
@@ -474,84 +330,43 @@ function UserDetails() {
                 if (res.data.status_code === 1) {
                     toast.dismiss(toastNotify);
                     toast.error("Error"); // Error save data to DB
-                    //setEmailNewCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
+
                 } else if (res.data.status_code === 2) {
                     toast.dismiss(toastNotify);
                     toast.error("Invalid email format");
-                    //setEmailNewCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
+
                 } else if (res.data.status_code === 4) {
                     toast.dismiss(toastNotify);
                     toast.error("Account with that email doesn't exist");
-                    //setButtonSendEmailCodeIsDisabled(false);
-                    //setEmailNewCodeStatus("error");
+
                 } else if (res.data.status_code === 9) {
                     toast.dismiss(toastNotify);
                     toast.error("Wrong email or password");
-                    //setButtonLoginUserIsDisabled(false);
-                    //setEmailNewCodeStatus("error");
+
                 } else if (res.data.status_code === 10) {
                     toast.dismiss(toastNotify);
                     toast.error("Account with that username already exists");
-                    //setButtonLoginUserIsDisabled(false);
-                    //setEmailNewCodeStatus("error");
-                } else {
-                    //secureLocalStorage.setItem("token", res.data.token);
 
+                } else {
                     toast.dismiss(toastNotify);
                     toast.success("Username updated successfully");
-                    //setEmailNewCodeStatus("success");
 
-                    /*  navigate(
-                         "/code/verify",
-                         {
-                             state: {
-                                 email: email.toString().toLocaleLowerCase()
-                             }
-                         }
-                     ) */
-
-                    // OK
-
-                    //window.location.reload();
                     clearInputs();
                     getUserDetails();
                 }
             }
 
         }).catch(err => {
-            console.log(err);
-            //setButtonLoginUserIsDisabled(false);
+            // console.log(err);
             toast.dismiss(toastNotify);
             toast.error("Error");
-            //setLoginUserStatus("error");
             return;
         })
-
-        //} else {
-        //    return;
-        //}
 
     }
 
     const updateUserPassword = async () => {
 
-        //checkAllInputsValidity();
-
-        // if (handleInputEmailIsValid) {
-
-        //setButtonLoginUserIsDisabled(true);
-
-        //if (passwordType === "text") {
-        //setPasswordType("password");
-        // }
-
-        // if (passwordVisibleChecked) {
-        //setPasswordVisibleChecked(!passwordVisibleChecked);
-        //}
-
-        //setLoginUserStatus("loading");
         const toastNotify = toast.loading("Loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
@@ -575,83 +390,39 @@ function UserDetails() {
                 if (res.data.status_code === 1) {
                     toast.dismiss(toastNotify);
                     toast.error("Error"); // Error save data to DB
-                    //setEmailNewCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
+
                 } else if (res.data.status_code === 2) {
                     toast.dismiss(toastNotify);
                     toast.error("Invalid email format");
-                    //setEmailNewCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
+
                 } else if (res.data.status_code === 4) {
                     toast.dismiss(toastNotify);
                     toast.error("Account with that email doesn't exist");
-                    //setButtonSendEmailCodeIsDisabled(false);
-                    //setEmailNewCodeStatus("error");
+
                 } else if (res.data.status_code === 8) {
                     toast.dismiss(toastNotify);
                     toast.error("Wrong old password");
-                    //setButtonLoginUserIsDisabled(false);
-                    //setEmailNewCodeStatus("error");
+
                 } else if (res.data.status_code === 9) {
                     toast.dismiss(toastNotify);
                     toast.error("Wrong email or password");
-                    //setButtonLoginUserIsDisabled(false);
-                    //setEmailNewCodeStatus("error");
-                } else {
-                    //secureLocalStorage.setItem("token", res.data.token);
 
+                } else {
                     toast.dismiss(toastNotify);
                     toast.success("Password updated successfully");
-                    //setEmailNewCodeStatus("success");
-
-                    /*  navigate(
-                         "/code/verify",
-                         {
-                             state: {
-                                 email: email.toString().toLocaleLowerCase()
-                             }
-                         }
-                     ) */
-
-                    // OK
                     clearInputs();
-                    //window.location.reload();
-                    //getUserDetails();
                 }
             }
 
         }).catch(err => {
-            console.log(err);
-            //setButtonLoginUserIsDisabled(false);
             toast.dismiss(toastNotify);
             toast.error("Error");
-            //setLoginUserStatus("error");
             return;
         })
-
-        //} else {
-        //    return;
-        //}
 
     }
 
     const updateUserImage = async (filter) => {
-
-        //checkAllInputsValidity();
-
-        // if (handleInputEmailIsValid) {
-
-        //setButtonLoginUserIsDisabled(true);
-
-        //if (passwordType === "text") {
-        //setPasswordType("password");
-        // }
-
-        // if (passwordVisibleChecked) {
-        //setPasswordVisibleChecked(!passwordVisibleChecked);
-        //}
-
-        //setLoginUserStatus("loading");
         const toastNotify = toast.loading("Loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
@@ -673,9 +444,6 @@ function UserDetails() {
             formData.append("userImg", userCoverImgNew);
         }
 
-
-        //const data = formData
-
         await axios.put(`${url}/user/image/update`, formData, config).then((res) => {
 
             if (res.status === 200) {
@@ -683,62 +451,33 @@ function UserDetails() {
                 if (res.data.status_code === 1) {
                     toast.dismiss(toastNotify);
                     toast.error("Error");
+
                 } else if (res.data.status_code === 2) {
                     toast.dismiss(toastNotify);
                     toast.error("Invalid email format");
-                    //setButtonLoginUserIsDisabled(false);
+
                 } else if (res.data.status_code === 4) {
                     toast.dismiss(toastNotify);
                     toast.error("User with that email not found");
-                    //setLoginUserStatus("user_email_not_found");
-                    //setButtonLoginUserIsDisabled(false);
+
                 } else {
-                    //secureLocalStorage.setItem("token", res.data.token);
-
                     toast.dismiss(toastNotify);
-
-                    //getUserDetails();
-
-                    //setLoginUserStatus("success");
-
                     window.location.reload(); // to update the value in header
-                    //clearInputs();
                 }
             }
 
         }).catch(err => {
-            console.log(err);
-            //setButtonLoginUserIsDisabled(false);
             toast.dismiss(toastNotify);
             toast.error("Error");
-            //setLoginUserStatus("error");
             return;
         })
 
-        //} else {
-        //    return;
-        //}
 
     }
 
 
     const deleteUserImage = async (filter) => {
 
-        //checkAllInputsValidity();
-
-        // if (handleInputEmailIsValid) {
-
-        //setButtonLoginUserIsDisabled(true);
-
-        //if (passwordType === "text") {
-        //setPasswordType("password");
-        // }
-
-        // if (passwordVisibleChecked) {
-        //setPasswordVisibleChecked(!passwordVisibleChecked);
-        //}
-
-        //setLoginUserStatus("loading");
         const toastNotify = toast.loading("Loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
@@ -748,7 +487,6 @@ function UserDetails() {
                 Authorization: "Bearer " + jwt_token
             }
         }
-
 
         const data = {
             filter: filter === "profile" ? "profile" : "cover",
@@ -762,45 +500,30 @@ function UserDetails() {
                 if (res.data.status_code === 1) {
                     toast.dismiss(toastNotify);
                     toast.error("Error");
+
                 } else if (res.data.status_code === 2) {
                     toast.dismiss(toastNotify);
                     toast.error("Invalid email format");
-                    //setButtonLoginUserIsDisabled(false);
+
                 } else if (res.data.status_code === 4) {
                     toast.dismiss(toastNotify);
                     toast.error("User with that email not found");
-                    //setLoginUserStatus("user_email_not_found");
-                    //setButtonLoginUserIsDisabled(false);
+
                 } else {
-                    //secureLocalStorage.setItem("token", res.data.token);
-
                     toast.dismiss(toastNotify);
-
-                    //getUserDetails();
-
-                    //setLoginUserStatus("success");
-
                     window.location.reload(); // to update the value in header
-                    //clearInputs();
                 }
             }
 
         }).catch(err => {
-            console.log(err);
-            //setButtonLoginUserIsDisabled(false);
             toast.dismiss(toastNotify);
             toast.error("Error");
-            //setLoginUserStatus("error");
             return;
         })
 
-        //} else {
-        //    return;
-        //}
-
     }
 
-  
+
 
 
     const sendEmailNewCodeNoReply = async () => {
@@ -821,43 +544,25 @@ function UserDetails() {
                     toast.dismiss(toastNotify);
                     toast.error("Invalid email format");
                     setEmailNewCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
+
                 } else if (res.data.status_code === 4) {
                     toast.dismiss(toastNotify);
                     toast.error("Account with that email doesn't exist");
-                    //setButtonSendEmailCodeIsDisabled(false);
                     setEmailNewCodeStatus("error");
+
                 } else if (res.data.status_code === 7) {
                     toast.dismiss(toastNotify);
                     toast.error("Error while sending email, try again!");
                     setEmailNewCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
-                    //resendEmailCode();
+                    
                 } else {
-                    //secureLocalStorage.setItem("token", res.data.token);
-
                     toast.dismiss(toastNotify);
                     toast.success("Email sent successfully");
                     setEmailNewCodeStatus("success");
-
-                    /*  navigate(
-                         "/code/verify",
-                         {
-                             state: {
-                                 email: email.toString().toLocaleLowerCase()
-                             }
-                         }
-                     ) */
-
-                    // OK
-
-                    //window.location.reload();
-                    //clearInputs();
                 }
             }
 
         }).catch(err => {
-            //setButtonSendEmailCodeIsDisabled(false);
             toast.dismiss(toastNotify);
             toast.error("Error Send Email");
             setEmailNewCodeStatus("error");
@@ -884,244 +589,242 @@ function UserDetails() {
 
                         {responseStatusGeUserDetails === "error" && <Error />}
 
-                        { responseStatusGeUserDetails === "success" &&
+                        {responseStatusGeUserDetails === "success" &&
 
-                                        
-                                            <ul className="list-group list-group-flush">
-                                                <li className="list-group-item">
-                                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                                                        <img src={user?.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} width="100%" height="100" alt="cover-img" className="card-img-top mb-3" style={{ objectFit: "cover" }} />
+
+                            <ul className="list-group list-group-flush">
+                                <li className="list-group-item">
+                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                                        <img src={user?.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} width="100%" height="100" alt="cover-img" className="card-img-top mb-3" style={{ objectFit: "cover" }} />
+                                    </div>
+
+                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                                        <div className="dropdown">
+                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i>
+                                                {userCoverImgPreviewNew &&
+                                                    <span className="position-absolute top-0 start-100 translate-middle p-2 bg-primary border border-light rounded-circle animate__animated animate__flash animate__infinite"></span>
+                                                }
+                                            </button>
+
+                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                                    <i className="bi bi-x-lg"></i>
+                                                </span>
+                                                {userCoverImgPreviewNew &&
+                                                    <div className="container-fluid">
+                                                        <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => { setUserCoverImgPreviewNew(null); setUserCoverImgNew(null) }}></button>
+                                                        <img src={userCoverImgPreviewNew} width="350" height="150" style={{ objectFit: "cover" }} alt="user-cover-img" className="rounded border border-primary border-3 mb-3" />
                                                     </div>
 
-                                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                                                        <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i>
-                                                                {userCoverImgPreviewNew &&
-                                                                    <span className="position-absolute top-0 start-100 translate-middle p-2 bg-primary border border-light rounded-circle animate__animated animate__flash animate__infinite"></span>
-                                                                }
-                                                            </button>
+                                                }
 
-                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
-                                                                    <i className="bi bi-x-lg"></i>
-                                                                </span>
-                                                                {userCoverImgPreviewNew &&
-                                                                    <div className="container-fluid">
-                                                                        <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => { setUserCoverImgPreviewNew(null); setUserCoverImgNew(null) }}></button>
-                                                                        <img src={userCoverImgPreviewNew} width="350" height="150" style={{ objectFit: "cover" }} alt="user-cover-img" className="rounded border border-primary border-3 mb-3" />
-                                                                    </div>
+                                                <form onSubmit={handleSubmit}>
+                                                    <li className="container-fluid mb-2">
 
-                                                                }
+                                                        {(!userCoverImgNew && !userCoverImgPreviewNew) &&
 
-                                                                <form onSubmit={handleSubmit}>
-                                                                    <li className="container-fluid mb-2">
-
-                                                                        {(!userCoverImgNew && !userCoverImgPreviewNew) &&
-
-                                                                            <>
-                                                                                <input type="file" className="form-control form-control-sm" name="userCoverImageNew" id="userCoverImageNew" accept="image/jpeg" style={{ display: 'none' }} onChange={(e) => handleInputUserCoverImageNew(e)} required />
-                                                                                <label htmlFor="userCoverImageNew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
-                                                                                <small className="text-secondary">max: 10mb / .jpg</small>
-                                                                            </>
-                                                                        }
-
-
-
-                                                                    </li>
-                                                                    <li><button className={"btn " + (userCoverImgPreviewNew ? "btn-primary" : "btn-secondary") + " btn-sm rounded-pill fw-semibold"} style={{ paddingLeft: 15, paddingRight: 15 }} onClick={() => updateUserImage("cover")} disabled={!userCoverImgNew}>Update</button></li>
-                                                                </form>
-                                                            </ul>
-                                                        </div>
-                                                        {user?.userCoverImg &&
-                                                            <div className="dropdown">
-                                                                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-x-circle-fill text-danger"></i></button>
-                                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                    <p><small className="text-secondary">Delete Imgae?</small></p>
-                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deleteUserImage("cover")}>Yes</button>
-                                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
-                                                                </ul>
-                                                            </div>
+                                                            <>
+                                                                <input type="file" className="form-control form-control-sm" name="userCoverImageNew" id="userCoverImageNew" accept="image/jpeg" style={{ display: 'none' }} onChange={(e) => handleInputUserCoverImageNew(e)} required />
+                                                                <label htmlFor="userCoverImageNew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
+                                                                <small className="text-secondary">max: 10mb / .jpg</small>
+                                                            </>
                                                         }
 
-                                                    </div>
-
-                                                    <hr />
-
-
-                                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                                                        <img src={user?.userProfileImg ? `data:image/png;base64,${user.userProfileImg}` : default_user_profile_img} width="90" height="90" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
-                                                    </div>
-                                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                                                        <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i>
-                                                                {userProfileImgPreviewNew &&
-                                                                    <span className="position-absolute top-0 start-100 translate-middle p-2 bg-primary border border-light rounded-circle animate__animated animate__flash animate__infinite"></span>
-                                                                }
-                                                            </button>
-
-                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
-                                                                    <i className="bi bi-x-lg"></i>
-                                                                </span>
-                                                                {userProfileImgPreviewNew &&
-                                                                    <>
-                                                                        <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => { setUserProfileImgPreviewNew(null); setUserProfileImgNew(null) }}></button>
-                                                                        <img src={userProfileImgPreviewNew} width="90" height="90" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-primary border-3 mb-3" />
-                                                                    </>
-
-                                                                }
-
-                                                                <form onSubmit={handleSubmit}>
-                                                                    <li className="container-fluid mb-2">
-
-                                                                        {(!userProfileImgNew && !userProfileImgPreviewNew) &&
-
-                                                                            <>
-                                                                                <input type="file" className="form-control form-control-sm" name="userProfileImagenew" id="userProfileImagenew" accept="image/jpeg" style={{ display: 'none' }} onChange={(e) => handleInputUserImageNew(e)} required />
-                                                                                <label htmlFor="userProfileImagenew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
-                                                                                <small className="text-secondary">max: 10mb / .jpg</small>
-                                                                            </>
-                                                                        }
-
-
-
-                                                                    </li>
-                                                                    <li><button className={"btn " + (userProfileImgPreviewNew ? "btn-primary" : "btn-secondary") + " btn-sm rounded-pill fw-semibold"} style={{ paddingLeft: 15, paddingRight: 15 }} onClick={() => updateUserImage("profile")} disabled={!userProfileImgNew}>Update</button></li>
-                                                                </form>
-                                                            </ul>
-                                                        </div>
-                                                        {user?.userProfileImg &&
-                                                            <div className="dropdown">
-                                                                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-x-circle-fill text-danger"></i></button>
-                                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                    <p><small className="text-secondary">Delete Imgae?</small></p>
-                                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deleteUserImage("profile")}>Yes</button>
-                                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
-                                                                </ul>
-                                                            </div>
-                                                        }
-
-                                                    </div>
-                                                </li>
-
-
-                                                <li className="list-group-item">
-                                                    <div className="d-grid gap-2 d-md-flex">
-                                                        <small className="me-md-2"><strong>Full Name:</strong> {user?.fullName}</small>
-                                                        <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
-                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
-                                                                    <i className="bi bi-x-lg"></i>
-                                                                </span>
-                                                                <form onSubmit={handleSubmit} style={{minWidth: 200}}>
-                                                                    <li className="container-fluid mb-3">
-                                                                        <input type="text" className="form-control form-control-sm" id="inputFullNameNew" placeholder="New: Full Name" maxLength="100" value={fullNameNew} onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
-                                                                        {fullNameNew?.length > 0 &&
-                                                                            <small className="text-secondary">{fullNameNew?.length}/100</small>
-                                                                        }
-
-                                                                    </li>
-                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserDetails} disabled={!fullNameNew || fullNameNew > 100}>Update</button></li>
-                                                                </form>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li className="list-group-item">
-                                                    <div className="d-grid gap-2 d-md-flex">
-                                                        <small><strong>Email:</strong> {user?.email}</small>
-                                                        <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
-                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
-                                                                    <i className="bi bi-x-lg"></i>
-                                                                </span>
-                                                                <form onSubmit={handleSubmit} style={{minWidth: 200}}>
-                                                                    <li className="container-fluid mb-3">
-                                                                        {emailNew && code ?
-
-                                                                            <input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
-                                                                            :
-                                                                            <>
-                                                                                <p><small>Password will be required</small></p>
-                                                                                <p><small>Verification code will be sent on new email</small></p>
-                                                                            </>
-                                                                        }
-
-                                                                        <input type="email" className="form-control form-control-sm mb-3" id="inputEmailNew" placeholder="New: Email" name="emailNew" maxLength="100" onChange={(e) => handleInputEmail(e)} autoComplete="off" required noValidate />
-
-                                                                        {emailNewCodeStatus === "success" &&
-                                                                            <input type="text" className="form-control form-control-sm mb-3" id="inputCode" placeholder="Code from new Email" maxLength="6" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
-                                                                        }
-
-                                                                        {emailNew && !code && user.email !== emailNew &&
-                                                                            <button type="button" className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={sendEmailNewCodeNoReply} disabled={!emailNew || emailNewCodeStatus === "loading"}>Send Code</button>
-                                                                        }
-
-                                                                        {user.email === emailNew &&
-                                                                            <small>Warning: same email</small>
-                                                                        }
-
-                                                                    </li>
-                                                                    {password && emailNew && code &&
-                                                                        <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserEmail}>Update</button></li>
-                                                                    }
-                                                                </form>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li className="list-group-item">
-                                                    <div className="d-grid gap-2 d-md-flex">
-                                                        <small><strong>Username:</strong> {user?.username}</small>
-                                                        <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
-                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
-                                                                    <i className="bi bi-x-lg"></i>
-                                                                </span>
-                                                                <form onSubmit={handleSubmit} className="container-fluid" style={{minWidth: 200}}>
-                                                                    <li className="mb-3">
-                                                                        <input type="text" className="form-control form-control-sm" id="inputUsernameNew" placeholder="New: Username" maxLength="20" value={usernameNew} onChange={(e) => handleInputUsername(e)} autoComplete="off" required />
-                                                                        {usernameNew?.length > 0 &&
-                                                                            <small className="text-secondary">{usernameNew?.length}/20 | a-z 0-9 - _ .</small>
-                                                                        }
-
-                                                                    </li>
-                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
-                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserUsername} disabled={!usernameNew || !password || usernameNew.length > 20}>Update</button></li>
-                                                                </form>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li className="list-group-item"><small><strong>Role:</strong> {user?.role}</small></li>
-                                                <li className="list-group-item"><small><strong>Registered:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
-                                                <li className="list-group-item">
-                                                    <div className="d-grid gap-2 d-md-flex">
-                                                        <small><strong>Password:</strong> ******</small>
-                                                        <div className="dropdown">
-                                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
-                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
-                                                                    <i className="bi bi-x-lg"></i>
-                                                                </span>
-                                                                <form onSubmit={handleSubmit} className="container-fluid" style={{minWidth: 200}}>
-                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordOld" placeholder="Old: Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
-                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordNew" placeholder="New: Password" maxLength="100" onChange={(e) => handleInputPasswordNew(e)} autoComplete="off" required /></li>
-                                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordRepeatNew" placeholder="New: Password Repeat" maxLength="100" onChange={(e) => handleInputPasswordRepeatNew(e)} autoComplete="off" required /></li>
-                                                                    {passwordNew !== passwordRepeatNew &&
-                                                                        <small>New passwords must match!</small>
-                                                                    }
-                                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserPassword} disabled={!password || !passwordNew || passwordRepeatNew !== passwordNew || passwordNew.length > 100}>Update</button></li>
-                                                                </form>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
+                                                    </li>
+                                                    <li><button className={"btn " + (userCoverImgPreviewNew ? "btn-primary" : "btn-secondary") + " btn-sm rounded-pill fw-semibold"} style={{ paddingLeft: 15, paddingRight: 15 }} onClick={() => updateUserImage("cover")} disabled={!userCoverImgNew}>Update</button></li>
+                                                </form>
                                             </ul>
-         
+                                        </div>
+                                        {user?.userCoverImg &&
+                                            <div className="dropdown">
+                                                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-x-circle-fill text-danger"></i></button>
+                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                    <p><small className="text-secondary">Delete Imgae?</small></p>
+                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deleteUserImage("cover")}>Yes</button>
+                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
+                                                </ul>
+                                            </div>
+                                        }
+
+                                    </div>
+
+                                    <hr />
+
+
+                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                                        <img src={user?.userProfileImg ? `data:image/png;base64,${user.userProfileImg}` : default_user_profile_img} width="90" height="90" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
+                                    </div>
+                                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                                        <div className="dropdown">
+                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i>
+                                                {userProfileImgPreviewNew &&
+                                                    <span className="position-absolute top-0 start-100 translate-middle p-2 bg-primary border border-light rounded-circle animate__animated animate__flash animate__infinite"></span>
+                                                }
+                                            </button>
+
+                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                                    <i className="bi bi-x-lg"></i>
+                                                </span>
+                                                {userProfileImgPreviewNew &&
+                                                    <>
+                                                        <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => { setUserProfileImgPreviewNew(null); setUserProfileImgNew(null) }}></button>
+                                                        <img src={userProfileImgPreviewNew} width="90" height="90" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-primary border-3 mb-3" />
+                                                    </>
+
+                                                }
+
+                                                <form onSubmit={handleSubmit}>
+                                                    <li className="container-fluid mb-2">
+
+                                                        {(!userProfileImgNew && !userProfileImgPreviewNew) &&
+
+                                                            <>
+                                                                <input type="file" className="form-control form-control-sm" name="userProfileImagenew" id="userProfileImagenew" accept="image/jpeg" style={{ display: 'none' }} onChange={(e) => handleInputUserImageNew(e)} required />
+                                                                <label htmlFor="userProfileImagenew" className="btn btn-secondary btn-sm me-md-2">Upload Image</label>
+                                                                <small className="text-secondary">max: 10mb / .jpg</small>
+                                                            </>
+                                                        }
+
+
+
+                                                    </li>
+                                                    <li><button className={"btn " + (userProfileImgPreviewNew ? "btn-primary" : "btn-secondary") + " btn-sm rounded-pill fw-semibold"} style={{ paddingLeft: 15, paddingRight: 15 }} onClick={() => updateUserImage("profile")} disabled={!userProfileImgNew}>Update</button></li>
+                                                </form>
+                                            </ul>
+                                        </div>
+                                        {user?.userProfileImg &&
+                                            <div className="dropdown">
+                                                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-x-circle-fill text-danger"></i></button>
+                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                    <p><small className="text-secondary">Delete Imgae?</small></p>
+                                                    <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deleteUserImage("profile")}>Yes</button>
+                                                    <button className="btn btn-secondary btn-sm" type="button">No</button>
+                                                </ul>
+                                            </div>
+                                        }
+
+                                    </div>
+                                </li>
+
+
+                                <li className="list-group-item">
+                                    <div className="d-grid gap-2 d-md-flex">
+                                        <small className="me-md-2"><strong>Full Name:</strong> {user?.fullName}</small>
+                                        <div className="dropdown">
+                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                                    <i className="bi bi-x-lg"></i>
+                                                </span>
+                                                <form onSubmit={handleSubmit} style={{ minWidth: 200 }}>
+                                                    <li className="container-fluid mb-3">
+                                                        <input type="text" className="form-control form-control-sm" id="inputFullNameNew" placeholder="New: Full Name" maxLength="100" value={fullNameNew} onChange={(e) => handleInputFullName(e)} autoComplete="off" required />
+                                                        {fullNameNew?.length > 0 &&
+                                                            <small className="text-secondary">{fullNameNew?.length}/100</small>
+                                                        }
+
+                                                    </li>
+                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserDetails} disabled={!fullNameNew || fullNameNew > 100}>Update</button></li>
+                                                </form>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li className="list-group-item">
+                                    <div className="d-grid gap-2 d-md-flex">
+                                        <small><strong>Email:</strong> {user?.email}</small>
+                                        <div className="dropdown">
+                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                                    <i className="bi bi-x-lg"></i>
+                                                </span>
+                                                <form onSubmit={handleSubmit} style={{ minWidth: 200 }}>
+                                                    <li className="container-fluid mb-3">
+                                                        {emailNew && code ?
+
+                                                            <input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                                            :
+                                                            <>
+                                                                <p><small>Password will be required</small></p>
+                                                                <p><small>Verification code will be sent on new email</small></p>
+                                                            </>
+                                                        }
+
+                                                        <input type="email" className="form-control form-control-sm mb-3" id="inputEmailNew" placeholder="New: Email" name="emailNew" maxLength="100" onChange={(e) => handleInputEmail(e)} autoComplete="off" required noValidate />
+
+                                                        {emailNewCodeStatus === "success" &&
+                                                            <input type="text" className="form-control form-control-sm mb-3" id="inputCode" placeholder="Code from new Email" maxLength="6" onChange={(e) => handleInputCode(e)} autoComplete="off" required />
+                                                        }
+
+                                                        {emailNew && !code && user.email !== emailNew &&
+                                                            <button type="button" className="btn btn-secondary btn-sm rounded-pill fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={sendEmailNewCodeNoReply} disabled={!emailNew || emailNewCodeStatus === "loading"}>Send Code</button>
+                                                        }
+
+                                                        {user.email === emailNew &&
+                                                            <small>Warning: same email</small>
+                                                        }
+
+                                                    </li>
+                                                    {password && emailNew && code &&
+                                                        <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserEmail}>Update</button></li>
+                                                    }
+                                                </form>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li className="list-group-item">
+                                    <div className="d-grid gap-2 d-md-flex">
+                                        <small><strong>Username:</strong> {user?.username}</small>
+                                        <div className="dropdown">
+                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                                    <i className="bi bi-x-lg"></i>
+                                                </span>
+                                                <form onSubmit={handleSubmit} className="container-fluid" style={{ minWidth: 200 }}>
+                                                    <li className="mb-3">
+                                                        <input type="text" className="form-control form-control-sm" id="inputUsernameNew" placeholder="New: Username" maxLength="20" value={usernameNew} onChange={(e) => handleInputUsername(e)} autoComplete="off" required />
+                                                        {usernameNew?.length > 0 &&
+                                                            <small className="text-secondary">{usernameNew?.length}/20 | a-z 0-9 - _ .</small>
+                                                        }
+
+                                                    </li>
+                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
+                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserUsername} disabled={!usernameNew || !password || usernameNew.length > 20}>Update</button></li>
+                                                </form>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li className="list-group-item"><small><strong>Role:</strong> {user?.role}</small></li>
+                                <li className="list-group-item"><small><strong>Registered:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
+                                <li className="list-group-item">
+                                    <div className="d-grid gap-2 d-md-flex">
+                                        <small><strong>Password:</strong> ******</small>
+                                        <div className="dropdown">
+                                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false"><i className="bi bi-pencil-square"></i></button>
+                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                                    <i className="bi bi-x-lg"></i>
+                                                </span>
+                                                <form onSubmit={handleSubmit} className="container-fluid" style={{ minWidth: 200 }}>
+                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordOld" placeholder="Old: Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
+                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordNew" placeholder="New: Password" maxLength="100" onChange={(e) => handleInputPasswordNew(e)} autoComplete="off" required /></li>
+                                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordRepeatNew" placeholder="New: Password Repeat" maxLength="100" onChange={(e) => handleInputPasswordRepeatNew(e)} autoComplete="off" required /></li>
+                                                    {passwordNew !== passwordRepeatNew &&
+                                                        <small>New passwords must match!</small>
+                                                    }
+                                                    <li><button className="btn btn-secondary btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={updateUserPassword} disabled={!password || !passwordNew || passwordRepeatNew !== passwordNew || passwordNew.length > 100}>Update</button></li>
+                                                </form>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
                         }
 
 

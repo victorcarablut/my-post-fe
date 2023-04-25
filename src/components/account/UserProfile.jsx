@@ -24,9 +24,6 @@ import { Error } from "../_resources/ui/Alerts.jsx";
 import { VerifyToken } from "../security/VerifyToken.js";
 import { Logout } from "./Logout.js";
 
-
-
-
 function UserProfile() {
 
     const { username } = useParams();
@@ -53,7 +50,6 @@ function UserProfile() {
     let interval = null;
 
     useEffect(() => {
-        //console.log(username);
 
         checkAuth();
 
@@ -122,7 +118,6 @@ function UserProfile() {
 
             if (res.status === 200) {
 
-                //console.log(res.data.fullName);
                 setResponseStatusGetUserDetails("success");
 
                 setUser({
@@ -136,13 +131,10 @@ function UserProfile() {
                     userCoverImg: res.data.userCoverImg
                 })
 
-
-
             }
 
         }).catch(err => {
             setResponseStatusGetUserDetails("error");
-            //Logout();
             return;
         })
 
@@ -151,8 +143,6 @@ function UserProfile() {
     return (
 
         <>
-
-
             <div className="d-flex justify-content-center mb-3">
                 <div className="container-fluid" style={{ maxWidth: 1400 }}>
 

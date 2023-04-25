@@ -10,7 +10,7 @@ import axios from "axios";
 import { url } from "../config.js";
 
 // Link 
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 import { VerifyToken } from './security/VerifyToken.js';
 import { Logout } from './account/Logout.js';
@@ -23,8 +23,6 @@ import { LoadingFullScreen } from '../components/_resources/ui/Loadings';
 
 
 function Header() {
-
-  //const navigate = useNavigate();
 
   const [mainLoading, setMainLoading] = useState(true);
 
@@ -47,10 +45,6 @@ function Header() {
 
   const checkAuth = async () => {
 
-    // setInterval(() => {
-    //    checkAuthInfinite();
-    //  }, 10000);
-
     const verifyToken = await VerifyToken();
 
     if (verifyToken) {
@@ -65,18 +59,6 @@ function Header() {
 
   }
 
-  const checkAuthInfinite = async () => {
-
-    const verifyToken = await VerifyToken();
-
-    if (verifyToken) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-
-    }
-
-  }
 
   const getUserDetails = async () => {
 
@@ -97,8 +79,6 @@ function Header() {
           userProfileImg: res.data.userProfileImg,
           role: res.data.role
         })
-
-        // console.log(res.data);
 
       } else {
         logout();
@@ -153,7 +133,6 @@ function Header() {
                 </div>
 
               }
-              {/* <Link to="/login" type="button" class="btn btn-light btn-sm me-md-2 rounded-pill shadow fw-semibold" style={{paddingLeft: 10, paddingRight: 15}}><i class="bi bi-box-arrow-in-right me-md-2"/>Login</Link> */}
 
               <div className="dropdown">
                 <button className="btn btn-light btn-sm dropdown-toggle rounded-pill shadow" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
@@ -171,7 +150,7 @@ function Header() {
                   {isAuthenticated &&
                     <>
                       <li><hr className="dropdown-divider" /></li>
-                      <li><button type="button" className="btn btn-danger btn-sm rounded-pill fw-semibold shadow" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal">Logout</button></li>
+                      <li><button type="button" className="btn btn-danger btn-sm rounded-pill fw-semibold shadow" data-bs-toggle="modal" data-bs-target="#exitModal">Logout</button></li>
                     </>
                   }
 
@@ -182,12 +161,12 @@ function Header() {
 
       }
 
-      {/* --- Modal (Delete Employee) --- */}
-      <div className="modal fade" id="deleteEmployeeModal" tabIndex="-1" aria-labelledby="deleteEmployeeModalLabel" aria-hidden="true">
+      {/* --- Modal (Exit Confirmation) --- */}
+      <div className="modal fade" id="exitModal" tabIndex="-1" aria-labelledby="exitModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="deleteEmployeeModalLabel">Exit</h1>
+              <h1 className="modal-title fs-5" id="exitModalLabel">Exit</h1>
               <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">

@@ -39,18 +39,3 @@ body {
   width: 6px !important;
 }
 
-
-
-/* Custom Global: form upload button */
-input[type=file]::file-selector-button {
-  border: none;
-  padding: 5px 10px;
-  border-radius: 3px;
-  background-color: #596275;
-  color: whitesmoke;
-  transition: 0.5s;
-}
-
-input[type=file]::file-selector-button:hover {
-  background-color: #4e5463;
-}

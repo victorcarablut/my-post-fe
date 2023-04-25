@@ -34,7 +34,6 @@ function Dashboard() {
     const [responseStatusGeUserDetails, setResponseStatusGetUserDetails] = useState("");
 
 
-
     useEffect(() => {
 
         checkAuth();
@@ -77,14 +76,10 @@ function Dashboard() {
 
         }).catch(err => {
             setResponseStatusGetUserDetails("error");
-            //Logout();
             return;
         })
 
     }
-
-
-
 
 
     return (
@@ -107,7 +102,6 @@ function Dashboard() {
                                             <p className="card-text"><small>{user?.email}</small></p>
                                             <p className="card-text"><small className="text-body-secondary">{user?.role}</small></p>
                                             <small className="text-secondary">Full control over users and posts.</small>
-
                                         </>
                                     }
 
@@ -171,10 +165,6 @@ function Dashboard() {
 
             </div>
         </div>
-
-
-
-
 
 
     )

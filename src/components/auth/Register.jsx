@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-// Secure Data (Local Storage)
-import secureLocalStorage from "react-secure-storage";
-
 // Axios (API)
 import axios from 'axios';
 
@@ -245,16 +242,6 @@ function Register() {
 
                         sendEmailCodeNoReply(email);
 
-                        /* navigate(
-                            "/code/verify",
-                            {
-                                state: {
-                                    email: email
-                                }
-                            }
-                        ) */
-
-                        // clearInputs();
                     }
                 }
 
@@ -290,25 +277,18 @@ function Register() {
                     toast.dismiss(toastNotify);
                     toast.error("Error"); // Error save data to DB
                     setEmailCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
                 } else if (res.data.status_code === 2) {
                     toast.dismiss(toastNotify);
                     toast.error("Invalid email format");
                     setEmailCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
                 } else if (res.data.status_code === 4) {
                     toast.dismiss(toastNotify);
                     toast.error("Account with that email doesn't exist");
-                    //setButtonSendEmailCodeIsDisabled(false);
                 } else if (res.data.status_code === 7) {
                     toast.dismiss(toastNotify);
                     toast.error("Error while sending email, try again!");
                     setEmailCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
-                    //resendEmailCode();
                 } else {
-                    //secureLocalStorage.setItem("token", res.data.token);
-
                     toast.dismiss(toastNotify);
                     toast.success("Step 2 - Email sent successfully");
                     setEmailCodeStatus("success");
@@ -322,15 +302,11 @@ function Register() {
                         }
                     )
 
-                    // OK
-
-                    //window.location.reload();
                     clearInputs();
                 }
             }
 
         }).catch(err => {
-            //setButtonSendEmailCodeIsDisabled(false);
             toast.dismiss(toastNotify);
             toast.error("Error Send Email");
             setEmailCodeStatus("error");
@@ -426,10 +402,7 @@ function Register() {
                                                 </div>
 
                                             </div>
-
                                     }
-
-
 
                                 </div>
                                 <div className="card-footer text-muted">
@@ -439,8 +412,6 @@ function Register() {
                             </div>
                         </div>
                     </div>
-
-
             }
         </>
 

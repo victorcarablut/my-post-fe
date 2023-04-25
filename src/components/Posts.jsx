@@ -10,22 +10,13 @@ import axios from "axios";
 import { url } from "../config.js";
 
 // Link 
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-//import { VerifyToken } from './security/VerifyToken.js';
-import { Logout } from './account/Logout.js';
-
-// Logo / User
-//import logo from '../assets/images/logo.png';
-//import user_pic_profile from '../assets/images/user.jpg';
-
-import { LoadingFullScreen, LoadingSmall } from './_resources/ui/Loadings.jsx';
 import { Empty, Error } from './_resources/ui/Alerts.jsx';
 
 // Date Time Format (moment.js)
 import moment from 'moment/min/moment-with-locales';
 import { moment_locale, moment_format_date_time_long } from './_resources/date-time/DateTime.js';
-//import UserPasswordRecover from './UserPasswordRecover.jsx';
 
 import default_user_profile_img from '../assets/images/user.jpg';
 
@@ -60,7 +51,6 @@ function Posts(props) {
 
     // inputs check validity
     const [handleInputPostTitleIsValid, setHandleInputPostTitleIsValid] = useState(false);
-    const [handleInputPostDescriptionIsValid, setHandleInputPostDescriptionIsValid] = useState(false);
 
     // add CSS className
     const [handleInputPostTitleClassName, setHandleInputPostTitleClassName] = useState(null);
@@ -77,7 +67,6 @@ function Posts(props) {
 
     useEffect(() => {
         getUserDetails();
-        //getAllPosts();
 
         // auto refresh
         interval = setInterval(getAllPosts, 5000);  // 5000 - 5 sec
@@ -113,7 +102,6 @@ function Posts(props) {
         setPostTitleNew(null);
         setPostDescriptionNew(null);
 
-        //deletePostImagePreview();
         setPostImage(null);
         deletePostImagePreviewNew();
 
@@ -121,7 +109,6 @@ function Posts(props) {
         setHandleInputPostDescriptionClassName(null);
 
         setHandleInputPostTitleIsValid(false);
-        setHandleInputPostDescriptionIsValid(false);
 
         setButtonCreatePostIsDisabled(false);
 
@@ -130,20 +117,11 @@ function Posts(props) {
     }
 
     const handleInputPostImage = (e) => {
-        //setPostImagePreviewShow(true);
-
-        //setPostImagePreviewShow(true); 
-
-        //setPostImagePreviewShow(!postImagePreviewShow); 
-
-        //console.log(postImagePreview);
-        //setPostImage(null);
-        //setPostImagePreview(true);
 
         if (e.target.files) {
             setPostImage(e.target.files[0]);
             setPostImagePreview(URL.createObjectURL(e.target.files[0]));
-            //setPostImagePreviewShow(true);
+            ;
             // important: reset the value to prevent no visible data uploading the same image file twice
             e.target.value = null
         } else {
@@ -165,15 +143,9 @@ function Posts(props) {
         }
     }
 
-    const deletePostImagePreview = () => {
-        //setPostImagePreview(null);
-        //setPostImagePreviewShow(false);
-        //setPostImage(null);
-    }
 
     const deletePostImagePreviewNew = () => {
         setPostImagePreviewNew(null);
-        //setPostImagePreviewNew(URL.createObjectURL(null));
         setPostImageNew(null);
         setPostImagePreviewNewTemporary(null);
     }
@@ -187,7 +159,6 @@ function Posts(props) {
             headers: {
                 Authorization: "Bearer " + jwt_token
             }
-
         }
 
         await axios.get(`${url}/user/details`, config).then((res) => {
@@ -197,9 +168,6 @@ function Posts(props) {
                 setUserEmail(res.data.email);
 
                 getAllPosts();
-
-
-                // TODO: if 403 logout
             }
 
         }).catch(err => {
@@ -212,8 +180,6 @@ function Posts(props) {
 
     const getAllPosts = async () => {
 
-        //console.log("load 1 time");
-
         setResponseStatusGetAllPosts("loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
@@ -224,22 +190,13 @@ function Posts(props) {
             }
         }
 
-        console.log(props.filter);
-
-
-        //await axios.get(`${url}/post/all/${props.filter}`, config).then((res) => {
-
         await axios.get(`${url}/post/all/${props.filter}`, config).then((res) => {
 
             if (res.status === 200) {
                 setResponseStatusGetAllPosts("success");
-                //console.log(res.data);
-
-                //setPosts(res.data);
 
                 if (props.filter === "all") {
-                    // USER & ADMIN can see only active Posts in: > Home
-
+                    
                     setPosts(res.data);
 
                 } else {
@@ -247,21 +204,12 @@ function Posts(props) {
 
                     // condition to prevent other user to see "Pending" message on owners Post's in: > UserProfile
 
-                    //getUserDetails();
-
-
-                    // clear Array
-                    //setPosts([]);
-
-
                     let newArr = [];
 
                     console.log(userId);
 
                     res.data.forEach((post) => {
-                        //console.log(res.user.id);
                         if (post.user.id === userId) {
-                            //console.log(res.id);
                             newArr.push(post);
                         } else if (post.user.id !== userId && post.status === "active") {
                             newArr.push(post);
@@ -271,9 +219,6 @@ function Posts(props) {
                     })
 
                     setPosts(newArr);
-
-                    console.log(newArr);
-                    //setPosts(res.data);
                 }
 
 
@@ -282,7 +227,6 @@ function Posts(props) {
 
         }).catch(err => {
             setResponseStatusGetAllPosts("error");
-            //Logout();
             return;
         })
 
@@ -308,42 +252,18 @@ function Posts(props) {
 
         const title = e.target.value;
         setPostTitleNew(title);
-
-        /*  if (title.length > 100) {
-             setHandleInputPostTitleIsValid(false);
-         } else if (title.length === 0) {
-             setHandleInputPostTitleClassName(null);
-         } else {
-             setHandleInputPostTitleIsValid(true);
-         } */
     }
 
     const handleInputPostDescription = async (e) => {
 
         const description = e.target.value;
         setPostDescription(description);
-
-        if (description.length > 500) {
-            setHandleInputPostDescriptionIsValid(false);
-        } else if (description.length === 0) {
-            setHandleInputPostDescriptionClassName(null);
-        } else {
-            setHandleInputPostDescriptionIsValid(true);
-        }
     }
 
     const handleInputPostDescriptionNew = async (e) => {
 
         const description = e.target.value;
         setPostDescriptionNew(description);
-
-        /* if (description.length > 500) {
-            setHandleInputPostDescriptionIsValid(false);
-        } else if (description.length === 0) {
-            setHandleInputPostDescriptionClassName(null);
-        } else {
-            setHandleInputPostDescriptionIsValid(true);
-        } */
     }
 
     const passPostDataUpdateNew = (id, title, description, image) => {
@@ -391,7 +311,6 @@ function Posts(props) {
             }
 
             const formData = new FormData();
-            //formData.append("data", data, {type: "application/json"});
             formData.append('data', new Blob([JSON.stringify({
                 user: {
                     id: userId,
@@ -411,19 +330,16 @@ function Posts(props) {
                     if (res.data.status_code === 1) {
                         toast.dismiss(toastNotify);
                         toast.error("Error"); // Error save data to DB
-                        //setEmailNewCodeStatus("error");
-                        //setButtonSendEmailCodeIsDisabled(false);
+
                     } else if (res.data.status_code === 4) {
                         toast.dismiss(toastNotify);
                         toast.error("Account with that email doesn't exist");
-                        //setButtonSendEmailCodeIsDisabled(false);
-                        //setEmailNewCodeStatus("error");
+
                     } else if (res.data.status_code === 11) {
                         toast.dismiss(toastNotify);
                         toast.error("You've reached maximum number of Posts");
                         setButtonCreatePostIsDisabled(false);
-                        //setButtonSendEmailCodeIsDisabled(false);
-                        //setEmailNewCodeStatus("error");
+
                     } else {
                         setButtonCreatePostIsDisabled(false);
 
@@ -434,9 +350,6 @@ function Posts(props) {
 
                         navigate("/user/" + username);
 
-                        //getAllPosts();
-
-                        //uploadImage();
                     }
 
 
@@ -467,12 +380,10 @@ function Posts(props) {
                 Authorization: "Bearer " + jwt_token
             }
         }
-        //console.log(postTitleNew);
-        //console.log(postDescriptionNew);
-        //console.log(postImageNew);
+
 
         const formData = new FormData();
-        //formData.append("data", data, {type: "application/json"});
+
         formData.append('post_id', new Blob([JSON.stringify({
             post_id: postId
         })], {
@@ -503,11 +414,9 @@ function Posts(props) {
                 if (res.data.status_code === 1) {
                     toast.dismiss(toastNotify);
                     toast.error("Error"); // Error save data to DB
-                    //setEmailNewCodeStatus("error");
-                    //setButtonSendEmailCodeIsDisabled(false);
+
                 } else {
                     setButtonCreatePostIsDisabled(false);
-
 
                     toast.dismiss(toastNotify);
                     toast.success("Updated");
@@ -515,9 +424,8 @@ function Posts(props) {
                     document.getElementById('button-modal-update-post-close').click();
                     clearInputs();
 
-                    getAllPosts();
+                    navigate("/user/" + username);
 
-                    //uploadImage();
                 }
 
 
@@ -555,7 +463,6 @@ function Posts(props) {
 
         await axios.post(`${url}/post/delete`, data, config).then((res) => {
             if (res.status === 200) {
-                //setButtonCreatePostIsDisabled(false);
 
                 toast.dismiss(toastNotify);
                 toast.success("Deleted");
@@ -566,50 +473,11 @@ function Posts(props) {
         }).catch(err => {
             toast.dismiss(toastNotify);
             toast.error("Error");
-            //setButtonCreatePostIsDisabled(false);
             return;
         })
 
     }
 
-    const uploadImage = async (postId) => {
-
-        //checkAllInputsValidity();
-
-        //setButtonCreatePostIsDisabled(true);
-
-        //const toastNotify = toast.loading("Waiting...");
-
-        const jwt_token = secureLocalStorage.getItem("token");
-
-        const config = {
-            headers: {
-                Authorization: "Bearer " + jwt_token
-            }
-        }
-
-        const formData = new FormData();
-        formData.append("user_id", userId);
-        formData.append("post_id", postId);
-        formData.append("image", postImage);
-
-        await axios.post(`${url}/post/upload/image`, formData, config).then((res) => {
-            if (res.status === 200) {
-                //setButtonCreatePostIsDisabled(false);
-
-                //toast.dismiss(toastNotify);
-                //toast.success("Published");
-
-                getAllPosts();
-            }
-
-        }).catch(err => {
-            //toast.dismiss(toastNotify);
-            //toast.error("Error");
-            //setButtonCreatePostIsDisabled(false);
-            return;
-        })
-    }
 
     // ------ Like ------
 
@@ -634,18 +502,10 @@ function Posts(props) {
 
         await axios.post(`${url}/post/like`, data, config).then((res) => {
             if (res.status === 200) {
-                //setButtonCreatePostIsDisabled(false);
-
-                //toast.dismiss(toastNotify);
-                //toast.success("Published");
-
                 getAllPosts();
             }
 
         }).catch(err => {
-            //toast.dismiss(toastNotify);
-            //toast.error("Error");
-            //setButtonCreatePostIsDisabled(false);
             return;
         })
 
@@ -683,7 +543,7 @@ function Posts(props) {
     return (
 
         <>
-            <div className="container-fluid">
+            <div className="container-fluid custom-animation-fadeInUp">
 
                 <div className="row">
 
@@ -750,8 +610,8 @@ function Posts(props) {
                             <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
                                 <div className="card-body">
                                     <div className="alert alert-light" role="alert">
-                                    <i className="bi bi-info-circle me-md-2"></i>
-                                    <small>All posts are reviewed by the admin.</small>
+                                        <i className="bi bi-info-circle me-md-2"></i>
+                                        <small>All posts are reviewed by the admin. Any change has to be approved.</small>
                                     </div>
                                 </div>
                             </div>
@@ -760,11 +620,7 @@ function Posts(props) {
                     </div>
 
 
-
                     <div className="col-xl-6 me-mb-3">
-
-
-
 
 
                         <div className="d-flex justify-content-center">
@@ -930,18 +786,12 @@ function Posts(props) {
                                                         </div>
                                                     </div>
 
-
-
-
-
-
                                                 </td>
                                             </tr>
 
 
 
                                         )}
-
 
 
                                     </tbody>
@@ -1012,14 +862,6 @@ function Posts(props) {
 
                                     </div>
                                 }
-
-
-
-                                {/*  {postImagePreviewNewTemporary &&
-                                    <div>
-                                        <button type="button" className="btn-secondary btn-sm mb-3" onClick={deletePostImagePreviewNew}>Delete Image</button>
-                                    </div>
-                                } */}
 
 
                                 <div className="form-floating mb-3">

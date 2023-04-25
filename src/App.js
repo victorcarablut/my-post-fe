@@ -13,7 +13,6 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import VerifyCode from './components/auth/VerifyCode';
 
-import Private from './components/other/Private';
 import About from './components/other/About';
 import Contact from './components/other/Contact';
 import PrivacyPolicy from './components/other/PrivacyPolicy';
@@ -29,8 +28,6 @@ import NotFound from './components/other/NotFound';
 
 // Notifications
 import { Toaster } from 'react-hot-toast';
-
-
 
 
 function App() {
@@ -50,7 +47,6 @@ function App() {
             {/* private */}
             <Route element={<PrivateRoute />}>
               <Route path="/" exact element={<Home />} />
-              <Route path="/private" element={<Private />} />
               <Route path="/account" element={<UserDetails />} />
               <Route path="/user/:username" element={<UserProfile />} />
               <Route path="/admin/dashboard" element={<Dashboard />} />
