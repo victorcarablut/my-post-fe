@@ -8,10 +8,7 @@ import axios from "axios";
 // config file (URL)
 import { url } from "../../config.js";
 
-
 export const VerifyToken = async () => {
-
-  console.log("VerifyToken.js");
 
   let isValid = false;
 
@@ -21,7 +18,6 @@ export const VerifyToken = async () => {
     headers: {
       Authorization: "Bearer " + jwt_token
     }
-
   }
 
   await axios.get(`${url}/token/verify`, config).then((res) => {
@@ -32,6 +28,7 @@ export const VerifyToken = async () => {
   }).catch(err => {
     isValid = false;
     secureLocalStorage.removeItem("token");
+    return;
   })
 
   return isValid;

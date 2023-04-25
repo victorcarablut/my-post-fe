@@ -60,7 +60,6 @@ const VerifyCode = () => {
     const regex = /^[0-9]*$/;
 
     setCode(code);
-    console.log(code.length);
 
     if (regex.test(code) && code.length === 6) {
       setHandleInputCodeIsValid(true);
@@ -136,7 +135,6 @@ const VerifyCode = () => {
 
         }
       }).catch(err => {
-        //console.log(err);
         setButtonVerifyCodeIsDisabled(false);
         toast.dismiss(toastNotify);
         toast.error("Server error");
@@ -194,7 +192,7 @@ const VerifyCode = () => {
         } else {
           toast.dismiss(toastNotify);
           toast.success("Code sent on email");
-          //clearInputs();
+
           // custom clear
           setCode(null);
           setHandleInputCodeIsValid(false);
@@ -204,7 +202,7 @@ const VerifyCode = () => {
 
       }
     }).catch(err => {
-      //console.log(err);
+
       setButtonVerifyCodeIsDisabled(false);
       toast.dismiss(toastNotify);
       toast.error("Server error");

@@ -357,7 +357,6 @@ function UserDetails() {
             }
 
         }).catch(err => {
-            // console.log(err);
             toast.dismiss(toastNotify);
             toast.error("Error");
             return;

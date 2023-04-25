@@ -428,7 +428,7 @@ function Users(props) {
                                                                     <p><small className="text-secondary">User role will be changed to ADMIN</small></p>
                                                                     <form onSubmit={handleSubmit} style={{ minWidth: 200 }}>
                                                                         <li className="container-fluid mb-3">
-                                                                            <input type="password" className="form-control form-control-sm mb-3" id="inputPassword" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
+                                                                            <input type="password" className="form-control form-control-sm mb-3" placeholder="Password" onChange={(e) => handleInputPassword(e)} autoComplete="off" required />
                                                                         </li>
 
                                                                     </form>

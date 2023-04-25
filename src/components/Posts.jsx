@@ -206,8 +206,6 @@ function Posts(props) {
 
                     let newArr = [];
 
-                    console.log(userId);
-
                     res.data.forEach((post) => {
                         if (post.user.id === userId) {
                             newArr.push(post);
@@ -452,9 +450,6 @@ function Posts(props) {
                 Authorization: "Bearer " + jwt_token
             }
         }
-
-        console.log("user_id: " + userId);
-        console.log("post_id: " + postId);
 
         const data = {
             user_id: userId,

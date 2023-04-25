@@ -187,9 +187,7 @@ function Register() {
                         
                     } else {
                         secureLocalStorage.setItem("token", res.data.token);
-
                         toast.dismiss(toastNotify);
-
                         setLoginUserStatus("success");
 
                         window.location.reload();
@@ -198,7 +196,6 @@ function Register() {
                 }
 
             }).catch(err => {
-                console.log(err);
                 setButtonLoginUserIsDisabled(false);
                 toast.dismiss(toastNotify);
                 toast.error("Error");
