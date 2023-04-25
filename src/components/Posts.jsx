@@ -346,7 +346,9 @@ function Posts(props) {
 
                         clearInputs();
 
-                        navigate("/user/" + username);
+                        getAllPosts();
+
+                        navigate("/user/" + username); // user will see a "pending" status
 
                     }
 
@@ -422,7 +424,11 @@ function Posts(props) {
                     document.getElementById('button-modal-update-post-close').click();
                     clearInputs();
 
-                    navigate("/user/" + username);
+                    getAllPosts();
+
+                    // navigate("/user/" + username);
+
+                    
 
                 }
 
@@ -606,7 +612,7 @@ function Posts(props) {
                                 <div className="card-body">
                                     <div className="alert alert-light" role="alert">
                                         <i className="bi bi-info-circle me-md-2"></i>
-                                        <small>All posts are reviewed by the admin. Any change has to be approved.</small>
+                                        <small>All posts are reviewed by the admin.</small>
                                     </div>
                                 </div>
                             </div>
