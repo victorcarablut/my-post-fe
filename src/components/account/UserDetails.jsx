@@ -37,6 +37,7 @@ function UserDetails() {
             username: null,
             role: null,
             registeredDate: null,
+            updatedDate: null,
             userProfileImg: null,
             userCoverImg: null
         }
@@ -176,6 +177,7 @@ function UserDetails() {
                     username: res.data.username,
                     role: res.data.role,
                     registeredDate: res.data.registeredDate,
+                    updatedDate: res.data.updatedDate,
                     userProfileImg: res.data.userProfileImg,
                     userCoverImg: res.data.userCoverImg
                 })
