@@ -152,12 +152,18 @@ function Register() {
             setLoginUserStatus("loading");
             const toastNotify = toast.loading("Loading");
 
+            const config = {
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded' 
+                }
+              }
+
             const data = {
                 email: email.toLocaleLowerCase(),
                 password: password
             }
 
-            await axios.post(`${url}/account/login`, data).then((res) => {
+            await axios.post(`${url}/account/login`, data, config).then((res) => {
 
                 if (res.status === 200) {
 
