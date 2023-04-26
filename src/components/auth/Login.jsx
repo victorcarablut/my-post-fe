@@ -310,7 +310,7 @@ function Register() {
                                         <form onSubmit={handleSubmit}>
 
                                             <div className="form-floating mb-3">
-                                                <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" maxLength="100" onChange={(e) => handleInputEmail(e)} autoComplete="off" required />
+                                                <input type="email" className={"form-control " + handleInputEmailClassName} id="floatingInputEmail" placeholder="Email" maxLength="100" onChange={(e) => handleInputEmail(e)} autoComplete="on" required />
                                                 <label htmlFor="floatingInputEmail">Email *</label>
                                                 <div className="invalid-feedback">
                                                     <small>Email must contain @ and .</small>

@@ -852,6 +852,9 @@ function UserDetails() {
                                 </li>
                                 <li className="list-group-item"><small><strong>Role:</strong> {user?.role}</small></li>
                                 <li className="list-group-item"><small><strong>Registered:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
+                                { user?.updatedDate && 
+                                <li className="list-group-item"><small><strong>Updated:</strong> {moment(user?.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
+                                }         
                                 <li className="list-group-item">
                                     <div className="d-grid gap-2 d-md-flex">
                                         <small><strong>Password:</strong> ******</small>

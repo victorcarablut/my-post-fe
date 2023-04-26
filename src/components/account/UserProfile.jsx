@@ -47,40 +47,25 @@ function UserProfile() {
     const [responseStatusGetUserDetails, setResponseStatusGetUserDetails] = useState("");
 
 
-
     useEffect(() => {
-
-        checkAuth();
 
         window.scrollTo({
             top: 0,
             behavior: "smooth",
         });
 
-        getUserDetails();
-
-        // auto refresh - (start)
-        // const interval = setInterval(getUserDetails, 10000);
-
-        return function () {
-
-            // auto refresh - (stop)
-            // clearInterval(interval);
-        };
-
-    }, [username]);
-
-
-
-    const checkAuth = async () => {
-        const verifyToken = await VerifyToken();
-        if (!verifyToken) {
-            await Logout();
+        const checkAuth = async () => {
+            const verifyToken = await VerifyToken();
+            if (!verifyToken) {
+                await Logout();
+            }
         }
-    }
+
+        checkAuth();
 
 
-    const getUserDetails = async () => {
+
+        const getUserDetails = async () => {
 
         setResponseStatusGetUserDetails("loading");
 
@@ -128,6 +113,17 @@ function UserProfile() {
         })
 
     }
+
+        getUserDetails();
+
+
+    }, [username]);
+
+
+
+
+
+    
 
     return (
 
