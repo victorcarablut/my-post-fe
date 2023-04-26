@@ -46,8 +46,7 @@ function UserProfile() {
     // http response status
     const [responseStatusGetUserDetails, setResponseStatusGetUserDetails] = useState("");
 
-    // auto refresh
-    let interval = null;
+
 
     useEffect(() => {
 
@@ -60,28 +59,18 @@ function UserProfile() {
 
         getUserDetails();
 
-        // auto refresh
-        interval = setInterval(getUserDetails, 10000);  // 5000 - 5 sec
-
-        // examples: 
-        // 1000 // 1 sec <- time in ms
-        // 10000 // 10 sec <- time in ms
-        // 15000 // 15 sec <- time in ms
-        // 1000 * 60 * 50 // 50 min 
-        // 1000 * 60 * 20 // 20 min
+        // auto refresh - (start)
+        const interval = setInterval(getUserDetails, 10000);
 
         return function () {
 
-            // auto refresh
-            stopInterval();
+            // auto refresh - (stop)
+            clearInterval(interval);
         };
 
     }, [username]);
 
-    // auto refresh
-    const stopInterval = () => {
-        clearInterval(interval);
-    }
+
 
     const checkAuth = async () => {
         const verifyToken = await VerifyToken();

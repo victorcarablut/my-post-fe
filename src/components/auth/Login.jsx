@@ -47,10 +47,8 @@ function Register() {
     const [emailCodeStatus, setEmailCodeStatus] = useState("");
 
     useEffect(() => {
-        checkAuth();
-    }, [])
 
-    /* 
+        /* 
     if access to this page, check if user are already authenticated
     - if yes: auto redirect to (home)
     - if not: stay here
@@ -66,6 +64,11 @@ function Register() {
             setMainLoading(false);
         }
     }
+        checkAuth();
+
+    }, [navigate])
+
+    
 
 
     // clear/reset inputs, other...

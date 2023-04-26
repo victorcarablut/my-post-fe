@@ -66,6 +66,7 @@ function UserDetails() {
         checkAuth();
         clearInputs();
         getUserDetails();
+        
     }, []);
 
     const checkAuth = async () => {
@@ -890,7 +891,7 @@ function UserDetails() {
                                     <p><small className="text-secondary">For security reasons password is required.</small></p>
                                 </div>
                                 <form onSubmit={handleSubmit} className="container-fluid" style={{ minWidth: 200 }}>
-                                    <li><input type="password" className="form-control form-control-sm mb-3" id="inputPasswordOld" placeholder="Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
+                                    <li><input type="password" className="form-control form-control-sm mb-3" placeholder="Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
                                     <li><button className="btn btn-danger btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={deleteAccount} disabled={!password}>Delete</button></li>
                                 </form>
                             </ul>

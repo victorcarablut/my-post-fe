@@ -34,35 +34,24 @@ function Posts(props) {
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
 
 
-    // auto refresh
-    let interval = null;
-
     useEffect(() => {
 
         getAllPosts();
 
-        // auto refresh
-        interval = setInterval(getAllPosts, 5000);  // 5000 - 5 sec
-
-        // examples: 
-        // 1000 // 1 sec <- time in ms
-        // 10000 // 10 sec <- time in ms
-        // 15000 // 15 sec <- time in ms
-        // 1000 * 60 * 50 // 50 min 
-        // 1000 * 60 * 20 // 20 min
+        // auto refresh - (start)
+        const interval = setInterval(getAllPosts, 5000);  // 5000 - 5 sec
 
         return function () {
 
-            // auto refresh
-            stopInterval();
+            // auto refresh - (stop)
+            clearInterval(interval);
         };
+
+
 
     }, [props.userId, filterPostStatus]);
 
-    // auto refresh
-    const stopInterval = () => {
-        clearInterval(interval);
-    }
+
 
     const getAllPosts = async () => {
 
@@ -341,7 +330,7 @@ function Posts(props) {
 
                                                 <p>{post.title}</p>
                                                 {post.image &&
-                                                    <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="image" style={{maxHeight: 400, width: "100%", objectFit: "cover"}} />
+                                                    <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" alt="post-img" style={{ maxHeight: 400, width: "100%", objectFit: "cover" }} />
                                                 }
 
                                                 <small style={{ fontSize: 12 }}>{post.description}</small>

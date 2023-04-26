@@ -36,8 +36,7 @@ function Users(props) {
     // http response status
     const [responseStatusGetAllUsers, setResponseStatusGetAllUsers] = useState("");
 
-    // auto refresh
-    let interval = null;
+
 
 
     useEffect(() => {
@@ -46,28 +45,17 @@ function Users(props) {
 
         getAllUsers();
 
-        // auto refresh
-        interval = setInterval(getAllUsers, 10000);  // 5000 - 5 sec
-
-        // examples: 
-        // 1000 // 1 sec <- time in ms
-        // 10000 // 10 sec <- time in ms
-        // 15000 // 15 sec <- time in ms
-        // 1000 * 60 * 50 // 50 min 
-        // 1000 * 60 * 20 // 20 min
+        // auto refresh - (start)
+        const interval = setInterval(getAllUsers, 10000); 
 
         return function () {
 
-            // auto refresh
-            stopInterval();
+            // auto refresh - (stop)
+            clearInterval(interval);
         };
 
     }, [props.userId, filterUserStatus]);
 
-    // auto refresh
-    const stopInterval = () => {
-        clearInterval(interval);
-    }
 
     const clearInputs = () => {
         setPassword(null);
@@ -367,7 +355,7 @@ function Users(props) {
                                             <br /><br />
 
                                             {(user.status === "regular" || user.status === "warning") &&
-                                                <img src={user.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} height="100" style={{ objectFit: "cover" }} className="card-img-top rounded" alt="image" />
+                                                <img src={user.userCoverImg ? `data:image/jpg;base64,${user.userCoverImg}` : default_user_cover_img} height="100" style={{ objectFit: "cover" }} className="card-img-top rounded" alt="user-cover" />
                                             }
 
 

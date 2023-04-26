@@ -61,35 +61,51 @@ function Posts(props) {
     // http response status
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
 
-    // auto refresh
-    let interval = null;
-
 
     useEffect(() => {
+
+        getAllPosts();
+
+        const getUserDetails = async () => {
+
+            const jwt_token = secureLocalStorage.getItem("token");
+    
+            const config = {
+                headers: {
+                    Authorization: "Bearer " + jwt_token
+                }
+            }
+    
+            await axios.get(`${url}/user/details`, config).then((res) => {
+                if (res.status === 200) {
+                    setUserId(res.data.id);
+                    setUsername(res.data.username);
+                    setUserEmail(res.data.email);
+    
+                    
+                }
+    
+            }).catch(err => {
+                return;
+            })
+    
+        }
+
         getUserDetails();
+        
+        // auto refresh - (start)
+        const interval = setInterval(getAllPosts, 5000);  // 5000 - 5 sec
 
-        // auto refresh
-        interval = setInterval(getAllPosts, 5000);  // 5000 - 5 sec
-
-        // examples: 
-        // 1000 // 1 sec <- time in ms
-        // 10000 // 10 sec <- time in ms
-        // 15000 // 15 sec <- time in ms
-        // 1000 * 60 * 50 // 50 min 
-        // 1000 * 60 * 20 // 20 min
+        //getAllPosts();
 
         return function () {
 
-            // auto refresh
-            stopInterval();
+            // auto refresh - (stop)
+            clearInterval(interval);
         };
 
     }, [props.filter, userId])
 
-    // auto refresh
-    const stopInterval = () => {
-        clearInterval(interval);
-    }
 
     // clear/reset inputs, other...
     const clearInputs = () => {
@@ -151,30 +167,7 @@ function Posts(props) {
     }
 
 
-    const getUserDetails = async () => {
-
-        const jwt_token = secureLocalStorage.getItem("token");
-
-        const config = {
-            headers: {
-                Authorization: "Bearer " + jwt_token
-            }
-        }
-
-        await axios.get(`${url}/user/details`, config).then((res) => {
-            if (res.status === 200) {
-                setUserId(res.data.id);
-                setUsername(res.data.username);
-                setUserEmail(res.data.email);
-
-                getAllPosts();
-            }
-
-        }).catch(err => {
-            return;
-        })
-
-    }
+    
 
 
 
@@ -196,7 +189,7 @@ function Posts(props) {
                 setResponseStatusGetAllPosts("success");
 
                 if (props.filter === "all") {
-                    
+
                     setPosts(res.data);
 
                 } else {
@@ -428,7 +421,7 @@ function Posts(props) {
 
                     // navigate("/user/" + username);
 
-                    
+
 
                 }
 
@@ -572,7 +565,7 @@ function Posts(props) {
                                             {postImage ?
                                                 <>
                                                     <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImage(null)}></button>
-                                                    <img src={postImagePreview} className="img-fluid rounded mb-3" alt="image" />
+                                                    <img src={postImagePreview} className="img-fluid rounded mb-3" alt="post-img" />
                                                 </>
 
                                                 :
@@ -612,8 +605,8 @@ function Posts(props) {
                                 <div className="card-body">
                                     <div className="alert alert-light" role="alert">
                                         <i className="bi bi-info-circle me-md-2"></i>
-                                        <small>Max. 3 Posts per User</small>
-                                        <br/>
+                                        <small>Max. 3 Posts</small>
+                                        <br />
                                         <small>All posts are reviewed by the admin. <Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy</Link></small>
                                     </div>
                                 </div>
@@ -722,7 +715,7 @@ function Posts(props) {
 
                                                             <p>{post.title}</p>
                                                             {post.image &&
-                                                                <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" style={{maxHeight: 400, width: "100%", objectFit: "cover"}} alt="image" />
+                                                                <img src={`data:image/jpeg;base64,${post.image}`} className="img-fluid rounded" style={{ maxHeight: 400, width: "100%", objectFit: "cover" }} alt="post-img" />
                                                             }
 
                                                             <small style={{ fontSize: 12 }}>{post.description}</small>
@@ -840,14 +833,14 @@ function Posts(props) {
                                 {postImagePreviewNewTemporary &&
                                     <>
                                         <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImagePreviewNewTemporary(null)}></button>
-                                        <img src={`data:image/jpg;base64,${postImagePreviewNewTemporary}`} className="img-fluid rounded mb-3" alt="image" />
+                                        <img src={`data:image/jpg;base64,${postImagePreviewNewTemporary}`} className="img-fluid rounded mb-3" alt="post-img" />
                                     </>
                                 }
 
                                 {postImageNew &&
                                     <>
                                         <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImageNew(null)}></button>
-                                        <img src={postImagePreviewNew} className="img-fluid rounded mb-3" alt="image" />
+                                        <img src={postImagePreviewNew} className="img-fluid rounded mb-3" alt="post-img" />
 
                                     </>
 

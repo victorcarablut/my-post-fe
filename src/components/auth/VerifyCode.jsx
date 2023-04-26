@@ -31,18 +31,21 @@ const VerifyCode = () => {
 
   useEffect(() => {
 
-    checkState();
-  }, []);
+    const checkState = () => {
 
-
-  const checkState = () => {
-
-    if (!state?.email || state?.email === null || state?.email === undefined) {
-      navigate("/");
-    } else {
-      setEmail(state?.email);
+      if (!state?.email || state?.email === null || state?.email === undefined) {
+        navigate("/");
+      } else {
+        setEmail(state?.email);
+      }
     }
-  }
+
+    checkState();
+    
+  }, [navigate, state?.email]);
+
+
+  
 
   // clear/reset inputs, other...
   const clearInputs = () => {
