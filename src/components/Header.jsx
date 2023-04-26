@@ -59,41 +59,43 @@ function Header() {
     // second: use it
     checkAuth();
 
-  }, [getUserDetails]);
+    const getUserDetails = async () => {
+
+      const jwt_token = secureLocalStorage.getItem("token");
+  
+      const config = {
+        headers: {
+          Authorization: "Bearer " + jwt_token
+        }
+  
+      }
+  
+      await axios.get(`${url}/user/details`, config).then((res) => {
+        if (res.status === 200) {
+          setUser({
+            username: res.data.username,
+            fullName: res.data.fullName,
+            userProfileImg: res.data.userProfileImg,
+            role: res.data.role
+          })
+  
+        } else {
+          logout();
+  
+        }
+  
+      }).catch(err => {
+        return;
+      })
+  
+    }
+
+  }, []);
 
 
   
 
-  const getUserDetails = async () => {
-
-    const jwt_token = secureLocalStorage.getItem("token");
-
-    const config = {
-      headers: {
-        Authorization: "Bearer " + jwt_token
-      }
-
-    }
-
-    await axios.get(`${url}/user/details`, config).then((res) => {
-      if (res.status === 200) {
-        setUser({
-          username: res.data.username,
-          fullName: res.data.fullName,
-          userProfileImg: res.data.userProfileImg,
-          role: res.data.role
-        })
-
-      } else {
-        logout();
-
-      }
-
-    }).catch(err => {
-      return;
-    })
-
-  }
+  
 
 
   const logout = async () => {
