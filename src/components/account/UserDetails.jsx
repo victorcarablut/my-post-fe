@@ -66,7 +66,7 @@ function UserDetails() {
         checkAuth();
         clearInputs();
         getUserDetails();
-        
+
     }, []);
 
     const checkAuth = async () => {
@@ -594,7 +594,7 @@ function UserDetails() {
                     toast.dismiss(toastNotify);
                     toast.error("Error");
 
-                } else if(res.data.status_code === 9) {
+                } else if (res.data.status_code === 9) {
                     toast.dismiss(toastNotify);
                     toast.error("Error Password");
 
@@ -880,22 +880,27 @@ function UserDetails() {
 
                     </div>
                     <div className="card-footer text-center">
-                        <div className="dropdown">
-                            <button className="btn btn-light btn-sm dropdown-toggle rounded-pill text-danger" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false">Delete Account</button>
-                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
-                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
-                                    <i className="bi bi-x-lg"></i>
-                                </span>
-                                <div className="container-fluid">
-                                    <p><small className="text-secondary">Your account and all your data will be deleted permanently.</small></p>
-                                    <p><small className="text-secondary">For security reasons password is required.</small></p>
-                                </div>
-                                <form onSubmit={handleSubmit} className="container-fluid" style={{ minWidth: 200 }}>
-                                    <li><input type="password" className="form-control form-control-sm mb-3" placeholder="Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
-                                    <li><button className="btn btn-danger btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={deleteAccount} disabled={!password}>Delete</button></li>
-                                </form>
-                            </ul>
-                        </div>
+
+                        {responseStatusGeUserDetails === "success" &&
+
+                            <div className="dropdown">
+                                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill text-danger" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false">Delete Account</button>
+                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style={{ cursor: 'pointer' }}>
+                                        <i className="bi bi-x-lg"></i>
+                                    </span>
+                                    <div className="container-fluid">
+                                        <p><small className="text-secondary">Your account and all your data will be deleted permanently.</small></p>
+                                        <p><small className="text-secondary">For security reasons password is required.</small></p>
+                                    </div>
+                                    <form onSubmit={handleSubmit} className="container-fluid" style={{ minWidth: 200 }}>
+                                        <li><input type="password" className="form-control form-control-sm mb-3" placeholder="Password" maxLength="100" onChange={(e) => handleInputPassword(e)} autoComplete="off" required /></li>
+                                        <li><button className="btn btn-danger btn-sm rounded-pill fw-semibold" style={{ paddingLeft: 15, paddingRight: 15 }} onClick={deleteAccount} disabled={!password}>Delete</button></li>
+                                    </form>
+                                </ul>
+                            </div>
+                        }
+
                     </div>
 
                 </div>

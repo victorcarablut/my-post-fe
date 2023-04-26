@@ -60,12 +60,12 @@ function UserProfile() {
         getUserDetails();
 
         // auto refresh - (start)
-        const interval = setInterval(getUserDetails, 10000);
+        // const interval = setInterval(getUserDetails, 10000);
 
         return function () {
 
             // auto refresh - (stop)
-            clearInterval(interval);
+            // clearInterval(interval);
         };
 
     }, [username]);
