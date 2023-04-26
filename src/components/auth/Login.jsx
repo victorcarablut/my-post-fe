@@ -154,9 +154,6 @@ function Register() {
 
             const config = {
                 withCredentials: false,
-                headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded' 
-                }
               }
 
             const data = {
