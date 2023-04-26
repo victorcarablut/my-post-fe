@@ -154,7 +154,7 @@ function Register() {
 
             const config = {
                 headers: {
-                    withCredentials: false
+                    "Access-Control-Allow-Origin": "*"
                 }
               }
 
