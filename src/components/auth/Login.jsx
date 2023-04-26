@@ -153,6 +153,7 @@ function Register() {
             const toastNotify = toast.loading("Loading");
 
             const config = {
+                withCredentials: false,
                 headers: {
                   'Content-Type': 'application/x-www-form-urlencoded' 
                 }
