@@ -41,7 +41,7 @@ function Header() {
 
     checkAuth();
 
-  }, []);
+  }, [checkAuth()]);
 
   const checkAuth = async () => {
 
