@@ -16,7 +16,8 @@ export const VerifyToken = async () => {
 
   const config = {
     headers: {
-      Authorization: "Bearer " + jwt_token
+      Authorization: "Bearer " + jwt_token,
+      'Content-Type': 'application/x-www-form-urlencoded' 
     }
   }
 
