@@ -39,8 +39,7 @@ function Header() {
 
   useEffect(() => {
 
-    checkAuth();
-
+   // first: defin a function
     const checkAuth = async () => {
 
       const verifyToken = await VerifyToken();
@@ -57,9 +56,13 @@ function Header() {
   
     }
 
-  }, []);
+    // second: use it
+    checkAuth();
+
+  }, [getUserDetails]);
 
 
+  
 
   const getUserDetails = async () => {
 
@@ -83,6 +86,7 @@ function Header() {
 
       } else {
         logout();
+
       }
 
     }).catch(err => {
