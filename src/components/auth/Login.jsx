@@ -153,7 +153,9 @@ function Register() {
             const toastNotify = toast.loading("Loading");
 
             const config = {
-                withCredentials: false,
+                headers: {
+                    withCredentials: false
+                }
               }
 
             const data = {
