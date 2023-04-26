@@ -16,7 +16,8 @@ export const VerifyToken = async () => {
 
   const config = {
     headers: {
-      Authorization: "Bearer " + jwt_token
+      Authorization: "Bearer " + jwt_token,
+      "Access-Control-Allow-Origin": "https://my-post-be.up.railway.app"
     }
   }
 

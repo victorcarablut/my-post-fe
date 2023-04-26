@@ -154,7 +154,7 @@ function Register() {
 
             const config = {
                 headers: {
-                    "Access-Control-Allow-Origin": "*"
+                    "Access-Control-Allow-Origin": "https://my-post-be.up.railway.app"
                 }
               }
 
