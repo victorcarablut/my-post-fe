@@ -41,23 +41,24 @@ function Header() {
 
     checkAuth();
 
-  }, [checkAuth()]);
+    const checkAuth = async () => {
 
-  const checkAuth = async () => {
-
-    const verifyToken = await VerifyToken();
-
-    if (verifyToken) {
-      setMainLoading(false);
-      setIsAuthenticated(true);
-      getUserDetails();
-
-    } else {
-      setMainLoading(false);
-      setIsAuthenticated(false);
+      const verifyToken = await VerifyToken();
+  
+      if (verifyToken) {
+        setMainLoading(false);
+        setIsAuthenticated(true);
+        getUserDetails();
+  
+      } else {
+        setMainLoading(false);
+        setIsAuthenticated(false);
+      }
+  
     }
 
-  }
+  }, []);
+
 
 
   const getUserDetails = async () => {
