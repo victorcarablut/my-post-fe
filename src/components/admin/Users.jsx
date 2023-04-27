@@ -353,9 +353,15 @@ function Users(props) {
                                                             <span className="badge rounded-pill bg-warning text-dark border border-secondary">Warning</span>
                                                         </div>
                                                         :
-                                                        <div className="position-absolute top-0 start-50 translate-middle">
-                                                            <span className="badge rounded-pill bg-danger border border-secondary">Blocked</span>
-                                                        </div>
+                                                      
+                                                            user.blockedDate ?
+                                                                <div className="position-absolute top-0 start-50 translate-middle">
+                                                                    <span className="badge rounded-pill bg-danger border border-secondary">Blocked</span>
+                                                                </div>
+                                                                :
+                                                                <div className="position-absolute top-0 start-50 translate-middle">
+                                                                    <span className="badge rounded-pill bg-secondary border border-secondary">Not Verified</span>
+                                                                </div>
 
                                                 }
                                             </div>
@@ -376,9 +382,15 @@ function Users(props) {
                                                     </div>
 
                                                     :
+                                                    user.blockedDate ?
                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-start">
                                                         <img src={default_user_profile_img} width="60" height="60" style={{ objectFit: "cover", marginTop: -30 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
                                                         <h6>{user.fullName} <span className="badge bg-secondary">Deleted</span></h6>
+                                                    </div>
+                                                    :
+                                                    <div className="d-grid gap-2 d-md-flex justify-content-md-start">
+                                                        <img src={default_user_profile_img} width="60" height="60" style={{ objectFit: "cover", marginTop: -30 }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
+                                                        <h6>{user.fullName} <span className="badge bg-secondary">{user.role}</span></h6>
                                                     </div>
                                                 }
 
@@ -457,7 +469,7 @@ function Users(props) {
                                             </div>
                                             <div className="card-body">
 
-                                                {(user.status === "regular" || user.status === "warning") ?
+                                                {(user.status === "regular" || user.status === "warning" || user.status === null) ?
                                                     <>
                                                         <ul className="list-group list-group-flush">
                                                             <li className="list-group-item"><small style={{ fontSize: 12 }}>id: #{user.id}</small> / <small style={{ fontSize: 12 }}>{user.enabled ? "enabled - (email verified)" : "disabled -  (email not verified yet)"}</small></li>
@@ -478,12 +490,17 @@ function Users(props) {
                                                     </>
 
                                                     :
+                                                    user.blockedDate ?
+
                                                     <ul className="list-group list-group-flush">
                                                         <li className="list-group-item"><small style={{ fontSize: 12 }}>@{user.username}</small></li>
                                                         <li className="list-group-item"><small style={{ fontSize: 12 }}>{user.email}</small></li>
                                                         <li className="list-group-item"><small>registered: {moment(user.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
                                                         <li className="list-group-item"><small>blocked: {moment(user.blockedDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
                                                     </ul>
+
+                                                    :
+                                                    <></>
 
                                                 }
 
