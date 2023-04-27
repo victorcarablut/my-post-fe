@@ -129,7 +129,9 @@ function Posts(props) {
 
         setHandleInputPostTitleIsValid(false);
 
+
         setButtonCreatePostIsDisabled(false);
+        setButtonLikeIsDisabled(false);
 
         setResponseStatusGetAllPosts("");
 
