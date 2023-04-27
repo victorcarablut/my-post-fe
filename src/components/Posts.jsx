@@ -57,6 +57,8 @@ function Posts(props) {
     const [handleInputPostDescriptionClassName, setHandleInputPostDescriptionClassName] = useState(null);
 
     const [buttonCreatePostIsDisabled, setButtonCreatePostIsDisabled] = useState(false);
+    const [buttonLikeIsDisabled, setButtonLikeIsDisabled] = useState(false);
+
 
     // http response status
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
@@ -64,50 +66,48 @@ function Posts(props) {
 
     useEffect(() => {
 
-        
-
         const getUserDetails = async () => {
 
             const jwt_token = secureLocalStorage.getItem("token");
-    
+
             const config = {
                 headers: {
                     Authorization: "Bearer " + jwt_token
                 }
             }
-    
+
             await axios.get(`${url}/user/details`, config).then((res) => {
                 if (res.status === 200) {
                     setUserId(res.data.id);
                     setUsername(res.data.username);
                     setUserEmail(res.data.email);
                 }
-    
+
             }).catch(err => {
                 return;
             })
-    
+
         }
 
-        getUserDetails();
+        getUserDetails();  
 
+    }, [props.filter, userId])
 
-        
+    useEffect(() => {
 
         getAllPosts();
-        
+
         // auto refresh - (start)
         const interval = setInterval(getAllPosts, 5000);  // 5000 - 5 sec
-
-        //getAllPosts();
 
         return function () {
 
             // auto refresh - (stop)
-            clearInterval(interval);
-        };
+           clearInterval(interval);
+        }
 
-    }, [props.filter, userId])
+    }, [props.filter])
+
 
 
     // clear/reset inputs, other...
@@ -168,9 +168,6 @@ function Posts(props) {
         setPostImageNew(null);
         setPostImagePreviewNewTemporary(null);
     }
-
-
-    
 
 
 
@@ -480,6 +477,8 @@ function Posts(props) {
 
     const postLike = async (postId) => {
 
+        setButtonLikeIsDisabled(true);
+
         const jwt_token = secureLocalStorage.getItem("token");
 
         const config = {
@@ -500,6 +499,7 @@ function Posts(props) {
         await axios.post(`${url}/post/like`, data, config).then((res) => {
             if (res.status === 200) {
                 getAllPosts();
+                setButtonLikeIsDisabled(false);
             }
 
         }).catch(err => {
@@ -541,6 +541,14 @@ function Posts(props) {
 
         <>
             <div className="container-fluid custom-animation-fadeInUp">
+
+                <div className="position-relative">
+                    <div className="position-absolute top-0 start-0">
+                        {responseStatusGetAllPosts === "loading" &&
+                            <div className="spinner-border spinner-border-sm text-light" style={{ marginLeft: 10 }} role="status" />
+                        }
+                    </div>
+                </div>
 
                 <div className="row">
 
@@ -596,6 +604,7 @@ function Posts(props) {
                                             </div>
                                             <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!postTitle || buttonCreatePostIsDisabled} onClick={createPost}>Publish</button>
                                         </form>
+                                        <small className="text-secondary">Max. 3 Posts</small>
 
                                     </div>
                                 </div>
@@ -608,8 +617,6 @@ function Posts(props) {
                                 <div className="card-body">
                                     <div className="alert alert-light" role="alert">
                                         <i className="bi bi-info-circle me-md-2"></i>
-                                        <small>Max. 3 Posts</small>
-                                        <br />
                                         <small>All posts are reviewed by the admin. <Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy</Link></small>
                                     </div>
                                 </div>
@@ -623,7 +630,7 @@ function Posts(props) {
 
 
                         <div className="d-flex justify-content-center">
-                            <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
+                            <div className="card container-fluid shadow" style={{ maxWidth: 600, minHeight: 120 }}>
                                 <div className="card-body">
                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                                         {(posts?.length !== 0 && responseStatusGetAllPosts !== "error") &&
@@ -741,7 +748,7 @@ function Posts(props) {
                                                             <div className="btn-group dropup">
 
 
-                                                                <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => postLike(post.id)}>
+                                                                <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" disabled={buttonLikeIsDisabled} onClick={() => postLike(post.id)}>
 
                                                                     <i className="bi bi-hand-thumbs-up me-md-2"></i>
 

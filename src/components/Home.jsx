@@ -11,16 +11,18 @@ function Home() {
 
   useEffect(() => {
 
+    const checkAuth = async () => {
+      const verifyToken = await VerifyToken();
+      if (!verifyToken) {
+        await Logout();
+      }
+    }
+
     checkAuth();
 
   }, []);
 
-  const checkAuth = async () => {
-    const verifyToken = await VerifyToken();
-    if (!verifyToken) {
-      await Logout();
-    }
-  }
+  
 
   return (
     <div className="container-fluid">

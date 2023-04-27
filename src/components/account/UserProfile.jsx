@@ -46,13 +46,16 @@ function UserProfile() {
     // http response status
     const [responseStatusGetUserDetails, setResponseStatusGetUserDetails] = useState("");
 
-
     useEffect(() => {
 
         window.scrollTo({
             top: 0,
             behavior: "smooth",
         });
+
+    }, [username]);
+
+    useEffect(() => {
 
         const checkAuth = async () => {
             const verifyToken = await VerifyToken();
@@ -63,56 +66,62 @@ function UserProfile() {
 
         checkAuth();
 
+    }, []);
+    
+    
 
+    useEffect(() => {
 
         const getUserDetails = async () => {
 
-        setResponseStatusGetUserDetails("loading");
+            setResponseStatusGetUserDetails("loading");
 
-        const jwt_token = secureLocalStorage.getItem("token");
+            const jwt_token = secureLocalStorage.getItem("token");
 
-        const config = {
-            headers: {
-                Authorization: "Bearer " + jwt_token
+            const config = {
+                headers: {
+                    Authorization: "Bearer " + jwt_token
+                }
             }
+
+            // actual user
+            await axios.get(`${url}/user/details`, config).then((res) => {
+                if (res.status === 200) {
+
+                    setResponseStatusGetUserDetails("success");
+                    setUsernameAccount(res.data.username);
+                }
+            }).catch(err => {
+                setResponseStatusGetUserDetails("error");
+                return;
+            })
+
+            // user
+            await axios.get(`${url}/user/` + username, config).then((res) => {
+
+                if (res.status === 200) {
+
+                    setResponseStatusGetUserDetails("success");
+
+                    setUser({
+                        fullName: res.data.fullName,
+                        email: res.data.email,
+                        username: res.data.username,
+                        role: res.data.role,
+                        status: res.data.status,
+                        registeredDate: res.data.registeredDate,
+                        userProfileImg: res.data.userProfileImg,
+                        userCoverImg: res.data.userCoverImg
+                    })
+
+                }
+
+            }).catch(err => {
+                setResponseStatusGetUserDetails("error");
+                return;
+            })
+
         }
-
-        await axios.get(`${url}/user/details`, config).then((res) => {
-            if (res.status === 200) {
-
-                setResponseStatusGetUserDetails("success");
-                setUsernameAccount(res.data.username);
-            }
-        }).catch(err => {
-            setResponseStatusGetUserDetails("error");
-            return;
-        })
-
-        await axios.get(`${url}/user/` + username, config).then((res) => {
-
-            if (res.status === 200) {
-
-                setResponseStatusGetUserDetails("success");
-
-                setUser({
-                    fullName: res.data.fullName,
-                    email: res.data.email,
-                    username: res.data.username,
-                    role: res.data.role,
-                    status: res.data.status,
-                    registeredDate: res.data.registeredDate,
-                    userProfileImg: res.data.userProfileImg,
-                    userCoverImg: res.data.userCoverImg
-                })
-
-            }
-
-        }).catch(err => {
-            setResponseStatusGetUserDetails("error");
-            return;
-        })
-
-    }
 
         getUserDetails();
 
@@ -123,12 +132,21 @@ function UserProfile() {
 
 
 
-    
+
 
     return (
 
         <>
             <div className="d-flex justify-content-center mb-3">
+
+                <div className="position-relative">
+                    <div className="position-absolute top-0 start-0">
+                        {responseStatusGetUserDetails === "loading" &&
+                            <div className="spinner-border spinner-border-sm text-light" style={{marginLeft: 10}} role="status" />
+                        }
+                    </div>
+                </div>
+
                 <div className="container-fluid" style={{ maxWidth: 1400 }}>
 
 

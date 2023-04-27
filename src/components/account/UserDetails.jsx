@@ -64,18 +64,23 @@ function UserDetails() {
 
     useEffect(() => {
 
-        checkAuth();
         clearInputs();
-        getUserDetails();
+
+
+        const checkAuth = async () => {
+            const verifyToken = await VerifyToken();
+            if (!verifyToken) {
+                await Logout();
+            } else {
+                await getUserDetails();
+            }
+        }
+
+        checkAuth();
 
     }, []);
 
-    const checkAuth = async () => {
-        const verifyToken = await VerifyToken();
-        if (!verifyToken) {
-            await Logout();
-        }
-    }
+    
 
     // clear/reset inputs, other...
     const clearInputs = () => {
@@ -632,6 +637,14 @@ function UserDetails() {
     return (
         <div className="d-flex justify-content-center">
 
+            <div className="position-relative">
+                <div className="position-absolute top-0 start-0">
+                    {responseStatusGeUserDetails === "loading" &&
+                        <div className="spinner-border spinner-border-sm text-light" style={{ marginLeft: 10 }} role="status" />
+                    }
+                </div>
+            </div>
+
             <div className="container-fluid" style={{ maxWidth: 400 }}>
                 <div className="card text-left shadow-lg animate__animated animate__fadeIn">
                     <div className="card-header text-center fw-semibold">
@@ -854,9 +867,9 @@ function UserDetails() {
                                 </li>
                                 <li className="list-group-item"><small><strong>Role:</strong> {user?.role}</small></li>
                                 <li className="list-group-item"><small><strong>Registered:</strong> {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
-                                { user?.updatedDate && 
-                                <li className="list-group-item"><small><strong>Updated:</strong> {moment(user?.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
-                                }         
+                                {user?.updatedDate &&
+                                    <li className="list-group-item"><small><strong>Updated:</strong> {moment(user?.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small></li>
+                                }
                                 <li className="list-group-item">
                                     <div className="d-grid gap-2 d-md-flex">
                                         <small><strong>Password:</strong> ******</small>

@@ -39,7 +39,7 @@ function Posts(props) {
         getAllPosts();
 
         // auto refresh - (start)
-        const interval = setInterval(getAllPosts, 5000);  // 5000 - 5 sec
+        const interval = setInterval(getAllPosts, 6000);  // 5000 - 5 sec
 
         return function () {
 
@@ -49,7 +49,7 @@ function Posts(props) {
 
 
 
-    }, [props.userId, filterPostStatus]);
+    }, [filterPostStatus]);
 
 
 
@@ -213,7 +213,16 @@ function Posts(props) {
         <div>
 
             <div className="d-flex justify-content-center">
-                <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
+
+                <div className="position-relative">
+                    <div className="position-absolute top-0 start-0">
+                        {responseStatusGetAllPosts === "loading" &&
+                            <div className="spinner-border spinner-border-sm text-light" style={{ marginLeft: 10 }} role="status" />
+                        }
+                    </div>
+                </div>
+
+                <div className="card container-fluid shadow" style={{ maxWidth: 600, minHeight: 120 }}>
                     <div className="card-body">
 
                         {(responseStatusGetAllPosts !== "error") &&
@@ -237,6 +246,7 @@ function Posts(props) {
 
                     </div>
                 </div>
+
             </div>
 
             {posts?.length !== 0 &&

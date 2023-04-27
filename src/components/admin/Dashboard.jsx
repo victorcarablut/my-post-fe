@@ -22,6 +22,7 @@ function Dashboard() {
     // actual User (admin only)
     const [user, setUser] = useState(
         {
+            userId: null,
             fullName: null,
             email: null,
             username: null,
@@ -36,17 +37,19 @@ function Dashboard() {
 
     useEffect(() => {
 
+        const checkAuth = async () => {
+            const verifyToken = await VerifyToken();
+            if (!verifyToken) {
+                await Logout();
+            } else {
+                await getUserDetails();
+            }
+        }
+
         checkAuth();
 
-        getUserDetails();
-    }, []);
+    }, [user.userId]);
 
-    const checkAuth = async () => {
-        const verifyToken = await VerifyToken();
-        if (!verifyToken) {
-          await Logout();
-        }
-      }
 
     const getUserDetails = async () => {
 
@@ -86,6 +89,14 @@ function Dashboard() {
 
 
         <div className="container-fluid">
+
+            <div className="position-relative">
+                <div className="position-absolute top-0 start-0">
+                    {responseStatusGeUserDetails === "loading" &&
+                        <div className="spinner-border spinner-border-sm text-light" style={{ marginLeft: 10 }} role="status" />
+                    }
+                </div>
+            </div>
 
             <div className="row">
 
@@ -145,7 +156,11 @@ function Dashboard() {
 
                     <div className="card bg-transparent border-0">
                         <div className="card-body">
-                            <Users userId={user?.userId} />
+
+                            {user?.userId &&
+                                <Users userId={user?.userId} />
+                            }
+
                         </div>
 
                     </div>
@@ -156,7 +171,11 @@ function Dashboard() {
 
                     <div className="card bg-transparent border-0">
                         <div className="card-body">
-                            <Posts userId={user?.userId} />
+
+                            {user?.userId &&
+                                <Posts userId={user?.userId} />
+                            }
+
                         </div>
 
                     </div>

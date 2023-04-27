@@ -46,7 +46,7 @@ function Users(props) {
         getAllUsers();
 
         // auto refresh - (start)
-        const interval = setInterval(getAllUsers, 10000); 
+        const interval = setInterval(getAllUsers, 9000);
 
         return function () {
 
@@ -54,7 +54,7 @@ function Users(props) {
             clearInterval(interval);
         };
 
-    }, [props.userId, filterUserStatus]);
+    }, [filterUserStatus]);
 
 
     const clearInputs = () => {
@@ -285,7 +285,16 @@ function Users(props) {
         <div>
 
             <div className="d-flex justify-content-center">
-                <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
+
+                <div className="position-relative">
+                    <div className="position-absolute top-0 start-0">
+                        {responseStatusGetAllUsers === "loading" &&
+                            <div className="spinner-border spinner-border-sm text-light" style={{ marginLeft: 10 }} role="status" />
+                        }
+                    </div>
+                </div>
+
+                <div className="card container-fluid shadow" style={{ maxWidth: 600, minHeight: 120 }}>
                     <div className="card-body">
 
                         {(responseStatusGetAllUsers !== "error") &&
