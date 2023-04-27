@@ -214,7 +214,7 @@ function UserProfile() {
 
 
 
-            {responseStatusGetUserDetails !== "error" &&
+            {(responseStatusGetUserDetails !== "error" && username) &&
 
                 <Posts filter={username} />
             }

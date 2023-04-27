@@ -81,6 +81,8 @@ function Posts(props) {
                     setUserId(res.data.id);
                     setUsername(res.data.username);
                     setUserEmail(res.data.email);
+
+                    getAllPosts();
                 }
 
             }).catch(err => {
@@ -95,7 +97,7 @@ function Posts(props) {
 
     useEffect(() => {
 
-        getAllPosts();
+        
 
         // auto refresh - (start)
         const interval = setInterval(getAllPosts, 5000);  // 5000 - 5 sec
@@ -106,7 +108,7 @@ function Posts(props) {
            clearInterval(interval);
         }
 
-    }, [props.filter])
+    }, [props.filter, userId])
 
 
 
