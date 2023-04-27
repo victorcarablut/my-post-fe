@@ -503,6 +503,7 @@ function Posts(props) {
             }
 
         }).catch(err => {
+            setButtonLikeIsDisabled(false);
             return;
         })
 
