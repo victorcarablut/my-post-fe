@@ -29,10 +29,8 @@ function Posts(props) {
 
     const navigate = useNavigate();
 
-    const [userId, setUserId] = useState(null);
-    const [postId, setPostId] = useState(null);
-    const [username, setUsername] = useState(null);
-    const [userEmail, setUserEmail] = useState(null);
+
+    const [postId, setPostId]= useState(null);
 
     const [postTitle, setPostTitle] = useState(null);
     const [postDescription, setPostDescription] = useState(null);
@@ -66,49 +64,20 @@ function Posts(props) {
 
     useEffect(() => {
 
-        const getUserDetails = async () => {
-
-            const jwt_token = secureLocalStorage.getItem("token");
-
-            const config = {
-                headers: {
-                    Authorization: "Bearer " + jwt_token
-                }
-            }
-
-            await axios.get(`${url}/user/details`, config).then((res) => {
-                if (res.status === 200) {
-                    setUserId(res.data.id);
-                    setUsername(res.data.username);
-                    setUserEmail(res.data.email);
-
-                    getAllPosts();
-                }
-
-            }).catch(err => {
-                return;
-            })
-
-        }
-
-        getUserDetails();  
-
-    }, [props.filter, userId])
-
-    useEffect(() => {
-
-        
-
+        getAllPosts();
         // auto refresh - (start)
-        const interval = setInterval(getAllPosts, 5000);  // 5000 - 5 sec
+        const interval = setInterval(autoLoadDataInfinite, 6000);  // start loading after: 5000 - 5 sec
 
         return function () {
-
             // auto refresh - (stop)
-           clearInterval(interval);
+            clearInterval(interval);
         }
 
-    }, [props.filter, userId])
+    }, [props.filter])
+
+    const autoLoadDataInfinite = async () => {
+        await getAllPosts();
+    }
 
 
 
@@ -177,6 +146,8 @@ function Posts(props) {
 
     const getAllPosts = async () => {
 
+
+console.log("load");
         setResponseStatusGetAllPosts("loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
@@ -187,16 +158,19 @@ function Posts(props) {
             }
         }
 
+
+
         await axios.get(`${url}/post/all/${props.filter}`, config).then((res) => {
 
             if (res.status === 200) {
                 setResponseStatusGetAllPosts("success");
 
                 if (props.filter === "all") {
-
+     
                     setPosts(res.data);
 
                 } else {
+              
                     // only the Owner of Posts can see active & non active in: > UserProfile
 
                     // condition to prevent other user to see "Pending" message on owners Post's in: > UserProfile
@@ -204,9 +178,9 @@ function Posts(props) {
                     let newArr = [];
 
                     res.data.forEach((post) => {
-                        if (post.user.id === userId) {
+                        if (post.user.id === props.userId) {
                             newArr.push(post);
-                        } else if (post.user.id !== userId && post.status === "active") {
+                        } else if (post.user.id !== props.userId && post.status === "active") {
                             newArr.push(post);
                         } else {
                             return;
@@ -308,8 +282,8 @@ function Posts(props) {
             const formData = new FormData();
             formData.append('data', new Blob([JSON.stringify({
                 user: {
-                    id: userId,
-                    email: userEmail
+                    id: props.userId,
+                    email: props.userEmail
                 },
                 title: postTitle,
                 description: postDescription
@@ -345,7 +319,7 @@ function Posts(props) {
 
                         getAllPosts();
 
-                        navigate("/user/" + username); // user will see a "pending" status
+                        navigate("/user/" + props.username); // example:user will see a "pending" status
 
                     }
 
@@ -389,7 +363,7 @@ function Posts(props) {
 
         formData.append('data', new Blob([JSON.stringify({
             user: {
-                id: userId
+                id: props.userId
             },
             title: postTitleNew,
             description: postDescriptionNew
@@ -455,7 +429,7 @@ function Posts(props) {
         }
 
         const data = {
-            user_id: userId,
+            user_id: props.userId,
             post_id: postId
         }
 
@@ -496,7 +470,7 @@ function Posts(props) {
                 id: postId
             },
             user: {
-                id: userId
+                id: props.userId
             }
         }
 
@@ -559,7 +533,7 @@ function Posts(props) {
 
                     <div className="col-xl-6" style={{ paddingBottom: 20 }}>
 
-                        {(username === props.filter || props.filter === "all") &&
+                        {(props.username === props.filter || props.filter === "all") &&
 
 
 
@@ -708,7 +682,7 @@ function Posts(props) {
 
 
                                                             {
-                                                                userId === post.user.id &&
+                                                                props.userId === post.user.id &&
                                                                 <div className="position-absolute top-0 end-0">
                                                                     <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                                                                         <button type="button" className="btn btn-light btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostModal" aria-label="Edit" data-balloon-pos="left" onClick={() => passPostDataUpdateNew(post.id, post.title, post.description, post.image)}><i className="bi bi-pencil-square"></i></button>
@@ -758,7 +732,7 @@ function Posts(props) {
                                                                     <i className="bi bi-hand-thumbs-up me-md-2"></i>
 
 
-                                                                    {post.likes?.map(like => like.userId === userId &&
+                                                                    {post.likes?.map(like => like.userId === props.userId &&
 
                                                                         <small className="text-primary me-md-2" key={like.likeId}>Liked</small>
                                                                     )
@@ -783,7 +757,7 @@ function Posts(props) {
                                                                                 <ul className="list-group list-group-flush" key={like.likeId} style={{ minWidth: 250 }}>
                                                                                     <li className="list-group-item list-group-item-action" style={{ cursor: 'pointer' }} onClick={() => navigate("/user/" + like.username)}>
                                                                                         <img src={like.userProfileImg ? `data:image/jpg;base64,${like.userProfileImg}` : default_user_profile_img} width="30" height="30" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
-                                                                                        <small className={(like.userId === userId ? "text-primary" : "text-dark")}>{like.userFullName.length >= 20 ? like.userFullName.substring(0, 25) + "..." : like.userFullName}</small>
+                                                                                        <small className={(like.userId === props.userId ? "text-primary" : "text-dark")}>{like.userFullName.length >= 20 ? like.userFullName.substring(0, 25) + "..." : like.userFullName}</small>
                                                                                     </li>
                                                                                 </ul>
 

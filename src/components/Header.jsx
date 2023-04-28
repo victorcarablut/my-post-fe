@@ -24,6 +24,7 @@ import { LoadingFullScreen } from '../components/_resources/ui/Loadings';
 
 function Header() {
 
+
   const [mainLoading, setMainLoading] = useState(true);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);

@@ -28,10 +28,13 @@ function UserProfile() {
 
     const { username } = useParams();
 
+    const [userIdAccount, setUserIdAccount] = useState(null);
     const [usernameAccount, setUsernameAccount] = useState(null);
+    const [userEmailAccount, setUserEmailAccount] = useState(null);
 
     const [user, setUser] = useState(
         {
+
             fullName: null,
             email: null,
             username: null,
@@ -61,72 +64,77 @@ function UserProfile() {
             const verifyToken = await VerifyToken();
             if (!verifyToken) {
                 await Logout();
+            } else {
+                await getUserDetails();
             }
         }
 
         checkAuth();
 
-    }, []);
-    
-    
+    }, [username]);
 
-    useEffect(() => {
 
-        const getUserDetails = async () => {
 
-            setResponseStatusGetUserDetails("loading");
 
-            const jwt_token = secureLocalStorage.getItem("token");
 
-            const config = {
-                headers: {
-                    Authorization: "Bearer " + jwt_token
-                }
+    const getUserDetails = async () => {
+
+        setResponseStatusGetUserDetails("loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
             }
-
-            // actual user
-            await axios.get(`${url}/user/details`, config).then((res) => {
-                if (res.status === 200) {
-
-                    setResponseStatusGetUserDetails("success");
-                    setUsernameAccount(res.data.username);
-                }
-            }).catch(err => {
-                setResponseStatusGetUserDetails("error");
-                return;
-            })
-
-            // user
-            await axios.get(`${url}/user/` + username, config).then((res) => {
-
-                if (res.status === 200) {
-
-                    setResponseStatusGetUserDetails("success");
-
-                    setUser({
-                        fullName: res.data.fullName,
-                        email: res.data.email,
-                        username: res.data.username,
-                        role: res.data.role,
-                        status: res.data.status,
-                        registeredDate: res.data.registeredDate,
-                        userProfileImg: res.data.userProfileImg,
-                        userCoverImg: res.data.userCoverImg
-                    })
-
-                }
-
-            }).catch(err => {
-                setResponseStatusGetUserDetails("error");
-                return;
-            })
-
         }
 
-        getUserDetails();
+        // actual user
+        await axios.get(`${url}/user/details`, config).then((res) => {
+            if (res.status === 200) {
+
+                setResponseStatusGetUserDetails("success");
+                setUserIdAccount(res.data.id)
+                setUsernameAccount(res.data.username);
+                setUserEmailAccount(res.data.email);
+            }
+        }).catch(err => {
+            setResponseStatusGetUserDetails("error");
+            return;
+        })
+
+        // user
+        await axios.get(`${url}/user/` + username, config).then((res) => {
+
+            if (res.status === 200) {
+
+                setResponseStatusGetUserDetails("success");
+
+                setUser({
+
+                    fullName: res.data.fullName,
+                    email: res.data.email,
+                    username: res.data.username,
+                    role: res.data.role,
+                    status: res.data.status,
+                    registeredDate: res.data.registeredDate,
+                    userProfileImg: res.data.userProfileImg,
+                    userCoverImg: res.data.userCoverImg
+                })
+
+            }
+
+        }).catch(err => {
+            setResponseStatusGetUserDetails("error");
+            return;
+        })
+
+    }
 
 
-    }, [username]);
+
+
+
 
 
 
@@ -142,7 +150,7 @@ function UserProfile() {
                 <div className="position-relative">
                     <div className="position-absolute top-0 start-0">
                         {responseStatusGetUserDetails === "loading" &&
-                            <div className="spinner-border spinner-border-sm text-light" style={{marginLeft: 10}} role="status" />
+                            <div className="spinner-border spinner-border-sm text-light" style={{ marginLeft: 10 }} role="status" />
                         }
                     </div>
                 </div>
@@ -192,9 +200,6 @@ function UserProfile() {
 
 
 
-
-
-
                                 </div>
                                 <div className="card-footer">
                                     <small className="text-secondary">Account created on {moment(user?.registeredDate).locale(moment_locale).format(moment_format_date_long)}</small>
@@ -214,12 +219,10 @@ function UserProfile() {
 
 
 
-            {(responseStatusGetUserDetails !== "error" && username) &&
+            {(responseStatusGetUserDetails !== "error" && username && usernameAccount) &&
 
-                <Posts filter={username} />
+                <Posts filter={username} userId={userIdAccount} username={usernameAccount} userEmail={userEmailAccount} />
             }
-
-
 
         </>
     )
