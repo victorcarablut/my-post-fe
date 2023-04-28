@@ -146,8 +146,6 @@ function Posts(props) {
 
     const getAllPosts = async () => {
 
-
-console.log("load");
         setResponseStatusGetAllPosts("loading");
 
         const jwt_token = secureLocalStorage.getItem("token");

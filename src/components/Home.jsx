@@ -23,6 +23,9 @@ function Home() {
   const [username, setUsername] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
 
+  // http response status
+  const [responseStatusGeUserDetails, setResponseStatusGetUserDetails] = useState("");
+
   useEffect(() => {
 
     const checkAuth = async () => {
@@ -42,6 +45,8 @@ function Home() {
 
   const getUserDetails = async () => {
 
+    setResponseStatusGetUserDetails("loading");
+
     const jwt_token = secureLocalStorage.getItem("token");
 
     const config = {
@@ -52,12 +57,15 @@ function Home() {
 
     await axios.get(`${url}/user/details`, config).then((res) => {
       if (res.status === 200) {
+        setResponseStatusGetUserDetails("success");
+
         setUserId(res.data.id);
         setUsername(res.data.username);
         setUserEmail(res.data.email);
       }
 
     }).catch(err => {
+      setResponseStatusGetUserDetails("error");
       return;
     })
 
@@ -66,6 +74,15 @@ function Home() {
 
   return (
     <div className="container-fluid">
+      
+      <div className="position-relative">
+        <div className="position-absolute top-0 start-0">
+          {responseStatusGeUserDetails === "loading" &&
+            <div className="spinner-border spinner-border-sm text-light" style={{ marginLeft: 10 }} role="status" />
+          }
+        </div>
+      </div>
+
       {userId &&
         <Posts filter="all" userId={userId} username={username} userEmail={userEmail} />
       }
