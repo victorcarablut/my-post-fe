@@ -298,7 +298,8 @@ function UserDetails() {
                     toast.dismiss(toastNotify);
                     toast.success("Email updated successfully");
                     clearInputs();
-                    getUserDetails();
+                    //getUserDetails();
+                    window.location.reload();
                 }
             }
 
@@ -359,7 +360,8 @@ function UserDetails() {
                     toast.success("Username updated successfully");
 
                     clearInputs();
-                    getUserDetails();
+                    //getUserDetails();
+                    window.location.reload();
                 }
             }
 
@@ -417,6 +419,7 @@ function UserDetails() {
                     toast.dismiss(toastNotify);
                     toast.success("Password updated successfully");
                     clearInputs();
+                    window.location.reload();
                 }
             }
 
