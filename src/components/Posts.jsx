@@ -66,7 +66,7 @@ function Posts(props) {
 
         getAllPosts();
         // auto refresh - (start)
-        const interval = setInterval(autoLoadDataInfinite, 6000);  // start loading after: 5000 - 5 sec
+        const interval = setInterval(autoLoadDataInfinite, 10000);  // example: start loading after: 5000 - 5 sec
 
         return function () {
             // auto refresh - (stop)
@@ -553,7 +553,7 @@ function Posts(props) {
                                             {postImage ?
                                                 <>
                                                     <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImage(null)}></button>
-                                                    <img src={postImagePreview} className="img-fluid rounded mb-3" alt="post-img" />
+                                                    <img src={postImagePreview} className="img-fluid rounded mb-3" alt="post-img" style={{ maxHeight: 400, width: "100%", objectFit: "cover" }} />
                                                 </>
 
                                                 :
@@ -820,14 +820,14 @@ function Posts(props) {
                                 {postImagePreviewNewTemporary &&
                                     <>
                                         <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImagePreviewNewTemporary(null)}></button>
-                                        <img src={`data:image/jpg;base64,${postImagePreviewNewTemporary}`} className="img-fluid rounded mb-3" alt="post-img" />
+                                        <img src={`data:image/jpg;base64,${postImagePreviewNewTemporary}`} className="img-fluid rounded mb-3" alt="post-img" style={{ maxHeight: 400, width: "100%", objectFit: "cover" }} />
                                     </>
                                 }
 
                                 {postImageNew &&
                                     <>
                                         <button type="button" className="btn-close mb-3" aria-label="Close" onClick={(e) => setPostImageNew(null)}></button>
-                                        <img src={postImagePreviewNew} className="img-fluid rounded mb-3" alt="post-img" />
+                                        <img src={postImagePreviewNew} className="img-fluid rounded mb-3" alt="post-img" style={{ maxHeight: 400, width: "100%", objectFit: "cover" }} />
 
                                     </>
 
