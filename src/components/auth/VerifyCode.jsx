@@ -131,9 +131,14 @@ const VerifyCode = () => {
           } else {
             toast.dismiss(toastNotify);
             toast.success("Code verified");
-            navigate("/login");
+            
+            sendEmailAccountCreated(email);
+
             clearInputs();
-            sendEmailAccountCreated();
+
+            navigate("/login");
+
+            
           }
 
         }
@@ -151,10 +156,10 @@ const VerifyCode = () => {
   }
 
 
-  const sendEmailAccountCreated = async () => {
+  const sendEmailAccountCreated = async (userEmail) => {
 
       const data = {
-        email: email
+        email: userEmail
       }
 
       await axios.post(`${url}/account/created/email/info`, data).then((res) => {

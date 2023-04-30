@@ -263,13 +263,13 @@ function Register() {
     }
 
 
-    const sendEmailCodeNoReply = async (email) => {
+    const sendEmailCodeNoReply = async (userEmail) => {
 
         setEmailCodeStatus("loading")
         const toastNotify = toast.loading("Send Email Code");
 
         const data = {
-            email: email.toString().toLocaleLowerCase()
+            email: userEmail.toString().toLocaleLowerCase()
         }
 
         await axios.post(`${url}/account/email/code/send`, data).then((res) => {
@@ -300,7 +300,7 @@ function Register() {
                         "/code/verify",
                         {
                             state: {
-                                email: email.toString().toLocaleLowerCase()
+                                email: userEmail.toString().toLocaleLowerCase()
                             }
                         }
                     )
