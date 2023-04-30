@@ -1,6 +1,7 @@
 {
   "name": "my-post-fe",
   "version": "1.0.0",
+  "homepage": "https://mypost.victorcarablut.com",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
