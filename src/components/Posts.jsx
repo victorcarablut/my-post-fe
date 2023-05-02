@@ -150,6 +150,7 @@ function Posts(props) {
     const getAllPosts = async () => {
 
         setResponseStatusGetAllPosts("loading");
+        setButtonLikeIsDisabled(true);
 
         const jwt_token = secureLocalStorage.getItem("token");
 
@@ -167,6 +168,7 @@ function Posts(props) {
 
             if (res.status === 200) {
                 setResponseStatusGetAllPosts("success");
+                
 
                 if (props.filter === "active") {
 
@@ -193,12 +195,15 @@ function Posts(props) {
                     setPosts(newArr);
                 }
 
+                setButtonLikeIsDisabled(false);
+
 
 
             }
 
         }).catch(err => {
             setResponseStatusGetAllPosts("error");
+            setButtonLikeIsDisabled(true);
             return;
         })
 
@@ -207,6 +212,7 @@ function Posts(props) {
     const getAllPostLikes = async (postId) => {
 
         setLikes([]);
+        setButtonLikeIsDisabled(true);
 
         setResponseStatusGetAllPostsLikes("loading");
 
@@ -226,11 +232,15 @@ function Posts(props) {
 
             if (res.status === 200) {
                 setResponseStatusGetAllPostsLikes("success");
+                
                 setLikes(res.data);
+
+                setButtonLikeIsDisabled(false);
             }
 
         }).catch(err => {
             setResponseStatusGetAllPostsLikes("error");
+            setButtonLikeIsDisabled(true);
             return;
         })
 
@@ -512,7 +522,7 @@ function Posts(props) {
         await axios.post(`${url}/post/like`, data, config).then((res) => {
             if (res.status === 200) {
                 getAllPosts();
-                setButtonLikeIsDisabled(false);
+                // setButtonLikeIsDisabled(false); already in  getAllPosts();
             }
 
         }).catch(err => {
