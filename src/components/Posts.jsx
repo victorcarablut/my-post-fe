@@ -69,7 +69,7 @@ function Posts(props) {
 
         getAllPosts();
         // auto refresh - (start)
-        const interval = setInterval(autoLoadDataInfinite, 10000);  // example: start loading after: 5000 - 5 sec
+        const interval = setInterval(getAllPostsAutoLoad, 10000);  // example: start loading after: 5000 - 5 sec
 
         return function () {
             // auto refresh - (stop)
@@ -77,10 +77,6 @@ function Posts(props) {
         }
 
     }, [props.filter])
-
-    const autoLoadDataInfinite = async () => {
-        await getAllPosts();
-    }
 
 
 
@@ -204,6 +200,53 @@ function Posts(props) {
         }).catch(err => {
             setResponseStatusGetAllPosts("error");
             setButtonLikeIsDisabled(true);
+            return;
+        })
+
+    }
+
+    // used this without setButtonLikeIsDisabled(true/false); cause is disabling the button when auto refresh after seconds
+    const getAllPostsAutoLoad = async () => {
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+    
+        const data = {
+            filter: props.filter
+        }
+
+        await axios.post(`${url}/post/find`, data, config).then((res) => {
+
+            if (res.status === 200) {
+     
+                if (props.filter === "active") {
+
+                    setPosts(res.data);
+
+                } else {
+
+                    let newArr = [];
+
+                    res.data.forEach((post) => {
+                        if (post.user.id === props.userId) {
+                            newArr.push(post);
+                        } else if (post.user.id !== props.userId && post.status === "active") {
+                            newArr.push(post);
+                        } else {
+                            return;
+                        }
+                    })
+
+                    setPosts(newArr);
+                }
+            }
+
+        }).catch(err => {
             return;
         })
 
