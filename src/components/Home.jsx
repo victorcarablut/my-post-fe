@@ -84,7 +84,7 @@ function Home() {
       </div>
 
       {userId &&
-        <Posts filter="all" userId={userId} username={username} userEmail={userEmail} />
+        <Posts filter="active" userId={userId} username={username} userEmail={userEmail} />
       }
     </div>
   )

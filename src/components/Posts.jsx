@@ -30,7 +30,7 @@ function Posts(props) {
     const navigate = useNavigate();
 
 
-    const [postId, setPostId]= useState(null);
+    const [postId, setPostId] = useState(null);
 
     const [postTitle, setPostTitle] = useState(null);
     const [postDescription, setPostDescription] = useState(null);
@@ -47,6 +47,8 @@ function Posts(props) {
     // list
     const [posts, setPosts] = useState([]);
 
+    const [likes, setLikes] = useState([]);
+
     // inputs check validity
     const [handleInputPostTitleIsValid, setHandleInputPostTitleIsValid] = useState(false);
 
@@ -60,6 +62,7 @@ function Posts(props) {
 
     // http response status
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
+    const [responseStatusGetAllPostsLikes, setResponseStatusGetAllPostsLikes] = useState("");
 
 
     useEffect(() => {
@@ -155,20 +158,22 @@ function Posts(props) {
                 Authorization: "Bearer " + jwt_token
             }
         }
+        // {props.filter}
+        const data = {
+            filter: props.filter
+        }
 
-
-
-        await axios.get(`${url}/post/all/${props.filter}`, config).then((res) => {
+        await axios.post(`${url}/post/find`, data, config).then((res) => {
 
             if (res.status === 200) {
                 setResponseStatusGetAllPosts("success");
 
-                if (props.filter === "all") {
-     
+                if (props.filter === "active") {
+
                     setPosts(res.data);
 
                 } else {
-              
+
                     // only the Owner of Posts can see active & non active in: > UserProfile
 
                     // condition to prevent other user to see "Pending" message on owners Post's in: > UserProfile
@@ -194,6 +199,38 @@ function Posts(props) {
 
         }).catch(err => {
             setResponseStatusGetAllPosts("error");
+            return;
+        })
+
+    }
+
+    const getAllPostLikes = async (postId) => {
+
+        setLikes([]);
+
+        setResponseStatusGetAllPostsLikes("loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+        // {props.filter}
+        const data = {
+            postId: postId
+        }
+
+        await axios.post(`${url}/post/like/all`, data, config).then((res) => {
+
+            if (res.status === 200) {
+                setResponseStatusGetAllPostsLikes("success");
+                setLikes(res.data);
+            }
+
+        }).catch(err => {
+            setResponseStatusGetAllPostsLikes("error");
             return;
         })
 
@@ -531,7 +568,7 @@ function Posts(props) {
 
                     <div className="col-xl-6" style={{ paddingBottom: 20 }}>
 
-                        {(props.username === props.filter || props.filter === "all") &&
+                        {(props.username === props.filter || props.filter === "active") &&
 
 
 
@@ -644,10 +681,10 @@ function Posts(props) {
                                             <tr key={post.id}>
                                                 <td>
 
-                                                    <div className="card container-fluid animate__animated animate__fadeIn shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
+                                                    <div className="card container-fluid animate__animated animate__fadeInUp shadow-sm" style={{ maxWidth: 500, marginTop: 50 }}>
 
 
-                                                        {props.filter !== "all" &&
+                                                        {props.filter !== "active" &&
 
                                                             <div className="position-relative">
                                                                 {post.status === "active" ?
@@ -727,16 +764,22 @@ function Posts(props) {
 
                                                                 <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" disabled={buttonLikeIsDisabled} onClick={() => postLike(post.id)}>
 
-                                                                    <i className="bi bi-hand-thumbs-up me-md-2"></i>
+                                                                    <i className={"bi " + (post.isCurrentUserLikePost ? "bi-hand-thumbs-up-fill text-primary" : "bi-hand-thumbs-up") + " me-md-2"}></i>
+
+                                                                    <small className={post.isCurrentUserLikePost ? "text-primary" : "text-secondary"}>Like</small>
+
+                                                                    {/* {post.isCurrentUserLikePost ? <small className="text-primary"><i className="bi bi-hand-thumbs-up-fill me-md-2"></i>Like</small> : <small className=""><i className="bi bi-hand-thumbs-up me-md-2"></i>Like</small>} */}
 
 
-                                                                    {post.likes?.map(like => like.userId === props.userId &&
+
+
+                                                                    {/* {post.likes?.map(like => like.userId === props.userId &&
 
                                                                         <small className="text-primary me-md-2" key={like.likeId}>Liked</small>
                                                                     )
                                                                     }
 
-                                                                    <small>{post.likes?.length}</small>
+                                                                    <small>{post.likes?.length}</small> */}
 
                                                                 </button>
 
@@ -744,13 +787,22 @@ function Posts(props) {
 
 
 
-                                                                {post.likes?.length !== 0 && <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" />}
+
+
+                                                                {post.totalLikes !== 0 && <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" onClick={() => getAllPostLikes(post.id)}><small>{post.totalLikes}</small></button>}
 
 
                                                                 <ul className="dropdown-menu">
+                                                                    
+                                                                    {responseStatusGetAllPostsLikes === "loading" &&
+                                                                        <div className="spinner-border spinner-border-sm text-light" style={{ marginLeft: 10 }} role="status" />
+                                                                    }
+
+                                                                    {responseStatusGetAllPostsLikes === "error" && <Error />}
+
                                                                     <div id="scrollbar-small" style={{ overflow: "scroll", maxHeight: 500, width: 300, maxWidth: "auto", overflowX: "auto" }}>
                                                                         {
-                                                                            post.likes?.map(like =>
+                                                                            likes.map(like =>
 
                                                                                 <ul className="list-group list-group-flush" key={like.likeId} style={{ minWidth: 250 }}>
                                                                                     <li className="list-group-item list-group-item-action" style={{ cursor: 'pointer' }} onClick={() => navigate("/user/" + like.username)}>

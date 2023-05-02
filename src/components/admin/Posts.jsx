@@ -65,9 +65,12 @@ function Posts(props) {
             }
         }
 
-        const role = "admin";
+    
+        const data = {
+            filter: "admin"
+        }
 
-        await axios.get(`${url}/post/all/${role}`, config).then((res) => {
+        await axios.post(`${url}/post/find`, data, config).then((res) => {
 
             if (res.status === 200) {
                 setResponseStatusGetAllPosts("success");
@@ -358,7 +361,7 @@ function Posts(props) {
                                                 </div>
                                             </div>
                                             <div className="card-footer bg-transparent text-muted">
-                                                <small>Likes: {post.likes?.length}</small>
+                                                <small>Likes: {post.totalLikes}</small>
                                             </div>
                                         </div>
                                     </td>
