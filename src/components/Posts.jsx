@@ -795,7 +795,7 @@ function Posts(props) {
                                                                 <ul className="dropdown-menu">
                                                                     
                                                                     {responseStatusGetAllPostsLikes === "loading" &&
-                                                                        <div className="spinner-border spinner-border-sm text-light" style={{ marginLeft: 10 }} role="status" />
+                                                                        <div className="spinner-border spinner-border-sm text-secondary" style={{ marginLeft: 10 }} role="status" />
                                                                     }
 
                                                                     {responseStatusGetAllPostsLikes === "error" && <Error />}
