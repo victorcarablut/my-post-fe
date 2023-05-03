@@ -59,8 +59,6 @@ function Posts(props) {
     const [handleInputPostDescriptionClassName, setHandleInputPostDescriptionClassName] = useState(null);
 
     const [buttonCreatePostIsDisabled, setButtonCreatePostIsDisabled] = useState(false);
-    const [buttonLikeIsDisabled, setButtonLikeIsDisabled] = useState(false);
-
 
     // http response status
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
@@ -71,7 +69,7 @@ function Posts(props) {
 
         getAllPosts();
         // auto refresh - (start)
-        const interval = setInterval(getAllPostsAutoLoad, 10000);  // example: start loading after: 5000 - 5 sec
+        const interval = setInterval(getAllPosts, 10000);  // example: start loading after: 5000 - 5 sec
 
         return function () {
             // auto refresh - (stop)
@@ -103,7 +101,7 @@ function Posts(props) {
 
 
         setButtonCreatePostIsDisabled(false);
-        setButtonLikeIsDisabled(false);
+
 
         setResponseStatusGetAllPosts("");
 
@@ -147,8 +145,10 @@ function Posts(props) {
 
     const getAllPosts = async () => {
 
+        console.log("load");
+
         setResponseStatusGetAllPosts("loading");
-        setButtonLikeIsDisabled(true);
+
 
         const jwt_token = secureLocalStorage.getItem("token");
 
@@ -193,7 +193,7 @@ function Posts(props) {
                     setPosts(newArr);
                 }
 
-                setButtonLikeIsDisabled(false);
+ 
 
 
 
@@ -201,63 +201,16 @@ function Posts(props) {
 
         }).catch(err => {
             setResponseStatusGetAllPosts("error");
-            setButtonLikeIsDisabled(true);
+      
             return;
         })
 
     }
 
-    // used this without setButtonLikeIsDisabled(true/false); cause is disabling the button when auto refresh after seconds
-    const getAllPostsAutoLoad = async () => {
-
-        const jwt_token = secureLocalStorage.getItem("token");
-
-        const config = {
-            headers: {
-                Authorization: "Bearer " + jwt_token
-            }
-        }
-
-        const data = {
-            filter: props.filter
-        }
-
-        await axios.post(`${url}/post/find`, data, config).then((res) => {
-
-            if (res.status === 200) {
-
-                if (props.filter === "active") {
-
-                    setPosts(res.data);
-
-                } else {
-
-                    let newArr = [];
-
-                    res.data.forEach((post) => {
-                        if (post.user.id === props.userId) {
-                            newArr.push(post);
-                        } else if (post.user.id !== props.userId && post.status === "active") {
-                            newArr.push(post);
-                        } else {
-                            return;
-                        }
-                    })
-
-                    setPosts(newArr);
-                }
-            }
-
-        }).catch(err => {
-            return;
-        })
-
-    }
 
     const getAllPostLikes = async (postId) => {
 
         setLikes([]);
-        setButtonLikeIsDisabled(true);
 
         setResponseStatusGetAllPostsLikes("loading");
 
@@ -280,12 +233,10 @@ function Posts(props) {
 
                 setLikes(res.data);
 
-                setButtonLikeIsDisabled(false);
             }
 
         }).catch(err => {
             setResponseStatusGetAllPostsLikes("error");
-            setButtonLikeIsDisabled(true);
             return;
         })
 
@@ -545,8 +496,6 @@ function Posts(props) {
 
     const postLike = async (postId) => {
 
-        setButtonLikeIsDisabled(true);
-
         const jwt_token = secureLocalStorage.getItem("token");
 
         const config = {
@@ -571,7 +520,7 @@ function Posts(props) {
             }
 
         }).catch(err => {
-            setButtonLikeIsDisabled(false);
+
             return;
         })
 
@@ -623,7 +572,7 @@ function Posts(props) {
 
                     <div className="col-xl-6" style={{ paddingBottom: 20 }}>
 
-                    <Users />
+                        {posts && <Users />}
 
                         {(props.username === props.filter || props.filter === "active") &&
 
@@ -693,7 +642,7 @@ function Posts(props) {
                                         <small>All posts are reviewed by the admin. <Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy</Link></small>
                                     </div>
 
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -709,7 +658,7 @@ function Posts(props) {
                                 <div className="card-body">
                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                                         {(posts?.length !== 0 && responseStatusGetAllPosts !== "error") &&
-                                            <input type="text" id="search-post-input" className="form-control search-post-input" onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
+                                            <input type="text" id="search-post-input" className="form-control search-post-input rounded-pill" onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
                                         }
 
                                     </div>
@@ -821,7 +770,7 @@ function Posts(props) {
 
 
                                                             <div className="btn-group dropup">
-                                                                <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" disabled={buttonLikeIsDisabled} onClick={() => postLike(post.id)}>
+                                                                <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" onClick={() => postLike(post.id)}>
 
                                                                     <i className={"bi " + (post.isCurrentUserLikePost ? "bi-hand-thumbs-up-fill text-primary" : "bi-hand-thumbs-up") + " me-md-2"}></i>
 
@@ -958,7 +907,7 @@ function Posts(props) {
                 </div>
             </div>
 
-            
+
 
         </>
 

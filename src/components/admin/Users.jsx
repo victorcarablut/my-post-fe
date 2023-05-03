@@ -170,7 +170,6 @@ function Users(props) {
             // all
             setFilterUserStatus(status);
         }
-        await getAllUsers();
 
     }
 
@@ -308,7 +307,7 @@ function Users(props) {
                         }
 
                         {(users?.length !== 0 && responseStatusGetAllUsers !== "error") &&
-                            <input type="text" id="search-user-input" className="form-control search-user-input" onKeyUp={searchUsers} placeholder="Search..." autoComplete="off" />
+                            <input type="text" id="search-user-input" className="form-control search-user-input rounded-pill" onKeyUp={searchUsers} placeholder="Search..." autoComplete="off" />
                         }
 
                         {responseStatusGetAllUsers === "error" && <Error />}

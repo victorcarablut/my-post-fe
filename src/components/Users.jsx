@@ -24,7 +24,7 @@ function Users() {
         getAllUsers();
 
         // auto refresh - (start)
-        const interval = setInterval(getAllUsers, 12000);
+        const interval = setInterval(getAllUsers, 14000);
 
         return function () {
 
@@ -118,7 +118,7 @@ function Users() {
                         <div className="d-flex justify-content-center">
 
                             {users?.length !== 0 &&
-                                <input type="text" id="search-user-input" className="form-control search-user-input" onKeyUp={searchUsers} placeholder="Search..." autoComplete="off" />
+                                <input type="text" id="search-user-input" className="form-control search-user-input rounded-pill mb-3" onKeyUp={searchUsers} placeholder="Search..." autoComplete="off" />
                             }
 
                         </div>
@@ -127,11 +127,11 @@ function Users() {
 
 
                             <div id="scrollbar-small" className="d-flex justify-content-center" style={{ overflow: "scroll", maxHeight: "1000px", width: "auto", maxWidth: "auto", overflowX: "auto" }}>
+                            
 
+                                <table id="table-users" className="container-fluid" style={{paddingBottom: 30}}>
 
-
-                                <table id="table-users" className="container-fluid">
-
+                            
                                     <tbody>
 
                                         {users?.map(user =>
@@ -139,10 +139,10 @@ function Users() {
                                             <tr key={user.userId}>
                                                 <td>
 
-                                                    <button className="btn btn-light rounded-pill d-grid gap-2 d-md-flex justify-content-md-start animate__animated animate__fadeIn border border-secondary-subtle shadow-sm" style={{ marginTop: 10, maxHeight: 50 }} onClick={() => navigateToUserProfile(user.username)}>
+                                                    <div className="btn btn-light rounded-pill d-grid gap-2 d-md-flex justify-content-md-start animate__animated animate__fadeIn border border-secondary-subtle shadow-sm" style={{ marginTop: 6, marginBottom: 6, maxHeight: 50 }} onClick={() => navigateToUserProfile(user.username)}>
                                                         <img src={user.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="30" height="30" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
                                                         {user.fullName}
-                                                    </button>
+                                                    </div>
 
                                                 </td>
                                             </tr>

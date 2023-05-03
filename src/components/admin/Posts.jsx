@@ -147,7 +147,7 @@ function Posts(props) {
             // all
             setFilterPostStatus(status);
         }
-        await getAllPosts();
+        
 
     }
 
@@ -240,7 +240,7 @@ function Posts(props) {
 
                         {(posts?.length !== 0 && responseStatusGetAllPosts !== "error") &&
 
-                            <input type="text" id="search-post-input" className="form-control search-post-input" onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
+                            <input type="text" id="search-post-input" className="form-control search-post-input rounded-pill" onKeyUp={searchPosts} placeholder="Search..." autoComplete="off" />
                         }
 
                         {responseStatusGetAllPosts === "error" && <Error />}
