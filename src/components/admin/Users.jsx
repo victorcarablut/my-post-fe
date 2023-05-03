@@ -83,7 +83,7 @@ function Users(props) {
             }
         }
 
-        await axios.get(`${url}/user/all`, config).then((res) => {
+        await axios.get(`${url}/user/all/admin`, config).then((res) => {
 
             if (res.status === 200) {
                 setResponseStatusGetAllUsers("success");

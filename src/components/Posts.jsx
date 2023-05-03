@@ -20,6 +20,8 @@ import { moment_locale, moment_format_date_time_long } from './_resources/date-t
 
 import default_user_profile_img from '../assets/images/user.jpg';
 
+import Users from './Users.jsx';
+
 
 // Notifications
 import toast from 'react-hot-toast';
@@ -164,7 +166,7 @@ function Posts(props) {
 
             if (res.status === 200) {
                 setResponseStatusGetAllPosts("success");
-                
+
 
                 if (props.filter === "active") {
 
@@ -215,7 +217,7 @@ function Posts(props) {
                 Authorization: "Bearer " + jwt_token
             }
         }
-    
+
         const data = {
             filter: props.filter
         }
@@ -223,7 +225,7 @@ function Posts(props) {
         await axios.post(`${url}/post/find`, data, config).then((res) => {
 
             if (res.status === 200) {
-     
+
                 if (props.filter === "active") {
 
                     setPosts(res.data);
@@ -275,7 +277,7 @@ function Posts(props) {
 
             if (res.status === 200) {
                 setResponseStatusGetAllPostsLikes("success");
-                
+
                 setLikes(res.data);
 
                 setButtonLikeIsDisabled(false);
@@ -621,12 +623,15 @@ function Posts(props) {
 
                     <div className="col-xl-6" style={{ paddingBottom: 20 }}>
 
+                    <Users />
+
                         {(props.username === props.filter || props.filter === "active") &&
 
 
 
                             <div className="d-flex justify-content-center mb-3">
                                 <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
+
                                     <div className="card-body">
                                         <h6>Create Post</h6>
 
@@ -682,10 +687,13 @@ function Posts(props) {
                         <div className="d-flex justify-content-center">
                             <div className="card container-fluid shadow" style={{ maxWidth: 500 }}>
                                 <div className="card-body">
+
                                     <div className="alert alert-light" role="alert">
                                         <i className="bi bi-info-circle me-md-2"></i>
                                         <small>All posts are reviewed by the admin. <Link to="/privacy-policy" type="button" className="btn btn-link btn-sm">Privacy Policy</Link></small>
                                     </div>
+
+                                    
                                 </div>
                             </div>
                         </div>
@@ -765,7 +773,7 @@ function Posts(props) {
 
 
                                                         <div className="card-header bg-transparent">
-                                                            <img src={post.user.userProfileImg ? `data:image/jpg;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + post.user.username)} />
+                                                            <img src={post.user.userProfileImg ? `data:image/jpg;base64,${post.user.userProfileImg}` : default_user_profile_img} width="50" height="50" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="position-absolute top-0 start-0 translate-middle rounded-circle border border-2 shadow me-md-2" onClick={() => navigate("/user/" + post.user.username)} />
                                                             <h6>{post.user.fullName}</h6>
 
 
@@ -813,40 +821,20 @@ function Posts(props) {
 
 
                                                             <div className="btn-group dropup">
-
-
                                                                 <button type="button" className="btn btn-light rounded-pill btn-sm me-md-2" disabled={buttonLikeIsDisabled} onClick={() => postLike(post.id)}>
 
                                                                     <i className={"bi " + (post.isCurrentUserLikePost ? "bi-hand-thumbs-up-fill text-primary" : "bi-hand-thumbs-up") + " me-md-2"}></i>
 
                                                                     <small className={post.isCurrentUserLikePost ? "text-primary" : "text-secondary"}>Like</small>
 
-                                                                    {/* {post.isCurrentUserLikePost ? <small className="text-primary"><i className="bi bi-hand-thumbs-up-fill me-md-2"></i>Like</small> : <small className=""><i className="bi bi-hand-thumbs-up me-md-2"></i>Like</small>} */}
-
-
-
-
-                                                                    {/* {post.likes?.map(like => like.userId === props.userId &&
-
-                                                                        <small className="text-primary me-md-2" key={like.likeId}>Liked</small>
-                                                                    )
-                                                                    }
-
-                                                                    <small>{post.likes?.length}</small> */}
-
                                                                 </button>
-
-
-
-
-
 
 
                                                                 {post.totalLikes !== 0 && <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" onClick={() => getAllPostLikes(post.id)}><small>{post.totalLikes}</small></button>}
 
 
                                                                 <ul className="dropdown-menu">
-                                                                    
+
                                                                     {responseStatusGetAllPostsLikes === "loading" &&
                                                                         <div className="spinner-border spinner-border-sm text-secondary" style={{ marginLeft: 10 }} role="status" />
                                                                     }
@@ -903,11 +891,11 @@ function Posts(props) {
 
             {/* --- Modal (Edit Post) --- */}
             <div className="modal fade" id="editPostModal" tabIndex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true" >
-                <div className="modal-dialog">
+                <div className="modal-dialog modal-dialog-scrollable">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="editPostModalLabel">Edit Post</h1>
-                            <button type="button" className="btn-close btn-close-white" id='button-modal-update-post-close' data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close btn-close-dark" id='button-modal-update-post-close' data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
 
@@ -969,6 +957,8 @@ function Posts(props) {
                     </div>
                 </div>
             </div>
+
+            
 
         </>
 
