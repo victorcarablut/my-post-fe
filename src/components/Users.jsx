@@ -10,12 +10,7 @@ import axios from "axios";
 // config file (URL)
 import { url } from "../config.js";
 
-
 import default_user_profile_img from '../assets/images/user.jpg';
-
-import { Empty, Error } from "./_resources/ui/Alerts.jsx";
-
-
 
 function Users() {
 
@@ -24,15 +19,12 @@ function Users() {
     // list
     const [users, setUsers] = useState([]);
 
-    // http response status
-    const [responseStatusGetAllUsers, setResponseStatusGetAllUsers] = useState("");
-
     useEffect(() => {
 
         getAllUsers();
 
         // auto refresh - (start)
-        const interval = setInterval(getAllUsers, 10000);
+        const interval = setInterval(getAllUsers, 12000);
 
         return function () {
 
@@ -43,8 +35,6 @@ function Users() {
     }, []);
 
     const getAllUsers = async () => {
-
-        setResponseStatusGetAllUsers("loading");
 
         const jwt_token = secureLocalStorage.getItem("token");
 
@@ -57,12 +47,11 @@ function Users() {
         await axios.get(`${url}/user/all`, config).then((res) => {
 
             if (res.status === 200) {
-                setResponseStatusGetAllUsers("success");
+
                 setUsers(res.data);
             }
 
         }).catch(err => {
-            setResponseStatusGetAllUsers("error");
             return;
         })
     }
@@ -106,7 +95,7 @@ function Users() {
 
             <button className="btn btn-light rounded-pill position-relative shadow" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasUsers" aria-controls="offcanvasExample" onClick={getAllUsers}>
                 <span className="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-secondary">
-                    {users?.length}
+                    {users?.length !== 0 && users?.length}
                 </span>
                 <i className="bi bi-people-fill me-md-2"></i><small className="me-md-2">Users</small><i className="bi bi-search"></i>
 
@@ -126,32 +115,13 @@ function Users() {
                 <div className="offcanvas-body">
                     <div>
 
-
-
                         <div className="d-flex justify-content-center">
 
-                            <div className="position-relative">
-                                <div className="position-absolute top-0 start-0">
-                                    {responseStatusGetAllUsers === "loading" &&
-                                        <div className="spinner-border spinner-border-sm text-secondary" style={{ marginLeft: 10 }} role="status" />
-                                    }
-                                </div>
-                            </div>
-
-
-
-
-
-                            {(users?.length !== 0 && responseStatusGetAllUsers !== "error") &&
+                            {users?.length !== 0 &&
                                 <input type="text" id="search-user-input" className="form-control search-user-input" onKeyUp={searchUsers} placeholder="Search..." autoComplete="off" />
                             }
 
-                            {responseStatusGetAllUsers === "error" && <Error />}
-                            {(users?.length === 0 && responseStatusGetAllUsers === "success") && <Empty />}
-
-
                         </div>
-
 
                         {users?.length !== 0 &&
 
