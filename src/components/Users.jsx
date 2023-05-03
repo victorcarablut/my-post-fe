@@ -10,16 +10,9 @@ import axios from "axios";
 // config file (URL)
 import { url } from "../config.js";
 
-// Date Time Format (moment.js)
-import moment from 'moment/min/moment-with-locales';
-import { moment_locale, moment_format_date_time_long } from './_resources/date-time/DateTime.js';
 
 import default_user_profile_img from '../assets/images/user.jpg';
-import default_user_cover_img from '../assets/images/cover.jpg';
 
-
-// Notifications
-import toast from 'react-hot-toast';
 import { Empty, Error } from "./_resources/ui/Alerts.jsx";
 
 
@@ -113,7 +106,7 @@ function Users() {
 
             <button className="btn btn-light rounded-pill position-relative shadow" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasUsers" aria-controls="offcanvasExample" onClick={getAllUsers}>
                 <span className="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-secondary">
-                    {users.length}
+                    {users?.length}
                 </span>
                 <i className="bi bi-people-fill me-md-2"></i><small className="me-md-2">Users</small><i className="bi bi-search"></i>
 
