@@ -48,8 +48,14 @@ function Posts(props) {
 
     // list
     const [posts, setPosts] = useState([]);
-
     const [likes, setLikes] = useState([]);
+    const [comments, setComments] = useState([]);
+
+    const [commentId, setCommentId] = useState(null);
+    const [comment, setComment] = useState(null);
+    const [commentNew, setCommentNew] = useState(null);
+
+
 
     // inputs check validity
     const [handleInputPostTitleIsValid, setHandleInputPostTitleIsValid] = useState(false);
@@ -63,6 +69,7 @@ function Posts(props) {
     // http response status
     const [responseStatusGetAllPosts, setResponseStatusGetAllPosts] = useState("");
     const [responseStatusGetAllPostsLikes, setResponseStatusGetAllPostsLikes] = useState("");
+    const [responseStatusGetAllPostsComments, setResponseStatusGetAllPostsComments] = useState("");
 
 
     useEffect(() => {
@@ -90,6 +97,9 @@ function Posts(props) {
 
         setPostTitleNew(null);
         setPostDescriptionNew(null);
+
+        setComment(null);
+        setCommentNew(null);
 
         setPostImage(null);
         deletePostImagePreviewNew();
@@ -145,8 +155,6 @@ function Posts(props) {
 
     const getAllPosts = async () => {
 
-        console.log("load");
-
         setResponseStatusGetAllPosts("loading");
 
 
@@ -193,7 +201,7 @@ function Posts(props) {
                     setPosts(newArr);
                 }
 
- 
+
 
 
 
@@ -201,42 +209,7 @@ function Posts(props) {
 
         }).catch(err => {
             setResponseStatusGetAllPosts("error");
-      
-            return;
-        })
 
-    }
-
-
-    const getAllPostLikes = async (postId) => {
-
-        setLikes([]);
-
-        setResponseStatusGetAllPostsLikes("loading");
-
-        const jwt_token = secureLocalStorage.getItem("token");
-
-        const config = {
-            headers: {
-                Authorization: "Bearer " + jwt_token
-            }
-        }
-        // {props.filter}
-        const data = {
-            postId: postId
-        }
-
-        await axios.post(`${url}/post/like/all`, data, config).then((res) => {
-
-            if (res.status === 200) {
-                setResponseStatusGetAllPostsLikes("success");
-
-                setLikes(res.data);
-
-            }
-
-        }).catch(err => {
-            setResponseStatusGetAllPostsLikes("error");
             return;
         })
 
@@ -494,6 +467,40 @@ function Posts(props) {
 
     // ------ Like ------
 
+    const getAllPostLikes = async (postId) => {
+
+        setLikes([]);
+
+        setResponseStatusGetAllPostsLikes("loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            postId: postId
+        }
+
+        await axios.post(`${url}/post/like/all`, data, config).then((res) => {
+
+            if (res.status === 200) {
+                setResponseStatusGetAllPostsLikes("success");
+
+                setLikes(res.data);
+
+            }
+
+        }).catch(err => {
+            setResponseStatusGetAllPostsLikes("error");
+            return;
+        })
+
+    }
+
     const postLike = async (postId) => {
 
         const jwt_token = secureLocalStorage.getItem("token");
@@ -517,6 +524,135 @@ function Posts(props) {
             if (res.status === 200) {
                 getAllPosts();
                 // setButtonLikeIsDisabled(false); already in  getAllPosts();
+            }
+
+        }).catch(err => {
+
+            return;
+        })
+
+
+    }
+
+    // ------ Comment ------
+
+    const getAllPostComments = async (postId) => {
+
+        setPostId(postId);
+        setComments([]);
+
+        setResponseStatusGetAllPostsComments("loading");
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            postId: postId
+        }
+
+        await axios.post(`${url}/post/comment/all`, data, config).then((res) => {
+
+            if (res.status === 200) {
+                setResponseStatusGetAllPostsComments("success");
+                setComments(res.data);
+            }
+
+        }).catch(err => {
+            setResponseStatusGetAllPostsComments("error");
+            return;
+        })
+
+    }
+
+    const handleInputPostComment = async (e) => {
+
+        const comment = e.target.value;
+        setComment(comment);
+    }
+
+    const handleInputPostCommentNew = async (e) => {
+
+        const comment = e.target.value;
+        setCommentNew(comment);
+    }
+
+    const postAddComment = async (postId) => {
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            post: {
+                id: postId
+            },
+            user: {
+                id: props.userId
+            },
+            comment: comment
+        }
+
+        await axios.post(`${url}/post/comment/add`, data, config).then((res) => {
+            if (res.status === 200) {
+                //getAllPosts();
+                // setButtonLikeIsDisabled(false); already in  getAllPosts();
+
+                getAllPostComments(postId);
+
+                setComment(null);
+            }
+
+        }).catch(err => {
+
+            return;
+        })
+
+
+    }
+
+    const passPostCommentDataUpdateNew = (id, comment) => {
+        setCommentId(id);
+        setCommentNew(comment);
+    }
+
+
+    const postUpdateComment = async () => {
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            postId: postId,
+            userId: props.userId,
+            commentId: commentId,
+            comment: commentNew
+        }
+
+        await axios.put(`${url}/post/comment/update`, data, config).then((res) => {
+            if (res.status === 200) {
+                //getAllPosts();
+                // setButtonLikeIsDisabled(false); already in  getAllPosts();
+
+                getAllPostComments(postId);
+
+                setComment(null);
+                setCommentNew(null);
+
+                document.getElementById('button-modal-update-post-comment-close').click();
             }
 
         }).catch(err => {
@@ -779,7 +915,7 @@ function Posts(props) {
                                                                 </button>
 
 
-                                                                {post.totalLikes !== 0 && <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" onClick={() => getAllPostLikes(post.id)}><small>{post.totalLikes}</small></button>}
+                                                                {post.totalLikes !== 0 && <button type="button" className="btn btn-sm btn-light rounded-pill dropdown-toggle dropdown-toggle-split me-md-2" data-bs-toggle="dropdown" aria-expanded="false" onClick={() => getAllPostLikes(post.id)}><small className="text-secondary">{post.totalLikes}</small></button>}
 
 
                                                                 <ul className="dropdown-menu">
@@ -806,7 +942,109 @@ function Posts(props) {
                                                                     </div>
                                                                 </ul>
 
+                                                                <button className="btn btn-light rounded-pill btn-sm" style={{ marginLeft: 20 }} type="button" onClick={() => getAllPostComments(post.id)}>
+                                                                    <i className="bi bi-chat-text-fill text-secondary me-md-2"></i>
+                                                                    <small className="text-secondary">Comments {post.totalComments}</small>
+                                                                </button>
+
                                                             </div>
+
+
+
+                                                            {post.id === postId &&
+
+
+
+
+                                                                <div style={{ marginTop: 10, marginBottom: 20 }}>
+
+                                                                    {responseStatusGetAllPostsComments === "loading" &&
+                                                                        <div className="spinner-border spinner-border-sm text-secondary" style={{ marginLeft: 10 }} role="status" />
+                                                                    }
+
+                                                                    {responseStatusGetAllPostsComments === "error" && <Error />}
+
+                                                                    <div className="card card-body border-0 custom-animation-fadeInUp">
+
+                                                                        <form onSubmit={handleSubmit}>
+                                                                            <div className="form-floating mb-3">
+                                                                                <textarea type="text" className="form-control" id="floatingInputPostComment" placeholder="Write..." value={comment || ""} maxLength="500" onChange={(e) => handleInputPostComment(e)} autoComplete="off" />
+                                                                                <label htmlFor="floatingInputPostComment">Write...</label>
+                                                                                <div className="invalid-feedback">
+                                                                                    <small>...</small>
+                                                                                </div>
+
+
+                                                                            </div>
+                                                                            <button className="btn btn-light btn-sm rounded-pill mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!comment} onClick={() => postAddComment(post.id)}><i className="bi bi-send-fill"></i></button>
+
+                                                                        </form>
+
+
+
+                                                                        <div id="scrollbar-small" style={{ overflow: "scroll", maxHeight: 400, width: "auto", maxWidth: "auto", overflowX: "auto" }}>
+                                                                            {
+                                                                                comments.map(comment =>
+
+
+
+                                                                                    <ul className="list-group list-group-flush rounded" key={comment.commentId} style={{ minWidth: 250, marginBottom: 20 }}>
+                                                                                        <li className="list-group-item bg-light" style={{ marginRight: 10 }}>
+
+                                                                                            {
+                                                                                                props.userId === comment.userId &&
+                                                                                                <div className="position-absolute top-0 end-0">
+                                                                                                    <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                                                                        <button type="button" className="btn btn-light btn-sm" style={{ margin: 5 }} data-bs-toggle="modal" data-bs-target="#editPostComment" aria-label="Edit" data-balloon-pos="left" onClick={() => passPostCommentDataUpdateNew(comment.commentId, comment.comment)}><i className="bi bi-pencil-square"></i></button>
+                                                                                                        <div className="dropdown" aria-label="Delete" data-balloon-pos="up">
+                                                                                                            <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg text-danger"></i></button>
+                                                                                                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
+                                                                                                                <p><small className="text-secondary">Delete Post?</small></p>
+                                                                                                                <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deletePost(post.id)}>Yes</button>
+                                                                                                                <button className="btn btn-secondary btn-sm" type="button">No</button>
+                                                                                                            </ul>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                </div>
+                                                                                            }
+
+                                                                                            <div>
+                                                                                                <img src={comment.userProfileImg ? `data:image/jpg;base64,${comment.userProfileImg}` : default_user_profile_img} width="30" height="30" style={{ objectFit: "cover", cursor: 'pointer' }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" onClick={() => navigate("/user/" + comment.username)} />
+                                                                                                <small className={(comment.userId === props.userId ? "text-primary" : "text-dark")} style={{ cursor: 'pointer' }} onClick={() => navigate("/user/" + comment.username)}>{comment.userFullName.length >= 20 ? comment.userFullName.substring(0, 25) + "..." : comment.userFullName}</small>
+                                                                                            </div>
+                                                                                            <p><small>{comment.comment}</small></p>
+
+                                                                                            <div className="position-absolute bottom-0 end-0 text-muted" style={{ padding: "5px", fontSize: 12 }}>
+
+                                                                                                {comment.updatedDate ?
+
+                                                                                                    <small>updated: {moment(comment.updatedDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                                                    :
+                                                                                                    <small>{moment(comment.createdDate).locale(moment_locale).format(moment_format_date_time_long)}</small>
+                                                                                                }
+                                                                                            </div>
+
+                                                                                        </li>
+                                                                                    </ul>
+
+
+
+
+                                                                                )
+                                                                            }
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+
+
+
+
+                                                            }
+
+
 
                                                         </div>
                                                     </div>
@@ -901,7 +1139,38 @@ function Posts(props) {
 
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary btn-sm rounded-pill shadow" id='button-modal-submit-delete-employee-close' data-bs-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-secondary btn-sm rounded-pill shadow" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* --- Modal (Edit Comment) --- */}
+            <div className="modal fade" id="editPostComment" tabIndex="-1" aria-labelledby="editPostCommentModalLabel" aria-hidden="true" >
+                <div className="modal-dialog modal-dialog-scrollable">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="editPostCommentModalLabel">Edit Comment</h1>
+                            <button type="button" className="btn-close btn-close-dark" id='button-modal-update-post-comment-close' data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+
+                            <form onSubmit={handleSubmit}>
+
+                                <div className="form-floating mb-3">
+                                    <textarea type="text" className="form-control" id="floatingInputPostCommentNew" placeholder="Write..." value={commentNew || ""} maxLength="500" onChange={(e) => handleInputPostCommentNew(e)} autoComplete="off" required />
+                                    <label htmlFor="floatingInputPostCommentNew">Write...</label>
+                                    <div className="invalid-feedback">
+                                        <small>...</small>
+                                    </div>
+                                </div>
+
+                                <button className="btn btn-secondary btn-sm rounded-pill shadow fw-semibold mb-3" style={{ paddingLeft: 15, paddingRight: 15 }} disabled={!commentNew} onClick={postUpdateComment}>Update</button>
+                            </form>
+
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary btn-sm rounded-pill shadow" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>

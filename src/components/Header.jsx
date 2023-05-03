@@ -182,7 +182,7 @@ function Header() {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-danger btn-sm rounded-pill shadow" onClick={logout}>Logout</button>
-              <button type="button" className="btn btn-secondary btn-sm rounded-pill shadow" id='button-modal-submit-delete-employee-close' data-bs-dismiss="modal">Close</button>
+              <button type="button" className="btn btn-secondary btn-sm rounded-pill shadow" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>

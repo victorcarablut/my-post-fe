@@ -361,7 +361,7 @@ function Posts(props) {
                                                 </div>
                                             </div>
                                             <div className="card-footer bg-transparent text-muted">
-                                                <small>Likes: {post.totalLikes}</small>
+                                                <small>Likes: {post.totalLikes} Comments: {post.totalComments}</small>
                                             </div>
                                         </div>
                                     </td>
