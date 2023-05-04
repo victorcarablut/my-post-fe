@@ -664,6 +664,35 @@ function Posts(props) {
     }
 
 
+    const postDeleteComment = async (postId, commentId) => {
+
+        const jwt_token = secureLocalStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + jwt_token
+            }
+        }
+
+        const data = {
+            postId: postId,
+            userId: props.userId,
+            commentId: commentId
+        }
+
+        await axios.post(`${url}/post/comment/delete`, data, config).then((res) => {
+            if (res.status === 200) {
+
+                getAllPostComments(postId);
+            }
+
+        }).catch(err => {
+            return;
+        })
+
+    }
+
+
     // Custom  method for filter/search
     const searchMethod = () => {
 
@@ -790,7 +819,7 @@ function Posts(props) {
 
 
                         <div className="d-flex justify-content-center">
-                            <div className="card container-fluid shadow" style={{ maxWidth: 600, minHeight: 120 }}>
+                            <div className="card container-fluid shadow" style={{ maxWidth: 600 }}>
                                 <div className="card-body">
                                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
                                         {(posts?.length !== 0 && responseStatusGetAllPosts !== "error") &&
@@ -799,11 +828,15 @@ function Posts(props) {
 
                                     </div>
 
-                                    {responseStatusGetAllPosts === "error" && <Error />}
-                                    {(posts?.length === 0 && responseStatusGetAllPosts === "success") && <Empty />}
+
 
                                 </div>
+
+                                {responseStatusGetAllPosts === "error" && <Error />}
+                            {(posts?.length === 0 && responseStatusGetAllPosts === "success") && <Empty />}
                             </div>
+
+                            
 
                         </div>
 
@@ -1000,7 +1033,7 @@ function Posts(props) {
                                                                                                             <button className="btn btn-light btn-sm dropdown-toggle" style={{ margin: 5 }} type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="bi bi-x-lg text-danger"></i></button>
                                                                                                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start text-center shadow-lg">
                                                                                                                 <p><small className="text-secondary">Delete Post?</small></p>
-                                                                                                                <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => deletePost(post.id)}>Yes</button>
+                                                                                                                <button className="btn btn-secondary btn-sm me-md-2" type="button" onClick={() => postDeleteComment(post.id, comment.commentId)}>Yes</button>
                                                                                                                 <button className="btn btn-secondary btn-sm" type="button">No</button>
                                                                                                             </ul>
                                                                                                         </div>
