@@ -3,33 +3,19 @@
 ### This is `frontend`  . . . go to [backend](https://github.com/VictoR-11011994/my-post-be)
 
 ```
-// backend
-Java EE (v17)
- - Spring Boot
- - Spring Security
- - JWT (Token)
-```
-
-```
 // frontend
 React Js (v18)
  - Axios
+ 
+-- Bootstrap CSS (v5)
+--- HTML, CSS, JS
 ```
 
-```
-//database
-MySQL (compatible also with phpMyAdmin)
-```
-
-```
-// other
-Bootstrap CSS (v5)
-HTML, CSS, JS
 ```
 
 ```
 // IDE
-Eclipse EE, Visual Studio Code, Workbench, Postman
+Visual Studio Code
 
 ...better experience with: Microsoft Edge, Google Chrome
 ```
