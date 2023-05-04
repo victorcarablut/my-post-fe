@@ -20,7 +20,7 @@ Visual Studio Code
 
 ___
 
-`Developed for demonstration purposes only.`
+`Developed for demonstration purposes only`
 
 > [code.victorcarablut.com](https://code.victorcarablut.com)
 
