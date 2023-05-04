@@ -1,6 +1,6 @@
 # Technologies:
 
-### This is `backend`  . . . go to [frontend](https://code.victorcarablut.com)
+### This is `frontend`  . . . go to [backend](https://github.com/VictoR-11011994/my-post-be)
 
 ```
 // backend
