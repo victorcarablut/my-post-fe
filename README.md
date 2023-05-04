@@ -1,3 +1,47 @@
+# Technologies:
+
+### This is `backend`  . . . go to [frontend](https://code.victorcarablut.com)
+
+```
+// backend
+Java EE (v17)
+ - Spring Boot
+ - Spring Security
+ - JWT (Token)
+```
+
+```
+// frontend
+React Js (v18)
+ - Axios
+```
+
+```
+//database
+MySQL (compatible also with phpMyAdmin)
+```
+
+```
+// other
+Bootstrap CSS (v5)
+HTML, CSS, JS
+```
+
+```
+// IDE
+Eclipse EE, Visual Studio Code, Workbench, Postman
+
+...better experience with: Microsoft Edge, Google Chrome
+```
+
+___
+
+`Developed for demonstration purposes only.`
+
+> [code.victorcarablut.com](https://code.victorcarablut.com)
+
+___
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
