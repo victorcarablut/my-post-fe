@@ -8,9 +8,7 @@ React Js (v18)
  - Axios
  
 -- Bootstrap CSS (v5)
---- HTML, CSS, JS
-```
-
+-- HTML, CSS, JS
 ```
 
 ```
