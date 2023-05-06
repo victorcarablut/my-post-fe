@@ -1,7 +1,7 @@
 {
   "name": "my-post-fe",
   "version": "1.0.0",
-  "homepage": "https://mypost.up.railway.app",
+  "homepage": "https://mypost.victorcarablut.com",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
