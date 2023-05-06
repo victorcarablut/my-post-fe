@@ -833,10 +833,10 @@ function Posts(props) {
                                 </div>
 
                                 {responseStatusGetAllPosts === "error" && <Error />}
-                            {(posts?.length === 0 && responseStatusGetAllPosts === "success") && <Empty />}
+                                {(posts?.length === 0 && responseStatusGetAllPosts === "success") && <Empty />}
                             </div>
 
-                            
+
 
                         </div>
 
