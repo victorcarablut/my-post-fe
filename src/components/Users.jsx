@@ -139,10 +139,10 @@ function Users() {
                                             <tr key={user.userId}>
                                                 <td>
 
-                                                    <div className="btn btn-light rounded-pill d-grid gap-2 d-md-flex justify-content-md-start animate__animated animate__fadeIn border border-secondary-subtle shadow-sm" style={{ marginTop: 6, marginBottom: 6, maxHeight: 50, marginRight: 10 }} onClick={() => navigateToUserProfile(user.username)}>
+                                                    <button className="btn btn-light rounded-pill animate__animated animate__fadeIn border border-secondary-subtle shadow-sm" style={{ marginTop: 6, marginBottom: 6, maxHeight: 50, marginRight: 10 }} onClick={() => navigateToUserProfile(user.username)}>
                                                         <img src={user.userProfileImg ? `data:image/jpg;base64,${user.userProfileImg}` : default_user_profile_img} width="30" height="30" style={{ objectFit: "cover" }} alt="user-profile-img" className="rounded-circle border border-2 me-md-2" />
-                                                        {user.fullName}
-                                                    </div>
+                                                        <small>{user.fullName}</small> 
+                                                    </button>
 
                                                 </td>
                                             </tr>
