@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // Secure Data (Local Storage)
 import secureLocalStorage from "react-secure-storage";
@@ -14,8 +14,6 @@ import { url } from "../config.js";
 
 import { VerifyToken } from './security/VerifyToken.js';
 import { Logout } from './account/Logout.js';
-import { useState } from 'react';
-
 
 function Home() {
 
