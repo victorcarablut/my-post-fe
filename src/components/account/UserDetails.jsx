@@ -58,7 +58,7 @@ function UserDetails() {
     const [userCoverImgPreviewNew, setUserCoverImgPreviewNew] = useState(null);
 
     // http response status
-    const [responseStatusGeUserDetails, setResponseStatusGetUserDetails] = useState("");
+    const [responseStatusGetUserDetails, setResponseStatusGetUserDetails] = useState("");
 
     const [emailNewCodeStatus, setEmailNewCodeStatus] = useState("");
 
@@ -642,7 +642,7 @@ function UserDetails() {
 
             <div className="position-relative">
                 <div className="position-absolute top-0 start-0">
-                    {responseStatusGeUserDetails === "loading" &&
+                    {responseStatusGetUserDetails === "loading" &&
                         <div className="spinner-border spinner-border-sm text-light" style={{ marginLeft: 10 }} role="status" />
                     }
                 </div>
@@ -656,9 +656,9 @@ function UserDetails() {
                     </div>
                     <div className="card-body">
 
-                        {responseStatusGeUserDetails === "error" && <Error />}
+                        {responseStatusGetUserDetails === "error" && <Error />}
 
-                        {responseStatusGeUserDetails === "success" &&
+                        {responseStatusGetUserDetails === "success" &&
 
 
                             <ul className="list-group list-group-flush">
@@ -902,7 +902,7 @@ function UserDetails() {
                     </div>
                     <div className="card-footer text-center">
 
-                        {responseStatusGeUserDetails === "success" &&
+                        {responseStatusGetUserDetails === "success" &&
 
                             <div className="dropdown">
                                 <button className="btn btn-light btn-sm dropdown-toggle rounded-pill text-danger" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false">Delete Account</button>
