@@ -48,7 +48,7 @@ function Header() {
       if (verifyToken) {
         setMainLoading(false);
         setIsAuthenticated(true);
-        getUserDetails();
+        await getUserDetails();
   
       } else {
         setMainLoading(false);
