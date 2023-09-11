@@ -71,7 +71,7 @@ function Header() {
   
       }
   
-      await axios.get(`${url}/user/details`, config).then((res) => {
+      await axios.get(`${url}/user/details`, config).then(async(res) => {
         if (res.status === 200) {
           setUser({
             username: res.data.username,
@@ -81,7 +81,7 @@ function Header() {
           })
   
         } else {
-          logout();
+          await logout();
   
         }
   
